@@ -1,0 +1,68 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Burse",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/FondBurse/AddFondBurse": {
+      "post": {
+        "tags": [
+          "FondBurse"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/FondBurse/{id}": {
+      "get": {
+        "tags": [
+          "FondBurse"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/FondBurse/generate": {
+      "get": {
+        "tags": [
+          "FondBurse"
+        ],
+        "parameters": [
+          {
+            "name": "disponibilBM",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1671770
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "components": { }
+}

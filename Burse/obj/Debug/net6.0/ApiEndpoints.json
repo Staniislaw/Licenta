@@ -1,0 +1,44 @@
+[
+  {
+    "ContainingType": "Burse.Controllers.FondBurseController",
+    "Method": "GetFondBurseById",
+    "RelativePath": "api/FondBurse/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.FondBurseController",
+    "Method": "AddFondBurse",
+    "RelativePath": "api/FondBurse/AddFondBurse",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.FondBurseController",
+    "Method": "GenerateExcel",
+    "RelativePath": "api/FondBurse/generate",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "disponibilBM",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
