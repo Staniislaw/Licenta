@@ -35,10 +35,20 @@
     "Parameters": [
       {
         "Name": "disponibilBM",
-        "Type": "System.Int32",
+        "Type": "System.Decimal",
         "IsRequired": false
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.FondBurseController",
+    "Method": "ProcessExcelFiles",
+    "RelativePath": "api/FondBurse/process",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   }
 ]

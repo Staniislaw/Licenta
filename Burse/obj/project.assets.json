@@ -2,6 +2,38 @@
   "version": 3,
   "targets": {
     "net6.0": {
+      "DocumentFormat.OpenXml/3.2.0": {
+        "type": "package",
+        "dependencies": {
+          "DocumentFormat.OpenXml.Framework": "3.2.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/DocumentFormat.OpenXml.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/DocumentFormat.OpenXml.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "DocumentFormat.OpenXml.Framework/3.2.0": {
+        "type": "package",
+        "dependencies": {
+          "System.IO.Packaging": "8.0.1"
+        },
+        "compile": {
+          "lib/net6.0/DocumentFormat.OpenXml.Framework.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/DocumentFormat.OpenXml.Framework.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "EPPlus/7.6.0": {
         "type": "package",
         "dependencies": {
@@ -54,6 +86,22 @@
         },
         "runtime": {
           "lib/netstandard2.1/ExcelDataReader.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "ExcelDataReader.DataSet/3.7.0": {
+        "type": "package",
+        "dependencies": {
+          "ExcelDataReader": "3.7.0"
+        },
+        "compile": {
+          "lib/netstandard2.1/ExcelDataReader.DataSet.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.1/ExcelDataReader.DataSet.dll": {
             "related": ".pdb;.xml"
           }
         }
@@ -699,6 +747,15 @@
           "lib/netstandard1.0/_._": {}
         }
       },
+      "Microsoft.Office.Interop.Excel/15.0.4795.1001": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Microsoft.Office.Interop.Excel.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Office.Interop.Excel.dll": {}
+        }
+      },
       "Microsoft.OpenApi/1.2.3": {
         "type": "package",
         "compile": {
@@ -955,6 +1012,22 @@
           "lib/netstandard2.0/System.IdentityModel.Tokens.Jwt.dll": {
             "related": ".xml"
           }
+        }
+      },
+      "System.IO.Packaging/8.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/System.IO.Packaging.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/System.IO.Packaging.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net6.0/_._": {}
         }
       },
       "System.IO.Pipelines/9.0.1": {
@@ -1251,6 +1324,54 @@
     }
   },
   "libraries": {
+    "DocumentFormat.OpenXml/3.2.0": {
+      "sha512": "eDBT9G0sAWUvjgE8l8E5bGCFXgxCZXIecQ8dqUnj2PyxyMR5eBmLahqRRw3Q7uSKM3cKbysaL2mEY0JJbEEOEA==",
+      "type": "package",
+      "path": "documentformat.openxml/3.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "documentformat.openxml.3.2.0.nupkg.sha512",
+        "documentformat.openxml.nuspec",
+        "icon.png",
+        "lib/net35/DocumentFormat.OpenXml.dll",
+        "lib/net35/DocumentFormat.OpenXml.xml",
+        "lib/net40/DocumentFormat.OpenXml.dll",
+        "lib/net40/DocumentFormat.OpenXml.xml",
+        "lib/net46/DocumentFormat.OpenXml.dll",
+        "lib/net46/DocumentFormat.OpenXml.xml",
+        "lib/net8.0/DocumentFormat.OpenXml.dll",
+        "lib/net8.0/DocumentFormat.OpenXml.xml",
+        "lib/netstandard2.0/DocumentFormat.OpenXml.dll",
+        "lib/netstandard2.0/DocumentFormat.OpenXml.xml"
+      ]
+    },
+    "DocumentFormat.OpenXml.Framework/3.2.0": {
+      "sha512": "e1neOKqRnSHUom4JQEorAoZ67aiJOp6+Xzsu0fc6IYfFcgQn6roo+w6i2w//N2u/5ilEfvLr35bNO9zaIN7r7g==",
+      "type": "package",
+      "path": "documentformat.openxml.framework/3.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "documentformat.openxml.framework.3.2.0.nupkg.sha512",
+        "documentformat.openxml.framework.nuspec",
+        "icon.png",
+        "lib/net35/DocumentFormat.OpenXml.Framework.dll",
+        "lib/net35/DocumentFormat.OpenXml.Framework.xml",
+        "lib/net40/DocumentFormat.OpenXml.Framework.dll",
+        "lib/net40/DocumentFormat.OpenXml.Framework.xml",
+        "lib/net46/DocumentFormat.OpenXml.Framework.dll",
+        "lib/net46/DocumentFormat.OpenXml.Framework.xml",
+        "lib/net6.0/DocumentFormat.OpenXml.Framework.dll",
+        "lib/net6.0/DocumentFormat.OpenXml.Framework.xml",
+        "lib/net8.0/DocumentFormat.OpenXml.Framework.dll",
+        "lib/net8.0/DocumentFormat.OpenXml.Framework.xml",
+        "lib/netstandard2.0/DocumentFormat.OpenXml.Framework.dll",
+        "lib/netstandard2.0/DocumentFormat.OpenXml.Framework.xml"
+      ]
+    },
     "EPPlus/7.6.0": {
       "sha512": "ve22wl/mlqjDsiewxXk4edACuIATsDZPFVOyg9l2xSnMLqN6nJHJ0q0MaaDDJwVrnfyTdA9DTJ1MF449gXi+Nw==",
       "type": "package",
@@ -1340,6 +1461,28 @@
         "lib/netstandard2.1/ExcelDataReader.dll",
         "lib/netstandard2.1/ExcelDataReader.pdb",
         "lib/netstandard2.1/ExcelDataReader.xml"
+      ]
+    },
+    "ExcelDataReader.DataSet/3.7.0": {
+      "sha512": "zA2/CVzbMspkNg0qf0/Zp+eU6VxYP5PtiJSErLDP46d/Y7F6of/NCcSGeXjs97KDq7UiEf6XJe+89s/92n2GYg==",
+      "type": "package",
+      "path": "exceldatareader.dataset/3.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ExcelDataReader.png",
+        "README.md",
+        "exceldatareader.dataset.3.7.0.nupkg.sha512",
+        "exceldatareader.dataset.nuspec",
+        "lib/net462/ExcelDataReader.DataSet.dll",
+        "lib/net462/ExcelDataReader.DataSet.pdb",
+        "lib/net462/ExcelDataReader.DataSet.xml",
+        "lib/netstandard2.0/ExcelDataReader.DataSet.dll",
+        "lib/netstandard2.0/ExcelDataReader.DataSet.pdb",
+        "lib/netstandard2.0/ExcelDataReader.DataSet.xml",
+        "lib/netstandard2.1/ExcelDataReader.DataSet.dll",
+        "lib/netstandard2.1/ExcelDataReader.DataSet.pdb",
+        "lib/netstandard2.1/ExcelDataReader.DataSet.xml"
       ]
     },
     "Humanizer.Core/2.8.26": {
@@ -2484,6 +2627,19 @@
         "version.txt"
       ]
     },
+    "Microsoft.Office.Interop.Excel/15.0.4795.1001": {
+      "sha512": "cuvqi/U5MYSM0gvR2l90q0m/urRgmg69EiwP5VWp1RcaJ0YT5G26Va5LaOZ3KJFc22FNihS5CUjeePUp2YpGQA==",
+      "type": "package",
+      "path": "microsoft.office.interop.excel/15.0.4795.1001",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net20/Microsoft.Office.Interop.Excel.dll",
+        "lib/netstandard2.0/Microsoft.Office.Interop.Excel.dll",
+        "microsoft.office.interop.excel.15.0.4795.1001.nupkg.sha512",
+        "microsoft.office.interop.excel.nuspec"
+      ]
+    },
     "Microsoft.OpenApi/1.2.3": {
       "sha512": "Nug3rO+7Kl5/SBAadzSMAVgqDlfGjJZ0GenQrLywJ84XGKO0uRqkunz5Wyl0SDwcR71bAATXvSdbdzPrYRYKGw==",
       "type": "package",
@@ -2948,6 +3104,35 @@
         "lib/netstandard2.0/System.IdentityModel.Tokens.Jwt.xml",
         "system.identitymodel.tokens.jwt.6.8.0.nupkg.sha512",
         "system.identitymodel.tokens.jwt.nuspec"
+      ]
+    },
+    "System.IO.Packaging/8.0.1": {
+      "sha512": "KYkIOAvPexQOLDxPO2g0BVoWInnQhPpkFzRqvNrNrMhVT6kqhVr0zEb6KCHlptLFukxnZrjuMVAnxK7pOGUYrw==",
+      "type": "package",
+      "path": "system.io.packaging/8.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net461/System.IO.Packaging.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net6.0/_._",
+        "buildTransitive/netcoreapp2.0/System.IO.Packaging.targets",
+        "lib/net462/System.IO.Packaging.dll",
+        "lib/net462/System.IO.Packaging.xml",
+        "lib/net6.0/System.IO.Packaging.dll",
+        "lib/net6.0/System.IO.Packaging.xml",
+        "lib/net7.0/System.IO.Packaging.dll",
+        "lib/net7.0/System.IO.Packaging.xml",
+        "lib/net8.0/System.IO.Packaging.dll",
+        "lib/net8.0/System.IO.Packaging.xml",
+        "lib/netstandard2.0/System.IO.Packaging.dll",
+        "lib/netstandard2.0/System.IO.Packaging.xml",
+        "system.io.packaging.8.0.1.nupkg.sha512",
+        "system.io.packaging.nuspec",
+        "useSharedDesignerContext.txt"
       ]
     },
     "System.IO.Pipelines/9.0.1": {
@@ -3550,11 +3735,14 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "DocumentFormat.OpenXml >= 3.2.0",
       "EPPlus >= 7.6.0",
       "ExcelDataReader >= 3.7.0",
+      "ExcelDataReader.DataSet >= 3.7.0",
       "Microsoft.EntityFrameworkCore >= 6.0.6",
       "Microsoft.EntityFrameworkCore.SqlServer >= 6.0.6",
       "Microsoft.EntityFrameworkCore.Tools >= 6.0.6",
+      "Microsoft.Office.Interop.Excel >= 15.0.4795.1001",
       "Swashbuckle.AspNetCore >= 6.5.0"
     ]
   },
@@ -3609,11 +3797,19 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "DocumentFormat.OpenXml": {
+            "target": "Package",
+            "version": "[3.2.0, )"
+          },
           "EPPlus": {
             "target": "Package",
             "version": "[7.6.0, )"
           },
           "ExcelDataReader": {
+            "target": "Package",
+            "version": "[3.7.0, )"
+          },
+          "ExcelDataReader.DataSet": {
             "target": "Package",
             "version": "[3.7.0, )"
           },
@@ -3630,6 +3826,10 @@
             "suppressParent": "All",
             "target": "Package",
             "version": "[6.0.6, )"
+          },
+          "Microsoft.Office.Interop.Excel": {
+            "target": "Package",
+            "version": "[15.0.4795.1001, )"
           },
           "Swashbuckle.AspNetCore": {
             "target": "Package",

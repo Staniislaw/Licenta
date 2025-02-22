@@ -7,12 +7,72 @@
       "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\controllers\\fondbursecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\helpers\\studentexcelreader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\helpers\\studentexcelreader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\models\\fondbursemeritrepartizat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\models\\fondbursemeritrepartizat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\models\\studentrecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\models\\studentrecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\helpers\\acronymgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\helpers\\acronymgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\services\\fondburseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\services\\fondburseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\services\\fondbursemeritrepartizatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\services\\fondbursemeritrepartizatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\services\\abstractions\\ifondbursemeritrepartizatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\services\\abstractions\\ifondbursemeritrepartizatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\migrations\\bursedbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\migrations\\bursedbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\migrations\\20250216114220_adaugarefondbursemeritrepartizat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\migrations\\20250216114220_adaugarefondbursemeritrepartizat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\services\\abstractions\\ifondburseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\services\\abstractions\\ifondburseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\models\\formatiistudii.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\models\\formatiistudii.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\models\\fondburse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\models\\fondburse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\migrations\\20241208162427_formatiistudii.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\migrations\\20241208162427_formatiistudii.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\data\\bursedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\data\\bursedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\helpers\\fondburseexcelreader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\helpers\\fondburseexcelreader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Licenta\\Burse\\Burse\\Migrations\\20241208144828_AddFondBurse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Burse\\Migrations\\20241208144828_AddFondBurse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\helpers\\formatiistudiifromexcel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -23,36 +83,8 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Burse\\Migrations\\20241222091359_AddFormatiiStudii.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\services\\fondburseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\services\\fondburseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\services\\abstractions\\ifondburseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\services\\abstractions\\ifondburseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\helpers\\acronymgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\helpers\\acronymgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\data\\bursedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\data\\bursedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\models\\fondburse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\models\\fondburse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|c:\\licenta\\burse\\burse\\helpers\\fondburseexcelreader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6956CEB-AB2F-4D3F-966C-7BE972079599}|Burse\\Burse.csproj|solutionrelative:burse\\helpers\\fondburseexcelreader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Licenta\\Burse\\Burse\\Migrations\\20241208144828_AddFondBurse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Burse\\Migrations\\20241208144828_AddFondBurse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Licenta\\Burse\\Burse\\Migrations\\20241208142217_initialMigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -66,7 +98,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 11,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 12,
           "Children": [
             {
               "$type": "Bookmark",
@@ -83,28 +115,98 @@
             {
               "$type": "Document",
               "DocumentIndex": 7,
+              "Title": "IFondBurseMeritRepartizatService.cs",
+              "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Services\\Abstractions\\IFondBurseMeritRepartizatService.cs",
+              "RelativeDocumentMoniker": "Burse\\Services\\Abstractions\\IFondBurseMeritRepartizatService.cs",
+              "ToolTip": "C:\\Licenta\\Burse\\Burse\\Services\\Abstractions\\IFondBurseMeritRepartizatService.cs",
+              "RelativeToolTip": "Burse\\Services\\Abstractions\\IFondBurseMeritRepartizatService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAQAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-16T11:36:13.012Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "FondBurseMeritRepartizatService.cs",
+              "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Services\\FondBurseMeritRepartizatService.cs",
+              "RelativeDocumentMoniker": "Burse\\Services\\FondBurseMeritRepartizatService.cs",
+              "ToolTip": "C:\\Licenta\\Burse\\Burse\\Services\\FondBurseMeritRepartizatService.cs",
+              "RelativeToolTip": "Burse\\Services\\FondBurseMeritRepartizatService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAABVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-16T11:35:28.442Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "BurseDBContextModelSnapshot.cs",
+              "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Migrations\\BurseDBContextModelSnapshot.cs",
+              "RelativeDocumentMoniker": "Burse\\Migrations\\BurseDBContextModelSnapshot.cs",
+              "ToolTip": "C:\\Licenta\\Burse\\Burse\\Migrations\\BurseDBContextModelSnapshot.cs",
+              "RelativeToolTip": "Burse\\Migrations\\BurseDBContextModelSnapshot.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-16T11:34:11.81Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "FondBurseMeritRepartizat.cs",
+              "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Models\\FondBurseMeritRepartizat.cs",
+              "RelativeDocumentMoniker": "Burse\\Models\\FondBurseMeritRepartizat.cs",
+              "ToolTip": "C:\\Licenta\\Burse\\Burse\\Models\\FondBurseMeritRepartizat.cs",
+              "RelativeToolTip": "Burse\\Models\\FondBurseMeritRepartizat.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAcAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-16T11:32:56.053Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "StudentExcelReader.cs",
+              "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Helpers\\StudentExcelReader.cs",
+              "RelativeDocumentMoniker": "Burse\\Helpers\\StudentExcelReader.cs",
+              "ToolTip": "C:\\Licenta\\Burse\\Burse\\Helpers\\StudentExcelReader.cs",
+              "RelativeToolTip": "Burse\\Helpers\\StudentExcelReader.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAAAEIAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-16T10:19:25.724Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "StudentRecord.cs",
+              "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Models\\StudentRecord.cs",
+              "RelativeDocumentMoniker": "Burse\\Models\\StudentRecord.cs",
+              "ToolTip": "C:\\Licenta\\Burse\\Burse\\Models\\StudentRecord.cs",
+              "RelativeToolTip": "Burse\\Models\\StudentRecord.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwA0AAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-16T10:10:01.162Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "AcronymGenerator.cs",
               "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Helpers\\AcronymGenerator.cs",
               "RelativeDocumentMoniker": "Burse\\Helpers\\AcronymGenerator.cs",
               "ToolTip": "C:\\Licenta\\Burse\\Burse\\Helpers\\AcronymGenerator.cs",
               "RelativeToolTip": "Burse\\Helpers\\AcronymGenerator.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAgwBEAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwBgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-15T14:01:51.227Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-15T14:01:51.227Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 10,
               "Title": "IFondBurseService.cs",
               "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Services\\Abstractions\\IFondBurseService.cs",
               "RelativeDocumentMoniker": "Burse\\Services\\Abstractions\\IFondBurseService.cs",
               "ToolTip": "C:\\Licenta\\Burse\\Burse\\Services\\Abstractions\\IFondBurseService.cs",
               "RelativeToolTip": "Burse\\Services\\Abstractions\\IFondBurseService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAcAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAgAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-15T12:55:00.605Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-15T12:55:00.605Z"
             },
             {
               "$type": "Document",
@@ -114,14 +216,50 @@
               "RelativeDocumentMoniker": "Burse\\Services\\FondBurseService.cs",
               "ToolTip": "C:\\Licenta\\Burse\\Burse\\Services\\FondBurseService.cs",
               "RelativeToolTip": "Burse\\Services\\FondBurseService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwCEAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAANEAAAAAAAAAAAAEwOgAAABcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-15T12:54:04.712Z",
+              "WhenOpened": "2025-02-15T12:54:04.712Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FondBurseController.cs",
+              "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Controllers\\FondBurseController.cs",
+              "RelativeDocumentMoniker": "Burse\\Controllers\\FondBurseController.cs",
+              "ToolTip": "C:\\Licenta\\Burse\\Burse\\Controllers\\FondBurseController.cs",
+              "RelativeToolTip": "Burse\\Controllers\\FondBurseController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIQAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-08T14:49:22.811Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 13,
+              "Title": "20241208162427_FormatiiStudii.cs",
+              "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Migrations\\20241208162427_FormatiiStudii.cs",
+              "RelativeDocumentMoniker": "Burse\\Migrations\\20241208162427_FormatiiStudii.cs",
+              "ToolTip": "C:\\Licenta\\Burse\\Burse\\Migrations\\20241208162427_FormatiiStudii.cs",
+              "RelativeToolTip": "Burse\\Migrations\\20241208162427_FormatiiStudii.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAABeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-16T11:37:29.135Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "20250216114220_AdaugareFondBurseMeritRepartizat.cs",
+              "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Migrations\\20250216114220_AdaugareFondBurseMeritRepartizat.cs",
+              "RelativeDocumentMoniker": "Burse\\Migrations\\20250216114220_AdaugareFondBurseMeritRepartizat.cs",
+              "ToolTip": "C:\\Licenta\\Burse\\Burse\\Migrations\\20250216114220_AdaugareFondBurseMeritRepartizat.cs",
+              "RelativeToolTip": "Burse\\Migrations\\20250216114220_AdaugareFondBurseMeritRepartizat.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-16T11:42:20.416Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
               "Title": "20241222091359_AddFormatiiStudii.cs",
               "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Migrations\\20241222091359_AddFormatiiStudii.cs",
               "RelativeDocumentMoniker": "Burse\\Migrations\\20241222091359_AddFormatiiStudii.cs",
@@ -132,71 +270,54 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 18,
               "Title": "FormatiiStudiiFromExcel.cs",
               "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Helpers\\FormatiiStudiiFromExcel.cs",
               "RelativeDocumentMoniker": "Burse\\Helpers\\FormatiiStudiiFromExcel.cs",
               "ToolTip": "C:\\Licenta\\Burse\\Burse\\Helpers\\FormatiiStudiiFromExcel.cs",
               "RelativeToolTip": "Burse\\Helpers\\FormatiiStudiiFromExcel.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAgwAgAAAA0AAAAAAAAAA==",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAvwBoAAABLAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T16:19:15.012Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-08T16:19:15.012Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 11,
               "Title": "FormatiiStudii.cs",
               "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Models\\FormatiiStudii.cs",
               "RelativeDocumentMoniker": "Burse\\Models\\FormatiiStudii.cs",
               "ToolTip": "C:\\Licenta\\Burse\\Burse\\Models\\FormatiiStudii.cs",
               "RelativeToolTip": "Burse\\Models\\FormatiiStudii.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwBEAAAAnAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T16:11:48.566Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-08T16:11:48.566Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 16,
               "Title": "FondBurseExcelReader.cs",
               "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Helpers\\FondBurseExcelReader.cs",
               "RelativeDocumentMoniker": "Burse\\Helpers\\FondBurseExcelReader.cs",
               "ToolTip": "C:\\Licenta\\Burse\\Burse\\Helpers\\FondBurseExcelReader.cs",
               "RelativeToolTip": "Burse\\Helpers\\FondBurseExcelReader.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAgwBIAAAA/AAAAAAAAAA==",
+              "ViewState": "AgIAABkAAAAAAAAAAAAawDAAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T15:06:31.496Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-08T15:06:31.496Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "FondBurseController.cs",
-              "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Controllers\\FondBurseController.cs",
-              "RelativeDocumentMoniker": "Burse\\Controllers\\FondBurseController.cs",
-              "ToolTip": "C:\\Licenta\\Burse\\Burse\\Controllers\\FondBurseController.cs",
-              "RelativeToolTip": "Burse\\Controllers\\FondBurseController.cs",
-              "ViewState": "AgIAACkDAAAAAAAAAAAawEgDAAASAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T14:49:22.811Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 17,
               "Title": "20241208144828_AddFondBurse.cs",
               "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Migrations\\20241208144828_AddFondBurse.cs",
               "RelativeDocumentMoniker": "Burse\\Migrations\\20241208144828_AddFondBurse.cs",
               "ToolTip": "C:\\Licenta\\Burse\\Burse\\Migrations\\20241208144828_AddFondBurse.cs",
               "RelativeToolTip": "Burse\\Migrations\\20241208144828_AddFondBurse.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-08T14:48:28.323Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 21,
               "Title": "20241208142217_initialMigration.cs",
               "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Migrations\\20241208142217_initialMigration.cs",
               "RelativeDocumentMoniker": "Burse\\Migrations\\20241208142217_initialMigration.cs",
@@ -208,7 +329,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 20,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\appsettings.json",
               "RelativeDocumentMoniker": "Burse\\appsettings.json",
@@ -216,38 +337,35 @@
               "RelativeToolTip": "Burse\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAABHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-12-08T14:06:58.509Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-08T14:06:58.509Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 15,
               "Title": "BurseDBContext.cs",
               "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Data\\BurseDBContext.cs",
               "RelativeDocumentMoniker": "Burse\\Data\\BurseDBContext.cs",
               "ToolTip": "C:\\Licenta\\Burse\\Burse\\Data\\BurseDBContext.cs",
               "RelativeToolTip": "Burse\\Data\\BurseDBContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAYAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwA4AAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T14:04:45.309Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-08T14:04:45.309Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 14,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Program.cs",
               "RelativeDocumentMoniker": "Burse\\Program.cs",
               "ToolTip": "C:\\Licenta\\Burse\\Burse\\Program.cs",
               "RelativeToolTip": "Burse\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T13:35:50.535Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-08T13:35:50.535Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "FondBurse.cs",
               "DocumentMoniker": "C:\\Licenta\\Burse\\Burse\\Models\\FondBurse.cs",
               "RelativeDocumentMoniker": "Burse\\Models\\FondBurse.cs",
@@ -255,8 +373,7 @@
               "RelativeToolTip": "Burse\\Models\\FondBurse.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwAkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T14:43:53.701Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-08T14:43:53.701Z"
             }
           ]
         }

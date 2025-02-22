@@ -37,7 +37,26 @@ namespace Burse.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FondBurse", (string)null);
+                    b.ToTable("FondBurse");
+                });
+
+            modelBuilder.Entity("Burse.Models.FondBurseMeritRepartizat", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<decimal>("bursaAlocatata")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("domeniu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("FondBurseMeritRepartizat");
                 });
 
             modelBuilder.Entity("Burse.Models.FormatiiStudii", b =>
@@ -89,7 +108,7 @@ namespace Burse.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("FormatiiStudii", (string)null);
+                    b.ToTable("FormatiiStudii");
                 });
 #pragma warning restore 612, 618
         }

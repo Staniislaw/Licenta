@@ -50,11 +50,23 @@
             "name": "disponibilBM",
             "in": "query",
             "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 1671770
+              "type": "number",
+              "format": "double",
+              "default": 1671771
             }
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/FondBurse/process": {
+      "get": {
+        "tags": [
+          "FondBurse"
         ],
         "responses": {
           "200": {
