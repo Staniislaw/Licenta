@@ -13,5 +13,6 @@ namespace Burse.Data
         public DbSet<FondBurse> FondBurse { get;set;}
         public DbSet<FormatiiStudii> FormatiiStudii { get;set;} 
         public DbSet<FondBurseMeritRepartizat> FondBurseMeritRepartizat { get;set;} 
+        public DbSet<StudentRecord> StudentRecord { get;set;}
     }
 }

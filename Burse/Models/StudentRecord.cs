@@ -1,7 +1,10 @@
-﻿namespace Burse.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Burse.Models
 {
     public class StudentRecord
     {
+        public int Id { get; set; }
         public int NrCrt { get; set; }  // Număr crt.
         public string Emplid { get; set; }  // ID angajat
         public string CNP { get; set; }  // Cod Numeric Personal
@@ -15,5 +18,11 @@
         public int TC { get; set; }  // TC – creditele obţinute pe anii anteriori+ credite anul curent
         public int TR { get; set; }  // TR – restanţele anii precedenti + restante anul curent
         public string SursaFinantare { get; set; }  // Sursa de finanțare
+        public string Bursa { get; set; }
+
+        [ForeignKey("FondBurseMeritRepartizat")]
+        public int FondBurseMeritRepartizatId { get; set; }
+
+        public FondBurseMeritRepartizat FondBurseMeritRepartizat { get; set; }
     }
 }

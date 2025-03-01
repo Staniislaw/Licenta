@@ -117,26 +117,145 @@ namespace Burse.Controllers
         [HttpGet("process")]
         public async Task<IActionResult> ProcessExcelFiles()
         {
-            StudentExcelReader excelReader = new StudentExcelReader();
+            decimal epsilon = 0.05M;
             string pathBurse = "C:\\Licenta\\Burse_Studenți (8).xlsx";
             string pathStudenti = "C:\\Licenta\\Book2.xlsx";
 
+            // Citim datele necesare
+            StudentExcelReader excelReader = new StudentExcelReader();
+            List<FondBurse> fonduri = await _fondBurseService.GetDateFromBursePerformanteAsync();
             Dictionary<string, List<StudentRecord>> studentRecords = excelReader.ReadStudentRecordsFromExcel(pathStudenti);
 
             foreach (var entry in studentRecords)
             {
                 string domeniu = entry.Key;
-                List<StudentRecord> students = entry.Value;
-                students = EliminaStudentiNeeligibili(students);
-
+                List<StudentRecord> students = ProcessStudents(entry.Value);
                 FondBurseMeritRepartizat? fondRepartizatByDomeniu = await _fondBurseMeritRepartizatService.GetByDomeniuAsync(domeniu);
+
+                if (fondRepartizatByDomeniu == null) continue; // Dacă nu există fonduri, trecem la următorul domeniu
+
+                (decimal valoareAnualBP1, decimal valoareAnualBP2) = CalculateScholarshipValues(domeniu, fonduri, fondRepartizatByDomeniu);
+
+                decimal sumaDisponibila = fondRepartizatByDomeniu.bursaAlocatata;
+                AssignScholarships(students, ref sumaDisponibila, valoareAnualBP1, valoareAnualBP2, epsilon);
+
+
+                //salvare in db a studentilor numai ce repartizati de burse
+                students.ForEach(s => s.FondBurseMeritRepartizatId = fondRepartizatByDomeniu.ID);
+                await _context.StudentRecord.AddRangeAsync(students);
+                await _context.SaveChangesAsync();
+
+                // Afisare rezultate
+                Console.WriteLine($"Domeniu: {domeniu} - Fonduri rămase: {sumaDisponibila}");
+                foreach (var s in students)
+                {
+                    Console.WriteLine($"Student: {s.Emplid}, Media: {s.Media}, Bursa: {s.Bursa}");
+                }
+                
             }
 
             return Ok();
         }
+
+        /// <summary>
+        /// Elimină studenții neeligibili și îi sortează descrescător după medie.
+        /// </summary>
+        private List<StudentRecord> ProcessStudents(List<StudentRecord> students)
+        {
+            return EliminaStudentiNeeligibili(students).OrderByDescending(s => s.Media).ToList();
+        }
+
+        /// <summary>
+        /// Calculează valoarea anuală a burselor BP1 și BP2 în funcție de domeniu.
+        /// </summary>
+        private (decimal, decimal) CalculateScholarshipValues(string domeniu, List<FondBurse> fonduri, FondBurseMeritRepartizat fondRepartizat)
+        {
+            decimal valoareBP1, valoareBP2;
+
+            if (domeniu.Contains("4") || (fondRepartizat.programStudiu == "master" && domeniu.Contains("2")))
+            {
+                valoareBP1 = fonduri[0].ValoreaLunara * 9.35M;
+                valoareBP2 = fonduri[1].ValoreaLunara * 9.35M;
+            }
+            else
+            {
+                valoareBP1 = fonduri[0].ValoreaLunara * 12;
+                valoareBP2 = fonduri[1].ValoreaLunara * 12;
+            }
+
+            return (valoareBP1, valoareBP2);
+        }
+
+        /// <summary>
+        /// Alocă bursele studenților, respectând regulile de diferență între medii.
+        /// </summary>
+        private void AssignScholarships(List<StudentRecord> students, ref decimal sumaDisponibila, decimal valoareAnualBP1, decimal valoareAnualBP2, decimal epsilon)
+        {
+            decimal ultimaMedie = -1;
+            bool aFostAcordatBP2 = false;
+
+            foreach (var student in students)
+            {
+                decimal diferenta = ultimaMedie < 0 ? 0 : Math.Abs(ultimaMedie - student.Media);
+                Console.WriteLine($"Compar {ultimaMedie} cu {student.Media}. Diferență = {diferenta}, Epsilon = {epsilon}");
+
+                if (sumaDisponibila <= 0)
+                {
+                    student.Bursa = "Nicio bursă";
+                    continue;
+                }
+
+                if (student.Media >= 9.00M)
+                {
+                    if (!aFostAcordatBP2 && diferenta <= epsilon)
+                    {
+                        if (sumaDisponibila >= valoareAnualBP1)
+                        {
+                            student.Bursa = "BP1";
+                            sumaDisponibila -= valoareAnualBP1;
+                        }
+                        else
+                        {
+                            student.Bursa = "BP2";
+                            sumaDisponibila -= valoareAnualBP2;
+                            aFostAcordatBP2 = true;
+                        }
+                    }
+                    else
+                    {
+                        if (sumaDisponibila >= valoareAnualBP2)
+                        {
+                            student.Bursa = "BP2";
+                            sumaDisponibila -= valoareAnualBP2;
+                        }
+                        else
+                        {
+                            student.Bursa = "Nicio bursă";
+                        }
+                        aFostAcordatBP2 = true;
+                    }
+                }
+                else
+                {
+                    if (sumaDisponibila >= valoareAnualBP2)
+                    {
+                        student.Bursa = "BP2";
+                        sumaDisponibila -= valoareAnualBP2;
+                    }
+                    else
+                    {
+                        student.Bursa = "Nicio bursă";
+                    }
+                    aFostAcordatBP2 = true;
+                }
+
+                ultimaMedie = student.Media;
+            }
+        }
+
         public static List<StudentRecord> EliminaStudentiNeeligibili(List<StudentRecord> students)
         {
-            return students.Where(s => s.RO == 0 && s.TR == 0 && s.Media>=8.00M).ToList();
+            return students.Where(s => s.RO == 0 && s.TR == 0).ToList();
         }
         static async void GenerateCustomLayout(string filePath, List<FondBurse> fonduri, List<FormatiiStudii> formatiiStudii,int disponibilBM)
         {

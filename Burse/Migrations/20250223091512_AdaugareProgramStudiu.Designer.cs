@@ -3,6 +3,7 @@ using Burse.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Burse.Migrations
 {
     [DbContext(typeof(BurseDBContext))]
-    partial class BurseDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250223091512_AdaugareProgramStudiu")]
+    partial class AdaugareProgramStudiu
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,82 +114,6 @@ namespace Burse.Migrations
                     b.HasKey("id");
 
                     b.ToTable("FormatiiStudii");
-                });
-
-            modelBuilder.Entity("Burse.Models.StudentRecord", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("An")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Bursa")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CNP")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CO")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Emplid")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("FondBurseMeritRepartizatId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Media")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("NrCrt")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NumeStudent")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PunctajAn")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RO")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SursaFinantare")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TC")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TR")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TaraCetatenie")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FondBurseMeritRepartizatId");
-
-                    b.ToTable("StudentRecord");
-                });
-
-            modelBuilder.Entity("Burse.Models.StudentRecord", b =>
-                {
-                    b.HasOne("Burse.Models.FondBurseMeritRepartizat", "FondBurseMeritRepartizat")
-                        .WithMany("Studenti")
-                        .HasForeignKey("FondBurseMeritRepartizatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FondBurseMeritRepartizat");
-                });
-
-            modelBuilder.Entity("Burse.Models.FondBurseMeritRepartizat", b =>
-                {
-                    b.Navigation("Studenti");
                 });
 #pragma warning restore 612, 618
         }

@@ -250,7 +250,8 @@ namespace Burse.Services
                     var fondBursa = new FondBurseMeritRepartizat
                     {
                         domeniu = domeniu,
-                        bursaAlocatata = disponibilBM / totalFiesc * totalFond
+                        bursaAlocatata = disponibilBM / totalFiesc * totalFond,
+                        programStudiu = "licenta"
                     };
 
                     await _fondBurseMeritRepartizatService.AddAsync(fondBursa);
@@ -427,7 +428,8 @@ namespace Burse.Services
                     var fondBursa = new FondBurseMeritRepartizat
                     {
                         domeniu = domeniu,
-                        bursaAlocatata = disponibilBM / totalFiesc * totalFond
+                        bursaAlocatata = disponibilBM / totalFiesc * totalFond,
+                        programStudiu = "master",
                     };
 
                     await _fondBurseMeritRepartizatService.AddAsync(fondBursa);
