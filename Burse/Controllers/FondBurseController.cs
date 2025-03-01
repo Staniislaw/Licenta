@@ -9,6 +9,7 @@ using Burse.Services.Abstractions;
 using Burse.Helpers;
 using System.Text.RegularExpressions;
 using Burse.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Burse.Controllers
 {
@@ -142,8 +143,7 @@ namespace Burse.Controllers
 
                 //salvare in db a studentilor numai ce repartizati de burse
                 students.ForEach(s => s.FondBurseMeritRepartizatId = fondRepartizatByDomeniu.ID);
-                await _context.StudentRecord.AddRangeAsync(students);
-                await _context.SaveChangesAsync();
+                await _fondBurseService.SaveNewStudentsAsync(students);
 
                 // Afisare rezultate
                 Console.WriteLine($"Domeniu: {domeniu} - Fonduri rămase: {sumaDisponibila}");

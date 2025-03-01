@@ -7,5 +7,6 @@ namespace Burse.Services.Abstractions
         Task<List<FondBurse>> GetDateFromBursePerformanteAsync();
         Task<List<FormatiiStudii>> GetAllFromFormatiiStudiiAsync();
         Task<byte[]> GenerateCustomLayout2(string filePath, List<FondBurse> fonduri, List<FormatiiStudii> formatiiStudii, decimal disponibilBM);
+        Task SaveNewStudentsAsync(List<StudentRecord> students);
     }
 }

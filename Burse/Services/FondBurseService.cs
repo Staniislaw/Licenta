@@ -634,5 +634,31 @@ namespace Burse.Services
                 }
             }
         }
+        public async Task SaveNewStudentsAsync(List<StudentRecord> students)
+        {
+            // Listă pentru studenții care trebuie adăugați
+            var studentsToAdd = new List<StudentRecord>();
+
+            foreach (var student in students)
+            {
+                // Verifică dacă studentul există deja în baza de date
+                bool studentExists = await _context.StudentRecord
+                    .AnyAsync(s => s.Emplid == student.Emplid);
+
+                if (!studentExists)
+                {
+                    // Adaugă studentul în lista de studenți de adăugat
+                    studentsToAdd.Add(student);
+                }
+            }
+
+            // Adaugă studenții care nu există deja
+            if (studentsToAdd.Any())
+            {
+                await _context.StudentRecord.AddRangeAsync(studentsToAdd);
+                await _context.SaveChangesAsync();
+            }
+        }
+
     }
 }
