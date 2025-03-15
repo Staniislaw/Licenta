@@ -1,4 +1,7 @@
-﻿namespace Burse.Helpers
+﻿using System.Globalization;
+using System.Text;
+
+namespace Burse.Helpers
 {
     public class AcronymGenerator
     {
@@ -24,10 +27,10 @@
             string upperProgram = programName.ToUpperInvariant();
 
             // Dacă programul conține "ÎNVĂȚĂMÂNT DUAL", tratăm separat
-            if (upperProgram.Contains("ÎNVĂȚĂMÂNT DUAL"))
+            if (upperProgram.Contains("INVATAMANT DUAL"))
             {
                 // Extragem partea dinaintea "ÎNVĂȚĂMÂNT DUAL"
-                string coreProgram = upperProgram.Replace("ÎNVĂȚĂMÂNT DUAL", "").Trim();
+                string coreProgram = upperProgram.Replace("INVATAMANT DUAL", "").Trim();
                 string coreAcronym = GenerateAcronym(coreProgram, an); // Aplicăm algoritmul pe restul
                 return $"{coreAcronym}-DUAL";
             }
@@ -36,7 +39,7 @@
             var words = upperProgram.Split(new char[] { ' ', '-', ',' }, StringSplitOptions.RemoveEmptyEntries);
 
             // Eliminăm cuvintele de legătură (stop words)
-            var filteredWords = words.Where(w => !StopWords.Contains(w)).ToList();
+            var filteredWords = words.Where(w => !StopWords.Contains(w.ToUpper())).ToList();
 
             if (filteredWords.Count == 0)
                 return string.Empty;
@@ -69,5 +72,23 @@
 
             return $"{acronym} ({an})";
         }
+        public static string RemoveDiacritics(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return text;
+            var normalizedString = text.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
+
     }
 }

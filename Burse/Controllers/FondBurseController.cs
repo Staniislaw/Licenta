@@ -32,14 +32,16 @@ namespace Burse.Controllers
         [HttpPost("AddFondBurse")]
         public async Task<IActionResult> AddFondBurse()
         {
-            var filePath = "C:\\Users\\Stas\\Downloads\\Fond_burse_2024_2025 13noiembrie.xls"; 
+            //var filePath = "C:\\Users\\Stas\\Downloads\\Fond_burse_2024_2025 13noiembrie.xls"; 
+            var filePath = "D:\\Licenta\\Fond_burse_2024_2025 13noiembrie.xls"; 
 
             var excelReader = new FondBurseExcelReader();
             var fonduriBurse = excelReader.ReadFondBurseFromExcel(filePath);
 
             var fonduriBurseNoi = fonduriBurse.Where(f => !_context.FondBurse.Any(fb => fb.CategorieBurse == f.CategorieBurse)).ToList();
 
-            var filePath2 = "C:\\Users\\Stas\\Downloads\\Formatii studii USV_1 octombrie 2024 finantare.xlsx";
+            //var filePath2 = "C:\\Users\\Stas\\Downloads\\Formatii studii USV_1 octombrie 2024 finantare.xlsx";
+            var filePath2 = "D:\\Licenta\\Formatii studii USV_1 octombrie 2024 finantare.xlsx";
             var excelReader2 = new FormatiiStudiiFromExcel();
             var fonduriBurse2 = excelReader2.ReadFormatiiStudiiFromExcel(filePath2);
             var fonduriBurse2Noi = fonduriBurse2
@@ -52,22 +54,24 @@ namespace Burse.Controllers
 
             try
             {
-                if (fonduriBurseNoi.Any()) 
+                bool hasChanges = false;
+                if (fonduriBurseNoi.Any())
                 {
                     _context.FondBurse.AddRange(fonduriBurseNoi);
-                    await _context.SaveChangesAsync();
-                    return Ok(fonduriBurseNoi);
+                    hasChanges = true;
                 }
-                else if (fonduriBurse2Noi.Any())
+                if (fonduriBurse2Noi.Any())
                 {
-                    _context.FormatiiStudii.AddRange(fonduriBurse2);
-                    await _context.SaveChangesAsync();
-                    return Ok(fonduriBurse2);
+                    _context.FormatiiStudii.AddRange(fonduriBurse2Noi);
+                    hasChanges = true;
                 }
-                else
+                if (hasChanges)
                 {
-                    return Ok("Nu au fost găsite fonduri noi de adăugat.");
+                    await _context.SaveChangesAsync();
+                    return Ok("Fondurile noi au fost adăugate cu succes.");
                 }
+                return Ok("Nu au fost găsite fonduri noi de adăugat.");
+
             }
             catch (Exception ex)
             {
@@ -103,7 +107,7 @@ namespace Burse.Controllers
 
                 // Citim fișierul și îl returnăm ca răspuns HTTP
                 //byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
-                 
+               
                 // Returnăm fișierul ca `FileContentResult` pentru descărcare
                 return File(fileBytes,
                             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -119,36 +123,59 @@ namespace Burse.Controllers
         public async Task<IActionResult> ProcessExcelFiles()
         {
             decimal epsilon = 0.05M;
-            string pathBurse = "C:\\Licenta\\Burse_Studenți (8).xlsx";
-            string pathStudenti = "C:\\Licenta\\C.xlsx";
+            List<string> pathStudentiList = new List<string>
+            {
+               "D:\\Licenta\\C.xls",
+               "D:\\Licenta\\aia.xls",
+               "D:\\Licenta\\esm.xls",
+               "D:\\Licenta\\IETTI.xls"
+            };
 
-            // Citim datele necesare
+            string pathBurse = "D:\\Licenta\\Burse_Studenți (1).xlsx";
+
             StudentExcelReader excelReader = new StudentExcelReader();
             List<FondBurse> fonduri = await _fondBurseService.GetDateFromBursePerformanteAsync();
-            Dictionary<string, List<StudentRecord>> studentRecords = excelReader.ReadStudentRecordsFromExcel(pathStudenti);
 
-            foreach (var entry in studentRecords)
+            foreach (var pathStudenti in pathStudentiList)
             {
-                string domeniu = entry.Key;
-                List<StudentRecord> students = ProcessStudents(entry.Value);
-                FondBurseMeritRepartizat? fondRepartizatByDomeniu = await _fondBurseMeritRepartizatService.GetByDomeniuAsync(domeniu);
+                Dictionary<string, List<StudentRecord>> studentRecords = excelReader.ReadStudentRecordsFromExcel(pathStudenti);
 
-                if (fondRepartizatByDomeniu == null) continue; // Dacă nu există fonduri, trecem la următorul domeniu
+                foreach (var entry in studentRecords)
+                {
+                    string domeniu = entry.Key;
+                    List<StudentRecord> students = ProcessStudents(entry.Value);
+                    FondBurseMeritRepartizat? fondRepartizatByDomeniu = await _fondBurseMeritRepartizatService.GetByDomeniuAsync(domeniu);
 
-                (decimal valoareAnualBP1, decimal valoareAnualBP2) = CalculateScholarshipValues(domeniu, fonduri, fondRepartizatByDomeniu);
+                    if (fondRepartizatByDomeniu == null) continue;
 
-                decimal sumaDisponibila = fondRepartizatByDomeniu.bursaAlocatata;
-                AssignScholarships(students, ref sumaDisponibila, valoareAnualBP1, valoareAnualBP2, epsilon);
+                    (decimal valoareAnualBP1, decimal valoareAnualBP2) = CalculateScholarshipValues(domeniu, fonduri, fondRepartizatByDomeniu);
 
+                    decimal sumaDisponibila = fondRepartizatByDomeniu.bursaAlocatata;
+                    AssignScholarships(students, ref sumaDisponibila, valoareAnualBP1, valoareAnualBP2, epsilon);
 
-                //salvare in db a studentilor numai ce repartizati de burse
-                students.ForEach(s => s.FondBurseMeritRepartizatId = fondRepartizatByDomeniu.ID);
-                await _fondBurseService.SaveNewStudentsAsync(students);
-
-                // Afisare rezultate
-                
+                    students.ForEach(s => s.FondBurseMeritRepartizatId = fondRepartizatByDomeniu.ID);
+                    await _fondBurseService.SaveNewStudentsAsync(students);
+                }
             }
 
+            // COUNT BURSE BP1 SI BPS2 SI INTRODUCEARE IN EXCEL
+            List<StudentRecord> studentiCuBursa = await _fondBurseService.GetStudentsWithBursaFromDatabaseAsync();
+            List<StudentScholarshipData> studentiClasificati = studentiCuBursa
+                .GroupBy(s => new { s.FondBurseMeritRepartizatId, s.FondBurseMeritRepartizat.domeniu })
+                .Select(group => new StudentScholarshipData
+                {
+                    FondBurseId = group.Key.FondBurseMeritRepartizatId,
+                    Domeniu = group.Key.domeniu,
+                    BP1Count = group.Count(s => s.Bursa.ToLower().Contains("bp1")),
+                    BP2Count = group.Count(s => s.Bursa.ToLower().Contains("bp2"))
+                }).ToList();
+
+            foreach (var item in studentiClasificati)
+            {
+                Console.WriteLine($"Domeniu: {item.Domeniu}, BP1: {item.BP1Count}, BP2: {item.BP2Count}");
+            }
+
+            ExcelUpdater.UpdateScholarshipCounts(pathBurse, studentiClasificati);
             return Ok();
         }
 
@@ -208,12 +235,21 @@ namespace Burse.Controllers
                         {
                             student.Bursa = "BP1";
                             sumaDisponibila -= valoareAnualBP1;
+                            Console.WriteLine($"{student.Media} ofer BP1");
+
                         }
-                        else
+                        else if(sumaDisponibila >= valoareAnualBP2)
                         {
                             student.Bursa = "BP2";
                             sumaDisponibila -= valoareAnualBP2;
                             aFostAcordatBP2 = true;
+                            Console.WriteLine($"{student.Media} ofer BP2");
+                        }
+                        else
+                        {
+                            student.Bursa = "Nicio bursă";
+                            Console.WriteLine($"{student.Media} ofer NICA");
+                            continue;
                         }
                     }
                     else

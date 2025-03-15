@@ -117,6 +117,11 @@ public class FormatiiStudiiFromExcel
             case "II": return "2"; // Anul 2
             case "III": return "3"; // Anul 3
             case "IV": return "4";  // Anul 4
+
+            case "I*": return "1";  // Anul 1
+            case "II*": return "2"; // Anul 2
+            case "III*": return "3"; // Anul 3
+            case "IV*": return "4";  // Anul 4
             default: return "An invalid"; // Dacă valoarea nu se potrivește (opțional, poți să alegi ce să returnezi în acest caz)
         }
     }

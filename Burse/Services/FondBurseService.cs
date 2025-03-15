@@ -230,7 +230,7 @@ namespace Burse.Services
                 foreach (var rec in groupL)
                 {
                     // ✅ Generate domain name
-                    string domeniu = generator.GenerateAcronym(rec.ProgramDeStudiu, rec.An);
+                    string domeniu = generator.GenerateAcronym(AcronymGenerator.RemoveDiacritics(rec.ProgramDeStudiu), rec.An);
 
                     // ✅ Compute the sum for the scholarship fund
                     int valRom = int.TryParse(rec.FaraTaxaRomani, out int r) ? r : 0;
@@ -409,7 +409,7 @@ namespace Burse.Services
                 int groupMStartRow = currentRow;
                 foreach (var rec in groupM)
                 {
-                    string domeniu = generator.GenerateAcronym(rec.ProgramDeStudiu, rec.An);
+                    string domeniu = generator.GenerateAcronym(AcronymGenerator.RemoveDiacritics(rec.ProgramDeStudiu), rec.An);
 
                     // ✅ Compute the sum for the scholarship fund
                     int valRom = int.TryParse(rec.FaraTaxaRomani, out int r) ? r : 0;
@@ -659,6 +659,14 @@ namespace Burse.Services
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<List<StudentRecord>> GetStudentsWithBursaFromDatabaseAsync()
+        {
+            return await _context.StudentRecord
+                .Where(s => !string.IsNullOrEmpty(s.Bursa) && s.Bursa.ToLower() != "nicio bursă")
+                .Include(s => s.FondBurseMeritRepartizat) 
+                .ToListAsync();
+        }
+
 
     }
 }
