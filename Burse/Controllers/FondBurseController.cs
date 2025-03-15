@@ -120,7 +120,7 @@ namespace Burse.Controllers
         {
             decimal epsilon = 0.05M;
             string pathBurse = "C:\\Licenta\\Burse_Studenți (8).xlsx";
-            string pathStudenti = "C:\\Licenta\\Book2.xlsx";
+            string pathStudenti = "C:\\Licenta\\C.xlsx";
 
             // Citim datele necesare
             StudentExcelReader excelReader = new StudentExcelReader();
@@ -146,11 +146,6 @@ namespace Burse.Controllers
                 await _fondBurseService.SaveNewStudentsAsync(students);
 
                 // Afisare rezultate
-                Console.WriteLine($"Domeniu: {domeniu} - Fonduri rămase: {sumaDisponibila}");
-                foreach (var s in students)
-                {
-                    Console.WriteLine($"Student: {s.Emplid}, Media: {s.Media}, Bursa: {s.Bursa}");
-                }
                 
             }
 
