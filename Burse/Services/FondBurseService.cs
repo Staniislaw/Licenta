@@ -169,6 +169,7 @@ namespace Burse.Services
                 // ---------------------------------------------------------
                 // L) Fond ramas pe program (K17:K19)
                 // ---------------------------------------------------------
+
                 sheet.Cells["K17:K19"].Merge = true;
                 sheet.Cells["K17"].Value = "Fond ramas pe program";
                 sheet.Cells["K17"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -247,13 +248,15 @@ namespace Burse.Services
                     sheet.Cells[currentRow, 2].Value = totalFond;
 
                     // ✅ Create and add record to the database
+                    string grupa = GrupuriDomeniiHelper.GetGrupa(domeniu);
+
                     var fondBursa = new FondBurseMeritRepartizat
                     {
                         domeniu = domeniu,
                         bursaAlocatata = disponibilBM / totalFiesc * totalFond,
-                        programStudiu = "licenta"
+                        programStudiu = "licenta",
+                        Grupa = grupa,
                     };
-
                     await _fondBurseMeritRepartizatService.AddAsync(fondBursa);
 
                     currentRow++;
@@ -324,7 +327,7 @@ namespace Burse.Services
                         continue; // Sărim regex-ul pentru Total-uri
                     }
                     // Aplicăm regex-ul: eliminăm (1), (2), (3), (4), dar păstrăm "-DUAL" dacă există
-                    Match match = regex.Match(programFull);
+                    /*Match match = regex.Match(programFull);
                     string programShort = match.Groups[1].Value.Trim(); // Extragem numele de bază
                     string dualSuffix = match.Groups[2].Value.Trim();  // Verificăm dacă are "-DUAL"
 
@@ -342,7 +345,13 @@ namespace Burse.Services
                     {
                         programRowMap[programShort] = new List<int>();
                     }
-                    programRowMap[programShort].Add(row);
+                    programRowMap[programShort].Add(row);*/
+                    string grupa = GrupuriDomeniiHelper.GetGrupa(programFull);
+                    if (!programRowMap.ContainsKey(grupa))
+                    {
+                        programRowMap[grupa] = new List<int>();
+                    }
+                    programRowMap[grupa].Add(row);
                 }
 
 
@@ -425,12 +434,16 @@ namespace Burse.Services
 
                    
                     sheet.Cells[currentRow, 2].Value = totalFond;
+                    string grupa = GrupuriDomeniiHelper.GetGrupa(domeniu);
                     var fondBursa = new FondBurseMeritRepartizat
                     {
                         domeniu = domeniu,
                         bursaAlocatata = disponibilBM / totalFiesc * totalFond,
                         programStudiu = "master",
+                        Grupa = grupa,
                     };
+
+
 
                     await _fondBurseMeritRepartizatService.AddAsync(fondBursa);
                     currentRow++;
@@ -493,7 +506,14 @@ namespace Burse.Services
                         continue; // Sărim regex-ul pentru Total-uri
                     }
                     // Aplicăm regex-ul: eliminăm (1), (2), (3), (4), dar păstrăm "-DUAL" dacă există
-                    Match match = regex.Match(programFull);
+                    string grupa = GrupuriDomeniiHelper.GetGrupa(programFull);
+                    if (!programRowMap.ContainsKey(grupa))
+                    {
+                        programRowMap[grupa] = new List<int>();
+                    }
+                    programRowMap[grupa].Add(row);
+
+                    /*Match match = regex.Match(programFull);
                     string programShort = match.Groups[1].Value.Trim(); // Extragem numele de bază
                     string dualSuffix = match.Groups[2].Value.Trim();  // Verificăm dacă are "-DUAL"
 
@@ -511,7 +531,7 @@ namespace Burse.Services
                     {
                         programRowMap[programShort] = new List<int>();
                     }
-                    programRowMap[programShort].Add(row);
+                    programRowMap[programShort].Add(row);*/
                 }
 
 
@@ -666,7 +686,36 @@ namespace Burse.Services
                 .Include(s => s.FondBurseMeritRepartizat) 
                 .ToListAsync();
         }
+        public async Task<Dictionary<string, List<StudentRecord>>> GetStudentiEligibiliPeGrupaAsync()
+        {
+            var studenti = await _context.StudentRecord
+                .Include(s => s.FondBurseMeritRepartizat)
+                .Where(s => s.FondBurseMeritRepartizat != null)
+                .Where(s => s.Bursa == null || s.Bursa == "nicio bursă")
+                .ToListAsync();
 
+            return studenti
+                .GroupBy(s => s.FondBurseMeritRepartizat.Grupa)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.OrderByDescending(s => s.Media).ToList()
+                );
+        }
+        public async Task<Dictionary<string, List<StudentRecord>>> GetStudentiEligibiliPeProgramAsync()
+        {
+            var studenti = await _context.StudentRecord
+                .Include(s => s.FondBurseMeritRepartizat)
+                .Where(s => s.FondBurseMeritRepartizat != null)
+                .Where(s => s.Bursa == null || s.Bursa == "nicio bursă")
+                .ToListAsync();
+
+            return studenti
+                .GroupBy(s => s.FondBurseMeritRepartizat.programStudiu) // "licenta" / "master"
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.OrderByDescending(s => s.Media).ToList()
+                );
+        }
 
     }
 }

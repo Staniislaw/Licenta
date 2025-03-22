@@ -29,6 +29,14 @@ namespace Burse.Services
                                  .FirstOrDefaultAsync(f => f.domeniu == domeniu);
         }
 
+        // ✅ UPDATE fonduri ramase
+        public async Task UpdateAsync(FondBurseMeritRepartizat fond)
+        {
+            _context.FondBurseMeritRepartizat.Update(fond);
+            await _context.SaveChangesAsync();
+        }
+
+
         // ✅ Add a new record
         public async Task<bool> AddAsync(FondBurseMeritRepartizat newFond)
         {
@@ -40,6 +48,7 @@ namespace Burse.Services
             {
                 // ✅ Update existing record
                 existingFond.bursaAlocatata = newFond.bursaAlocatata;
+                existingFond.Grupa = newFond.Grupa;
                 _context.FondBurseMeritRepartizat.Update(existingFond);
             }
             else

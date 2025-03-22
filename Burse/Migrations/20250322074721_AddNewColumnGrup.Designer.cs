@@ -3,6 +3,7 @@ using Burse.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Burse.Migrations
 {
     [DbContext(typeof(BurseDBContext))]
-    partial class BurseDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250322074721_AddNewColumnGrup")]
+    partial class AddNewColumnGrup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,9 +52,6 @@ namespace Burse.Migrations
 
                     b.Property<string>("Grupa")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("SumaRamasa")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("bursaAlocatata")
                         .HasColumnType("decimal(18,2)");

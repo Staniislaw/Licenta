@@ -9,5 +9,6 @@ namespace Burse.Services.Abstractions
         Task<bool> AddAsync(FondBurseMeritRepartizat newFond);
         Task<bool> UpdateAsync(string domeniu, decimal newAmount);
         Task<bool> DeleteAsync(string domeniu);
+        Task UpdateAsync(FondBurseMeritRepartizat fond);
     }
 }
