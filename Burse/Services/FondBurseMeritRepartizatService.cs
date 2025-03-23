@@ -20,7 +20,7 @@ namespace Burse.Services
         {
             return await _context.FondBurseMeritRepartizat.ToListAsync();
         }
-
+       
 
         // ✅ Get a single record by domain (domeniu)
         public async Task<FondBurseMeritRepartizat> GetByDomeniuAsync(string domeniu)

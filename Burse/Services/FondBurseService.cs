@@ -716,6 +716,18 @@ namespace Burse.Services
                     g => g.OrderByDescending(s => s.Media).ToList()
                 );
         }
+        public async Task<List<StudentRecord>> GetStudentiEligibiliPeDomeniiAsync(List<string> domenii)
+        {
+            return await _context.StudentRecord
+                .Include(s => s.FondBurseMeritRepartizat)
+                .Where(s => s.FondBurseMeritRepartizat != null)
+                .Where(s => domenii.Contains(s.FondBurseMeritRepartizat.Grupa))
+                .Where(s => s.FondBurseMeritRepartizat.programStudiu == "licenta")
+                .Where(s => s.Bursa == null || s.Bursa == "nicio bursă")
+                .ToListAsync();
+        }
+
+
 
     }
 }

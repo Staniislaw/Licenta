@@ -11,6 +11,7 @@ namespace Burse.Services.Abstractions
         Task<List<StudentRecord>> GetStudentsWithBursaFromDatabaseAsync();
         Task<Dictionary<string, List<StudentRecord>>> GetStudentiEligibiliPeGrupaAsync();
         Task<Dictionary<string, List<StudentRecord>>> GetStudentiEligibiliPeProgramAsync();
+        Task<List<StudentRecord>> GetStudentiEligibiliPeDomeniiAsync(List<string> domenii);
 
     }
 }

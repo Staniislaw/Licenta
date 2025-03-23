@@ -164,24 +164,7 @@ namespace Burse.Controllers
 
 
 
-            // COUNT BURSE BP1 SI BPS2 SI INTRODUCEARE IN EXCEL
-            List<StudentRecord> studentiCuBursa = await _fondBurseService.GetStudentsWithBursaFromDatabaseAsync();
-            List<StudentScholarshipData> studentiClasificati = studentiCuBursa
-                .GroupBy(s => new { s.FondBurseMeritRepartizatId, s.FondBurseMeritRepartizat.domeniu })
-                .Select(group => new StudentScholarshipData
-                {
-                    FondBurseId = group.Key.FondBurseMeritRepartizatId,
-                    Domeniu = group.Key.domeniu,
-                    BP1Count = group.Count(s => s.Bursa.ToLower().Contains("bp1")),
-                    BP2Count = group.Count(s => s.Bursa.ToLower().Contains("bp2"))
-                }).ToList();
-
-            foreach (var item in studentiClasificati)
-            {
-                Console.WriteLine($"Domeniu: {item.Domeniu}, BP1: {item.BP1Count}, BP2: {item.BP2Count}");
-            }
-
-            ExcelUpdater.UpdateScholarshipCounts(pathBurse, studentiClasificati);
+            
 
 
             //verificare 
@@ -234,6 +217,12 @@ namespace Burse.Controllers
                 }
             }
 
+
+
+
+
+
+
             //PASUL 2 PRELUAM SUMELE DISPONIBILE PENTRU LICENTA/MASTER SI OFERIM BURSE IN FUNCTIE DE MEDIE
             var sumaDisponibilaPeProgram = fonduriRepartizate
                 .GroupBy(f => f.programStudiu)
@@ -273,6 +262,77 @@ namespace Burse.Controllers
                     await _fondBurseMeritRepartizatService.UpdateAsync(fond);
                 }
             }
+            // COUNT BURSE BP1 SI BPS2 SI INTRODUCEARE IN EXCEL
+            List<StudentRecord> studentiCuBursa = await _fondBurseService.GetStudentsWithBursaFromDatabaseAsync();
+            List<StudentScholarshipData> studentiClasificati = studentiCuBursa
+                .GroupBy(s => new { s.FondBurseMeritRepartizatId, s.FondBurseMeritRepartizat.domeniu })
+                .Select(group => new StudentScholarshipData
+                {
+                    FondBurseId = group.Key.FondBurseMeritRepartizatId,
+                    Domeniu = group.Key.domeniu,
+                    BP1Count = group.Count(s => s.Bursa.ToLower().Contains("bp1")),
+                    BP2Count = group.Count(s => s.Bursa.ToLower().Contains("bp2"))
+                }).ToList();
+
+            foreach (var item in studentiClasificati)
+            {
+                Console.WriteLine($"Domeniu: {item.Domeniu}, BP1: {item.BP1Count}, BP2: {item.BP2Count}");
+            }
+
+            ExcelUpdater.UpdateScholarshipCounts(pathBurse, studentiClasificati);
+
+
+
+            //PASUL 3 OFERIM BURSE PE GRUPUIRIDE DOMENII
+            // PASUL 3 – Repartizare burse pe grupuri de domenii
+
+
+            foreach (var grup in GrupuriDomeniiHelper.GrupuriBurse)
+            {
+                string numeGrup = grup.Key;
+                List<string> domeniiGrup = grup.Value;
+
+                // 🔎 Fondurile de licență pentru acest grup (toate domeniile)
+                var fonduriInGrup = fonduriRepartizate
+                     .Where(f =>
+                         f.programStudiu == "licenta" &&
+                         GetDomeniiDinGrupa(f.Grupa)
+                             .Any(domeniu => domeniiGrup.Contains(domeniu)))
+                     .ToList();
+
+
+                if (!fonduriInGrup.Any()) continue;
+
+                // 🔢 Suma totală disponibilă în grup
+                decimal sumaDisponibila = fonduriInGrup.Sum(f => f.SumaRamasa);
+
+                // 🔁 Dicționar cu suma pe fiecare fond (pentru update ulterior)
+                var sumaRamasaPeFond = fonduriInGrup.ToDictionary(f => f.ID, f => f.SumaRamasa);
+
+                // 🎓 Toți studenții eligibili din domeniile grupului
+                var studentiLicenta = await _fondBurseService
+                    .GetStudentiEligibiliPeDomeniiAsync(domeniiGrup);
+
+                if (!studentiLicenta.Any()) continue;
+
+                // 🔽 Sortează după medie descrescător
+                studentiLicenta = studentiLicenta
+                    .OrderByDescending(s => s.Media)
+                    .ToList();
+
+                // 🏆 Atribuire burse doar BP2
+                AssignOnlyBP2(studentiLicenta, ref sumaDisponibila, fonduri, sumaRamasaPeFond);
+
+                // 💾 Salvare
+                await _fondBurseService.SaveNewStudentsAsync(studentiLicenta);
+
+                // 📦 Update pe toate fondurile
+                foreach (var fond in fonduriInGrup)
+                {
+                    fond.SumaRamasa = sumaRamasaPeFond[fond.ID];
+                    await _fondBurseMeritRepartizatService.UpdateAsync(fond);
+                }
+            }
 
 
 
@@ -299,6 +359,18 @@ namespace Burse.Controllers
             return Ok();
         }
 
+
+        // GET DOAR DOMENIU IETTI/ RST SUNT DESPARTITE
+        public static List<string> GetDomeniiDinGrupa(string grupa)
+        {
+            if (string.IsNullOrEmpty(grupa))
+                return new List<string>();
+
+            // Normalizezi ex: "IETTI/RST" => ["IETTI", "RST"]
+            return grupa.Split('/')
+                .Select(d => d.Trim().ToUpper()) // sau păstrezi lowercase, după cum ai în GrupuriBurse
+                .ToList();
+        }
         /// <summary>
         /// Elimină studenții neeligibili și îi sortează descrescător după medie.
         /// </summary>

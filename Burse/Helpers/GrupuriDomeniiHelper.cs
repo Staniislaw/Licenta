@@ -36,5 +36,15 @@
 
             return "Necunoscut";
         }
+
+        public static readonly Dictionary<string, List<string>> GrupuriBurse = new()
+        {
+            { "G1", new List<string> { "C" } }, 
+
+            { "G2", new List<string> { "AIA", "IETTI", "RST" } },
+
+            { "G3", new List<string> { "ESSCA", "SE", "ESM", "IEN", "ETI", "ME" } }, 
+        };
+
     }
 }
