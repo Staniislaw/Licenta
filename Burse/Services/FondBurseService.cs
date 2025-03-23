@@ -33,6 +33,16 @@ namespace Burse.Services
 
             return fonduri;
         }
+        public async Task ResetSumaRamasaAsync()
+        {
+            var fonduri = await _context.FondBurseMeritRepartizat.ToListAsync();
+            foreach (var fond in fonduri)
+            {
+                fond.SumaRamasa = fond.bursaAlocatata;
+            }
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<List<FormatiiStudii>> GetAllFromFormatiiStudiiAsync()
         {
             var formatiiStudii = await _context.FormatiiStudii.ToListAsync();
@@ -654,31 +664,69 @@ namespace Burse.Services
                 }
             }
         }
+        /* public async Task SaveNewStudentsAsync(List<StudentRecord> students)
+         {
+             // Listă pentru studenții care trebuie adăugați
+             var studentsToAdd = new List<StudentRecord>();
+
+             foreach (var student in students)
+             {
+                 // Verifică dacă studentul există deja în baza de date
+                 bool studentExists = await _context.StudentRecord
+                     .AnyAsync(s => s.Emplid == student.Emplid);
+
+                 if (!studentExists)
+                 {
+                     // Adaugă studentul în lista de studenți de adăugat
+                     studentsToAdd.Add(student);
+                 }
+             }
+
+             // Adaugă studenții care nu există deja
+             if (studentsToAdd.Any())
+             {
+                 await _context.StudentRecord.AddRangeAsync(studentsToAdd);
+                 await _context.SaveChangesAsync();
+             }
+         }*/
         public async Task SaveNewStudentsAsync(List<StudentRecord> students)
         {
-            // Listă pentru studenții care trebuie adăugați
+            // Obținem Emplid-urile din lista primită
+            var emplids = students.Select(s => s.Emplid).ToList();
+
+            // Preluăm din DB studenții existenți cu acele Emplid-uri
+            var existingStudents = await _context.StudentRecord
+                .Where(s => emplids.Contains(s.Emplid))
+                .ToListAsync();
+
             var studentsToAdd = new List<StudentRecord>();
 
             foreach (var student in students)
             {
-                // Verifică dacă studentul există deja în baza de date
-                bool studentExists = await _context.StudentRecord
-                    .AnyAsync(s => s.Emplid == student.Emplid);
+                var existingStudent = existingStudents.FirstOrDefault(s => s.Emplid == student.Emplid);
 
-                if (!studentExists)
+                if (existingStudent == null)
                 {
-                    // Adaugă studentul în lista de studenți de adăugat
+                    // Adăugăm student nou
                     studentsToAdd.Add(student);
+                }
+                else
+                {
+                    // 🔁 Actualizăm doar câmpul Bursa și, dacă vrei, FondBurseMeritRepartizatId
+                    existingStudent.Bursa = student.Bursa;
                 }
             }
 
-            // Adaugă studenții care nu există deja
+            // Adăugăm studenții noi
             if (studentsToAdd.Any())
             {
                 await _context.StudentRecord.AddRangeAsync(studentsToAdd);
-                await _context.SaveChangesAsync();
             }
+
+            // Salvăm toate modificările (insert + update)
+            await _context.SaveChangesAsync();
         }
+
         public async Task<List<StudentRecord>> GetStudentsWithBursaFromDatabaseAsync()
         {
             return await _context.StudentRecord
@@ -728,6 +776,15 @@ namespace Burse.Services
         }
 
 
+        public async Task ResetStudentiAsync()
+        {
+            var studenti = await _context.StudentRecord.ToListAsync();
+            foreach (var s in studenti)
+            {
+                s.Bursa = null;
+            }
+            await _context.SaveChangesAsync();
+        }
 
     }
 }
