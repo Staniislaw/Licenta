@@ -8,118 +8,115 @@ namespace Burse.Helpers
 {
     public class StudentExcelReader
     {
-        public Dictionary<string, List<StudentRecord>> ReadStudentRecordsFromExcel(string filePath)
+        public Dictionary<string, List<StudentRecord>> ReadStudentRecordsFromExcel(Stream stream, string fisier)
         {
             var studentRecordsByDomain = new Dictionary<string, List<StudentRecord>>();
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
-            string fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
+            string fileName = System.IO.Path.GetFileNameWithoutExtension(fisier);
             var columnMappings = LoadColumnMappingsFromDatabase(); // Încărcăm mapping-ul
-
-            using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+            
+            using (var reader = ExcelReaderFactory.CreateReader(stream))
             {
-                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                do
                 {
-                    do
-                    {
-                        string formattedSheetName = reader.Name;
-                        string domeniu = $"{fileName.ToUpper()} ({formattedSheetName})";
+                    string formattedSheetName = reader.Name;
+                    string domeniu = $"{fileName.ToUpper()} ({formattedSheetName})";
 
-                        // Detectăm "Xcdual" și transformăm în "C (X)-DUAL"
-                        var matchDual = System.Text.RegularExpressions.Regex.Match(formattedSheetName, @"^(\d+)\w*dual$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-                        if (matchDual.Success)
+                    // Detectăm "Xcdual" și transformăm în "C (X)-DUAL"
+                    var matchDual = System.Text.RegularExpressions.Regex.Match(formattedSheetName, @"^(\d+)\w*dual$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                    if (matchDual.Success)
+                    {
+                        formattedSheetName = $"{fileName} ({matchDual.Groups[1].Value})-DUAL";
+                        domeniu = formattedSheetName;
+                    }
+                    else
+                    {
+                        // Detectăm orice format de tip "1scc", "2rcc", "2sc" și îl transformăm în "X (Y)", excluzând "dual"
+                        var matchGeneric = System.Text.RegularExpressions.Regex.Match(formattedSheetName, @"^(\d+)([a-zA-Z]+)$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                        if (matchGeneric.Success && !matchGeneric.Groups[2].Value.ToLower().Contains("dual"))
                         {
-                            formattedSheetName = $"{fileName} ({matchDual.Groups[1].Value})-DUAL";
+                            formattedSheetName = $"{matchGeneric.Groups[2].Value.ToUpper()} ({matchGeneric.Groups[1].Value})";
                             domeniu = formattedSheetName;
                         }
-                        else
-                        {
-                            // Detectăm orice format de tip "1scc", "2rcc", "2sc" și îl transformăm în "X (Y)", excluzând "dual"
-                            var matchGeneric = System.Text.RegularExpressions.Regex.Match(formattedSheetName, @"^(\d+)([a-zA-Z]+)$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-                            if (matchGeneric.Success && !matchGeneric.Groups[2].Value.ToLower().Contains("dual"))
-                            {
-                                formattedSheetName = $"{matchGeneric.Groups[2].Value.ToUpper()} ({matchGeneric.Groups[1].Value})";
-                                domeniu = formattedSheetName;
-                            }
-                        }
+                    }
                        
-                        if (fileName.ToUpper() == "IETTI")
+                    if (fileName.ToUpper() == "IETTI")
+                    {
+                        if (formattedSheetName == "1")
                         {
-                            if (formattedSheetName == "1")
-                            {
-                                domeniu = "IETTI (1)";
-                            }
-                            else if (formattedSheetName == "2")
-                            {
-                                domeniu = "IETTI (2)";
-                            }
-                            else if (formattedSheetName == "3")
-                            {
-                                domeniu = "RST (3)";
-                            }
-                            else if (formattedSheetName == "4")
-                            {
-                                domeniu = "RST (4)";
-                            }
+                            domeniu = "IETTI (1)";
                         }
-
-                        bool isTableStarted = false;
-                        Dictionary<string, int> columnMapping = new Dictionary<string, int>();
-
-                        Console.WriteLine($"📄 Citim foaia: {reader.Name}");
-
-                        while (reader.Read())
+                        else if (formattedSheetName == "2")
                         {
-                            int totalColumns = reader.FieldCount;
-                            string firstCellValue = reader.GetValue(0)?.ToString()?.Trim() ?? "";
+                            domeniu = "IETTI (2)";
+                        }
+                        else if (formattedSheetName == "3")
+                        {
+                            domeniu = "RST (3)";
+                        }
+                        else if (formattedSheetName == "4")
+                        {
+                            domeniu = "RST (4)";
+                        }
+                    }
 
-                            if (!isTableStarted && firstCellValue.ToLower().Contains("nr. crt"))
+                    bool isTableStarted = false;
+                    Dictionary<string, int> columnMapping = new Dictionary<string, int>();
+
+                    Console.WriteLine($"📄 Citim foaia: {reader.Name}");
+
+                    while (reader.Read())
+                    {
+                        int totalColumns = reader.FieldCount;
+                        string firstCellValue = reader.GetValue(0)?.ToString()?.Trim() ?? "";
+
+                        if (!isTableStarted && firstCellValue.ToLower().Contains("nr. crt"))
+                        {
+                            isTableStarted = true;
+                            for (int i = 0; i < totalColumns; i++)
                             {
-                                isTableStarted = true;
-                                for (int i = 0; i < totalColumns; i++)
+                                string colName = reader.GetValue(i)?.ToString()?.Trim().ToLower() ?? "";
+                                if (!string.IsNullOrEmpty(colName))
                                 {
-                                    string colName = reader.GetValue(i)?.ToString()?.Trim().ToLower() ?? "";
-                                    if (!string.IsNullOrEmpty(colName))
-                                    {
-                                        columnMapping[colName] = i;
-                                    }
+                                    columnMapping[colName] = i;
                                 }
-                                Console.WriteLine($"📌 Antet tabel detectat, mapăm coloanele...");
-                                continue;
                             }
-
-                            if (!isTableStarted || columnMapping.Count == 0) continue;
-
-                            if (!studentRecordsByDomain.ContainsKey(domeniu))
-                            {
-                                studentRecordsByDomain[domeniu] = new List<StudentRecord>();
-                            }
-
-                            if (int.TryParse(firstCellValue, out int nrCrt))
-                            {
-                                var student = new StudentRecord
-                                {
-                                    NrCrt = nrCrt,
-                                    Emplid = GetColumnValue(reader, columnMapping, columnMappings["Emplid"]),
-                                    CNP = GetColumnValue(reader, columnMapping, columnMappings["CNP"]),
-                                    NumeStudent = GetColumnValue(reader, columnMapping, columnMappings["NumeStudent"]),
-                                    TaraCetatenie = GetColumnValue(reader, columnMapping, columnMappings["TaraCetatenie"]),
-                                    An = GetColumnValueAsInt(reader, columnMapping, columnMappings["An"]),
-                                    Media = GetColumnValueAsDecimal(reader, columnMapping, columnMappings["Media"]),
-                                    PunctajAn = GetColumnValueAsInt(reader, columnMapping, columnMappings["PunctajAn"]),
-                                    CO = GetColumnValueAsInt(reader, columnMapping, columnMappings["CO"]),
-                                    RO = GetColumnValueAsInt(reader, columnMapping, columnMappings["RO"]),
-                                    TC = GetColumnValueAsInt(reader, columnMapping, columnMappings["TC"]),
-                                    TR = GetColumnValueAsInt(reader, columnMapping, columnMappings["TR"]),
-                                    SursaFinantare = GetColumnValue(reader, columnMapping, columnMappings["SursaFinantare"])
-                                };
-
-                                Console.WriteLine($"👨‍🎓 Student detectat: {student.NumeStudent} - Media: {student.Media}");
-                                studentRecordsByDomain[domeniu].Add(student);
-                            }
+                            Console.WriteLine($"📌 Antet tabel detectat, mapăm coloanele...");
+                            continue;
                         }
-                    } while (reader.NextResult());
-                }
+
+                        if (!isTableStarted || columnMapping.Count == 0) continue;
+
+                        if (!studentRecordsByDomain.ContainsKey(domeniu))
+                        {
+                            studentRecordsByDomain[domeniu] = new List<StudentRecord>();
+                        }
+
+                        if (int.TryParse(firstCellValue, out int nrCrt))
+                        {
+                            var student = new StudentRecord
+                            {
+                                NrCrt = nrCrt,
+                                Emplid = GetColumnValue(reader, columnMapping, columnMappings["Emplid"]),
+                                CNP = GetColumnValue(reader, columnMapping, columnMappings["CNP"]),
+                                NumeStudent = GetColumnValue(reader, columnMapping, columnMappings["NumeStudent"]),
+                                TaraCetatenie = GetColumnValue(reader, columnMapping, columnMappings["TaraCetatenie"]),
+                                An = GetColumnValueAsInt(reader, columnMapping, columnMappings["An"]),
+                                Media = GetColumnValueAsDecimal(reader, columnMapping, columnMappings["Media"]),
+                                PunctajAn = GetColumnValueAsInt(reader, columnMapping, columnMappings["PunctajAn"]),
+                                CO = GetColumnValueAsInt(reader, columnMapping, columnMappings["CO"]),
+                                RO = GetColumnValueAsInt(reader, columnMapping, columnMappings["RO"]),
+                                TC = GetColumnValueAsInt(reader, columnMapping, columnMappings["TC"]),
+                                TR = GetColumnValueAsInt(reader, columnMapping, columnMappings["TR"]),
+                                SursaFinantare = GetColumnValue(reader, columnMapping, columnMappings["SursaFinantare"])
+                            };
+
+                            Console.WriteLine($"👨‍🎓 Student detectat: {student.NumeStudent} - Media: {student.Media}");
+                            studentRecordsByDomain[domeniu].Add(student);
+                        }
+                    }
+                } while (reader.NextResult());
             }
 
             return studentRecordsByDomain;

@@ -10,6 +10,7 @@ using Burse.Helpers;
 using System.Text.RegularExpressions;
 using Burse.Services;
 using Microsoft.EntityFrameworkCore;
+using DocumentFormat.OpenXml.Vml.Office;
 
 namespace Burse.Controllers
 {
@@ -30,20 +31,31 @@ namespace Burse.Controllers
         }
 
         [HttpPost("AddFondBurse")]
-        public async Task<IActionResult> AddFondBurse()
+        public async Task<IActionResult> AddFondBurse(List<IFormFile> files)
         {
             //var filePath = "C:\\Users\\Stas\\Downloads\\Fond_burse_2024_2025 13noiembrie.xls"; 
-            var filePath = "D:\\Licenta\\Fond_burse_2024_2025 13noiembrie.xls"; 
+            //var filePath = "D:\\Licenta\\Fond_burse_2024_2025 13noiembrie.xls"; 
+            if (files == null || files.Count == 0)
+                return BadRequest("Nu s-au primit fișiere.");
+            var fonduriBurseFile = files[0];
 
             var excelReader = new FondBurseExcelReader();
-            var fonduriBurse = excelReader.ReadFondBurseFromExcel(filePath);
+            List<FondBurse> fonduriBurse;
+            using (var stream1 = fonduriBurseFile.OpenReadStream())
+            {
+                fonduriBurse = excelReader.ReadFondBurseFromExcel(stream1);
+            }
 
             var fonduriBurseNoi = fonduriBurse.Where(f => !_context.FondBurse.Any(fb => fb.CategorieBurse == f.CategorieBurse)).ToList();
 
             //var filePath2 = "C:\\Users\\Stas\\Downloads\\Formatii studii USV_1 octombrie 2024 finantare.xlsx";
-            var filePath2 = "D:\\Licenta\\Formatii studii USV_1 octombrie 2024 finantare.xlsx";
+            var formatiiStudiiFile = files[1];
             var excelReader2 = new FormatiiStudiiFromExcel();
-            var fonduriBurse2 = excelReader2.ReadFormatiiStudiiFromExcel(filePath2);
+            List<FormatiiStudii> fonduriBurse2;
+            using (var stream2 = formatiiStudiiFile.OpenReadStream())
+            {
+                fonduriBurse2 = excelReader2.ReadFormatiiStudiiFromExcel(stream2);
+            }
             var fonduriBurse2Noi = fonduriBurse2
             .Where(f => !_context.FormatiiStudii.Any(fs =>
                 fs.Facultatea == f.Facultatea &&
@@ -68,10 +80,10 @@ namespace Burse.Controllers
                 if (hasChanges)
                 {
                     await _context.SaveChangesAsync();
-                    return Ok("Fondurile noi au fost adăugate cu succes.");
-                }
-                return Ok("Nu au fost găsite fonduri noi de adăugat.");
+                    return Ok(new { message = "Fondurile noi au fost adăugate cu succes." });
 
+                }
+                return Ok(new { message = "Nu au fost găsite fonduri noi de adăugat." });
             }
             catch (Exception ex)
             {
@@ -119,31 +131,31 @@ namespace Burse.Controllers
             }
         }
 
-        [HttpGet("process")]
-        public async Task<IActionResult> ProcessExcelFiles()
+        [HttpPost("process")]
+        public async Task<IActionResult> ProcessExcelFiles([FromForm] List<IFormFile> pathStudentiList,IFormFile burseFile)
         {
             //await _fondBurseService.ResetSumaRamasaAsync();
             //await _fondBurseService.ResetStudentiAsync();
             decimal epsilon = 0.05M;
-            List<string> pathStudentiList = new List<string>
-            {
-               "D:\\Licenta\\C.xls",
-               "D:\\Licenta\\aia.xls",
-               "D:\\Licenta\\esm.xls",
-               "D:\\Licenta\\IETTI.xls"
-            };
 
-            string pathBurse = "D:\\Licenta\\Burse_Studenți (1).xlsx";
+            if (burseFile == null)
+            {
+                return BadRequest("Fișierul Burse_Studenti.xlsx nu a fost găsit.");
+            }
+            var streamBurseFile = burseFile.OpenReadStream();
 
             StudentExcelReader excelReader = new StudentExcelReader();
             List<FondBurse> fonduri = await _fondBurseService.GetDateFromBursePerformanteAsync();
 
             foreach (var pathStudenti in pathStudentiList)
             {
-                Dictionary<string, List<StudentRecord>> studentRecords = excelReader.ReadStudentRecordsFromExcel(pathStudenti);
+                using var stream = pathStudenti.OpenReadStream();
+
+                Dictionary<string, List<StudentRecord>> studentRecords = excelReader.ReadStudentRecordsFromExcel(stream, pathStudenti.FileName);
 
                 foreach (var entry in studentRecords)
                 {
+
                     string domeniu = entry.Key;
                     List<StudentRecord> students = ProcessStudents(entry.Value);
                     FondBurseMeritRepartizat? fondRepartizatByDomeniu = await _fondBurseMeritRepartizatService.GetByDomeniuAsync(domeniu);
@@ -184,7 +196,9 @@ namespace Burse.Controllers
                 Console.WriteLine($"Domeniu: {item.Domeniu}, BP1: {item.BP1Count}, BP2: {item.BP2Count}");
             }
 
-            ExcelUpdater.UpdateScholarshipCounts(pathBurse, studentiClasificati1);
+            /*using var inputStream = burseFile.OpenReadStream();
+            var updatedStream = ExcelUpdater.UpdateScholarshipCounts(inputStream, studentiClasificati1);
+            */
 
 
             //verificare 
@@ -251,11 +265,7 @@ namespace Burse.Controllers
                 }).ToList();
 
          
-            ExcelUpdater.UpdateScholarshipCounts("D:\\Licenta\\Burse_Studenți (2).xlsx", studentiClasificati4);
-
-
-
-
+            //ExcelUpdater.UpdateScholarshipCounts("D:\\Licenta\\Burse_Studenți (2).xlsx", studentiClasificati4);
 
             //PASUL 2 PRELUAM SUMELE DISPONIBILE PENTRU LICENTA/MASTER SI OFERIM BURSE IN FUNCTIE DE MEDIE
             var sumaDisponibilaPeProgram = fonduriRepartizate
@@ -314,7 +324,7 @@ namespace Burse.Controllers
                 Console.WriteLine($"Domeniu: {item.Domeniu}, BP1: {item.BP1Count}, BP2: {item.BP2Count}");
             }
 
-            ExcelUpdater.UpdateScholarshipCounts("D:\\Licenta\\Burse_Studenți (3).xlsx", studentiClasificati2);
+            //ExcelUpdater.UpdateScholarshipCounts("D:\\Licenta\\Burse_Studenți (3).xlsx", studentiClasificati2);
 
 
             //PASUL 3 OFERIM BURSE PE GRUPUIRIDE DOMENII
@@ -390,7 +400,7 @@ namespace Burse.Controllers
                 Console.WriteLine($"Domeniu: {item.Domeniu}, BP1: {item.BP1Count}, BP2: {item.BP2Count}");
             }
 
-            ExcelUpdater.UpdateScholarshipCounts("D:\\Licenta\\Burse_Studenți (4).xlsx", studentiClasificati3);
+            //ExcelUpdater.UpdateScholarshipCounts("D:\\Licenta\\Burse_Studenți (4).xlsx", studentiClasificati3);
 
 
 
@@ -476,10 +486,16 @@ namespace Burse.Controllers
                 }).ToList();
 
 
-            ExcelUpdater.UpdateScholarshipCounts("D:\\Licenta\\Burse_Studenți (5).xlsx", studentiClasificati5);
+            //ExcelUpdater.UpdateScholarshipCounts("D:\\Licenta\\Burse_Studenți (5).xlsx", studentiClasificati5);
+            using var inputStream = burseFile.OpenReadStream();
+            var updatedStream = ExcelUpdater.UpdateScholarshipCounts(inputStream, studentiClasificati5);
 
+            return File(
+                updatedStream,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "Burse_Studenti_Actualizat.xlsx"
+                );
 
-            return Ok();
         }
 
 

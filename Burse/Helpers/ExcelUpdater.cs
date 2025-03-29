@@ -4,11 +4,11 @@ using OfficeOpenXml;
 
 public class ExcelUpdater
 {
-    public static void UpdateScholarshipCounts(string filePath, List<StudentScholarshipData> studentiClasificati)
+    public static MemoryStream UpdateScholarshipCounts(Stream fileStream, List<StudentScholarshipData> studentiClasificati)
     {
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-        using (var package = new ExcelPackage(new FileInfo(filePath)))
+        using var package = new ExcelPackage(fileStream);
         {
             var worksheet = package.Workbook.Worksheets[0];
 
@@ -33,7 +33,7 @@ public class ExcelUpdater
             if (headerRow == -1)
             {
                 Console.WriteLine("⚠️ Nu s-a găsit rândul antetului pentru tabel.");
-                return;
+                return null;
             }
 
             // 🟢 Găsim indexul coloanelor, inclusiv în celule fuzionate
@@ -50,7 +50,7 @@ public class ExcelUpdater
             if (programStudiuCol == -1 || bp1Col == -1 || bp2Col == -1)
             {
                 Console.WriteLine("⚠️ Nu s-au găsit toate coloanele necesare în foaia selectată.");
-                return;
+                return null;
             }
 
             int lastRow = worksheet.Dimension.End.Row;
@@ -68,8 +68,13 @@ public class ExcelUpdater
                 }
             }
 
-            package.Save();
             Console.WriteLine("✅ Datele au fost actualizate în fișierul Excel.");
+
+            var outputStream = new MemoryStream();
+            package.SaveAs(outputStream);
+            outputStream.Position = 0;
+            return outputStream;
+
         }
     }
 

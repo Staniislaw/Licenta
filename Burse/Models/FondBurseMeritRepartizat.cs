@@ -1,4 +1,6 @@
-﻿namespace Burse.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Burse.Models
 {
     public class FondBurseMeritRepartizat
     {
@@ -8,7 +10,7 @@
         public string programStudiu { get; set; }
         public string Grupa { get; set; }
         public decimal SumaRamasa { get; set; }
-
+        [JsonIgnore]
         public List<StudentRecord> Studenti { get; set; } = new List<StudentRecord>();
     }
 }
