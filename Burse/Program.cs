@@ -1,9 +1,10 @@
-using Burse.Data;
+﻿using Burse.Data;
 using Burse.Services.Abstractions;
 using Burse.Services;
 
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using Burse.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IFondBurseService, FondBurseService>();
 builder.Services.AddScoped<IFondBurseMeritRepartizatService, FondBurseMeritRepartizatService>();
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -23,19 +23,13 @@ builder.Services.AddCors(options =>
                .AllowAnyMethod()
                .AllowAnyHeader());
 });
-
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.ReferenceHandler = null; // sau nu seta deloc această opțiune
 });
 
-
 builder.Services.AddScoped<IStudentService, StudentService>();
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-    });
+builder.Services.AddScoped<GrupuriDomeniiHelper, GrupuriDomeniiHelper>();
 
 var app = builder.Build();
 

@@ -21,13 +21,15 @@ namespace Burse.Controllers
         private readonly BurseDBContext _context;
         private readonly IFondBurseService _fondBurseService;
         private readonly IFondBurseMeritRepartizatService _fondBurseMeritRepartizatService;
+        private readonly GrupuriDomeniiHelper _grupuriHelper;
 
 
-        public FondBurseController(BurseDBContext context, IFondBurseService fondBurseService, IFondBurseMeritRepartizatService fondBurseMeritRepartizatService)
+        public FondBurseController(BurseDBContext context, IFondBurseService fondBurseService, IFondBurseMeritRepartizatService fondBurseMeritRepartizatService, GrupuriDomeniiHelper grupuriHelper)
         {
             _context = context;
             _fondBurseService = fondBurseService;
             _fondBurseMeritRepartizatService = fondBurseMeritRepartizatService;
+            _grupuriHelper = grupuriHelper;
         }
 
         [HttpPost("AddFondBurse")]
@@ -329,9 +331,9 @@ namespace Burse.Controllers
 
             //PASUL 3 OFERIM BURSE PE GRUPUIRIDE DOMENII
             // PASUL 3 – Repartizare burse pe grupuri de domenii
-
-
-            foreach (var grup in GrupuriDomeniiHelper.GrupuriBurse)
+          
+            var grupuriBurse= await _grupuriHelper.GetGrupuriBurseAsync();
+            foreach (var grup in grupuriBurse)
             {
                 string numeGrup = grup.Key;
                 List<string> domeniiGrup = grup.Value;
@@ -406,7 +408,7 @@ namespace Burse.Controllers
 
             // 🔁 PUNCTUL 4: Redistribuire fond rămas către grupul cu cea mai mare fracțiune financiară
 
-            var grupuriCuSumaRamasa = GrupuriDomeniiHelper.GrupuriBurse
+            var grupuriCuSumaRamasa = grupuriBurse
                 .Select(grup =>
                 {
                     var sumaRamasa = fonduriRepartizate

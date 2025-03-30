@@ -69,6 +69,100 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "GetGrupuri",
+    "RelativePath": "api/Settings/grupuri",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "GetGrupuriBurse",
+    "RelativePath": "api/Settings/grupuri-burse",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "AddDomeniuToGrup",
+    "RelativePath": "api/Settings/grupuri-burse/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "payload",
+        "Type": "Burse.Models.GrupBursaEntry",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "RemoveDomeniuFromGrupBursa",
+    "RelativePath": "api/Settings/grupuri-burse/remove",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "grup",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "domeniu",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "AddDomeniuToGrup",
+    "RelativePath": "api/Settings/grupuri/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "payload",
+        "Type": "Burse.Models.GrupDomeniuEntry",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "RemoveDomeniuFromGrup",
+    "RelativePath": "api/Settings/grupuri/remove",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "grup",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "domeniu",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Burse.Controllers.StudentsController",
     "Method": "GetStudents",
     "RelativePath": "api/Students/getStudents",

@@ -17,11 +17,13 @@ namespace Burse.Services
     {
         private readonly BurseDBContext _context;
         private readonly IFondBurseMeritRepartizatService _fondBurseMeritRepartizatService;
+        private readonly GrupuriDomeniiHelper _grupuriHelper;
 
-        public FondBurseService(BurseDBContext context, IFondBurseMeritRepartizatService fondBurseMeritRepartizatService)
+        public FondBurseService(BurseDBContext context, IFondBurseMeritRepartizatService fondBurseMeritRepartizatService, GrupuriDomeniiHelper grupuriHelper)
         {
             _context = context;
             _fondBurseMeritRepartizatService = fondBurseMeritRepartizatService;
+            _grupuriHelper = grupuriHelper;
         }
 
         public async Task<List<FondBurse>> GetDateFromBursePerformanteAsync()
@@ -258,7 +260,7 @@ namespace Burse.Services
                     sheet.Cells[currentRow, 2].Value = totalFond;
 
                     // ✅ Create and add record to the database
-                    string grupa = GrupuriDomeniiHelper.GetGrupa(domeniu);
+                    string grupa = await _grupuriHelper.GetGrupaAsync(domeniu);
 
                     var fondBursa = new FondBurseMeritRepartizat
                     {
@@ -356,7 +358,8 @@ namespace Burse.Services
                         programRowMap[programShort] = new List<int>();
                     }
                     programRowMap[programShort].Add(row);*/
-                    string grupa = GrupuriDomeniiHelper.GetGrupa(programFull);
+                    //string grupa = GrupuriDomeniiHelper.GetGrupa(programFull);
+                    string grupa = await _grupuriHelper.GetGrupaAsync(programFull);
                     if (!programRowMap.ContainsKey(grupa))
                     {
                         programRowMap[grupa] = new List<int>();
@@ -444,7 +447,7 @@ namespace Burse.Services
 
                    
                     sheet.Cells[currentRow, 2].Value = totalFond;
-                    string grupa = GrupuriDomeniiHelper.GetGrupa(domeniu);
+                    string grupa = await _grupuriHelper.GetGrupaAsync(domeniu);
                     var fondBursa = new FondBurseMeritRepartizat
                     {
                         domeniu = domeniu,
@@ -516,7 +519,7 @@ namespace Burse.Services
                         continue; // Sărim regex-ul pentru Total-uri
                     }
                     // Aplicăm regex-ul: eliminăm (1), (2), (3), (4), dar păstrăm "-DUAL" dacă există
-                    string grupa = GrupuriDomeniiHelper.GetGrupa(programFull);
+                    string grupa = await _grupuriHelper.GetGrupaAsync(programFull);
                     if (!programRowMap.ContainsKey(grupa))
                     {
                         programRowMap[grupa] = new List<int>();
