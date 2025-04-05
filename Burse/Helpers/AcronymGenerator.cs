@@ -7,7 +7,7 @@ namespace Burse.Helpers
     {
         // Lista de cuvinte de legătură (stop words) care sunt ignorate
         private static readonly HashSet<string> StopWords = new HashSet<string>(
-            new[] { "ȘI", "SI", "DE", "LA", "DIN", "CU", "ÎN", "INVĂȚĂMÂNT" },
+            new[] { "ȘI", "SI", "DE", "LA", "DIN", "CU", "ÎN","IN", "INVĂȚĂMÂNT","PENTRU","INVATAMANT" },
             StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Burse.Helpers
             var words = upperProgram.Split(new char[] { ' ', '-', ',' }, StringSplitOptions.RemoveEmptyEntries);
 
             // Eliminăm cuvintele de legătură (stop words)
-            var filteredWords = words.Where(w => !StopWords.Contains(w.ToUpper())).ToList();
+            var filteredWords = words.Where(w => !StopWords.Contains(w.Trim())).ToList();
 
             if (filteredWords.Count == 0)
                 return string.Empty;
