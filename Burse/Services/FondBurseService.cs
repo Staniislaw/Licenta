@@ -17,11 +17,13 @@ namespace Burse.Services
     {
         private readonly BurseDBContext _context;
         private readonly IFondBurseMeritRepartizatService _fondBurseMeritRepartizatService;
+        private readonly GrupuriDomeniiHelper _grupuriHelper;
 
-        public FondBurseService(BurseDBContext context, IFondBurseMeritRepartizatService fondBurseMeritRepartizatService)
+        public FondBurseService(BurseDBContext context, IFondBurseMeritRepartizatService fondBurseMeritRepartizatService, GrupuriDomeniiHelper grupuriHelper)
         {
             _context = context;
             _fondBurseMeritRepartizatService = fondBurseMeritRepartizatService;
+            _grupuriHelper = grupuriHelper;
         }
 
         public async Task<List<FondBurse>> GetDateFromBursePerformanteAsync()
@@ -238,27 +240,20 @@ namespace Burse.Services
                 #region TOTAL L
                 // Scriem grupul L
                 int groupLStartRow = currentRow;
-                foreach (var rec in groupL)
-                {
-                    // ✅ Generate domain name
-                    string domeniu = generator.GenerateAcronym(AcronymGenerator.RemoveDiacritics(rec.ProgramDeStudiu), rec.An);
 
-                    // ✅ Compute the sum for the scholarship fund
+                var sortedGroupL = await SortGroupLAsync(groupL);
+
+                foreach (var (rec, domeniu, grupa) in sortedGroupL)
+                {
                     int valRom = int.TryParse(rec.FaraTaxaRomani, out int r) ? r : 0;
                     int valRp = int.TryParse(rec.FaraTaxaRp, out int rp) ? rp : 0;
                     int valU = int.TryParse(rec.FaraTaxaUECEE, out int u) ? u : 0;
                     decimal totalFond = valRom + valRp + valU;
 
-                    // ✅ Write values to Excel
                     sheet.Cells[currentRow, 1].Value = domeniu;
-
                     sheet.Cells[currentRow, 2].Style.Fill.PatternType = ExcelFillStyle.Solid;
                     sheet.Cells[currentRow, 2].Style.Fill.BackgroundColor.SetColor(Color.LightYellow);
-
                     sheet.Cells[currentRow, 2].Value = totalFond;
-
-                    // ✅ Create and add record to the database
-                    string grupa = GrupuriDomeniiHelper.GetGrupa(domeniu);
 
                     var fondBursa = new FondBurseMeritRepartizat
                     {
@@ -267,6 +262,7 @@ namespace Burse.Services
                         programStudiu = "licenta",
                         Grupa = grupa,
                     };
+
                     await _fondBurseMeritRepartizatService.AddAsync(fondBursa);
 
                     currentRow++;
@@ -356,7 +352,8 @@ namespace Burse.Services
                         programRowMap[programShort] = new List<int>();
                     }
                     programRowMap[programShort].Add(row);*/
-                    string grupa = GrupuriDomeniiHelper.GetGrupa(programFull);
+                    //string grupa = GrupuriDomeniiHelper.GetGrupa(programFull);
+                    string grupa = await _grupuriHelper.GetGrupaAsync(programFull);
                     if (!programRowMap.ContainsKey(grupa))
                     {
                         programRowMap[grupa] = new List<int>();
@@ -426,10 +423,10 @@ namespace Burse.Services
                 #region TOTAL M
                 // Scriem grupul M
                 int groupMStartRow = currentRow;
-                foreach (var rec in groupM)
-                {
-                    string domeniu = generator.GenerateAcronym(AcronymGenerator.RemoveDiacritics(rec.ProgramDeStudiu), rec.An);
 
+                var sortedGroupM = await SortGroupLAsync(groupM);
+                foreach (var (rec, domeniu, grupa) in sortedGroupM)
+                {
                     // ✅ Compute the sum for the scholarship fund
                     int valRom = int.TryParse(rec.FaraTaxaRomani, out int r) ? r : 0;
                     int valRp = int.TryParse(rec.FaraTaxaRp, out int rp) ? rp : 0;
@@ -444,7 +441,6 @@ namespace Burse.Services
 
                    
                     sheet.Cells[currentRow, 2].Value = totalFond;
-                    string grupa = GrupuriDomeniiHelper.GetGrupa(domeniu);
                     var fondBursa = new FondBurseMeritRepartizat
                     {
                         domeniu = domeniu,
@@ -452,8 +448,6 @@ namespace Burse.Services
                         programStudiu = "master",
                         Grupa = grupa,
                     };
-
-
 
                     await _fondBurseMeritRepartizatService.AddAsync(fondBursa);
                     currentRow++;
@@ -516,7 +510,7 @@ namespace Burse.Services
                         continue; // Sărim regex-ul pentru Total-uri
                     }
                     // Aplicăm regex-ul: eliminăm (1), (2), (3), (4), dar păstrăm "-DUAL" dacă există
-                    string grupa = GrupuriDomeniiHelper.GetGrupa(programFull);
+                    string grupa = await _grupuriHelper.GetGrupaAsync(programFull);
                     if (!programRowMap.ContainsKey(grupa))
                     {
                         programRowMap[grupa] = new List<int>();
@@ -786,5 +780,55 @@ namespace Burse.Services
             await _context.SaveChangesAsync();
         }
 
+        private async Task<List<(FormatiiStudii rec, string domeniu, string grupa)>> SortGroupLAsync(
+    List<FormatiiStudii> groupL)
+        {
+            var generator = new AcronymGenerator();
+
+            var domeniiProcesate = new List<(FormatiiStudii rec, string domeniu, string grupa)>();
+            var ordineGrupe = new List<string>();
+            var grupaToDomenii = new Dictionary<string, List<string>>();
+
+            foreach (var rec in groupL)
+            {
+                string domeniu = generator.GenerateAcronym(
+                    AcronymGenerator.RemoveDiacritics(rec.ProgramDeStudiu), rec.An);
+
+                string grupa = await _grupuriHelper.GetGrupaAsync(domeniu);
+
+                domeniiProcesate.Add((rec, domeniu, grupa));
+
+                if (!ordineGrupe.Contains(grupa))
+                    ordineGrupe.Add(grupa);
+
+                if (!grupaToDomenii.ContainsKey(grupa))
+                    grupaToDomenii[grupa] = new List<string>();
+
+                if (!grupaToDomenii[grupa].Contains(domeniu))
+                    grupaToDomenii[grupa].Add(domeniu);
+            }
+
+            var sorted = new List<(FormatiiStudii rec, string domeniu, string grupa)>();
+            var alreadyAdded = new HashSet<(string domeniu, string grupa)>();
+
+            foreach (var grupa in ordineGrupe)
+            {
+                foreach (var domeniu in grupaToDomenii[grupa])
+                {
+                    var selectie = domeniiProcesate
+                        .Where(x => x.domeniu == domeniu && x.grupa == grupa && !alreadyAdded.Contains((domeniu, grupa)))
+                        .ToList();
+
+                    sorted.AddRange(selectie);
+                    foreach (var x in selectie)
+                        alreadyAdded.Add((x.domeniu, x.grupa));
+                }
+            }
+
+            sorted.AddRange(domeniiProcesate
+                .Where(x => !alreadyAdded.Contains((x.domeniu, x.grupa))));
+
+            return sorted;
+        }
     }
 }
