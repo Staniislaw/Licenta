@@ -457,7 +457,7 @@ namespace Burse.Controllers
 
             // 🔁 PUNCTUL 4: Redistribuire fond rămas către grupul cu cea mai mare fracțiune financiară
 
-            var grupuriCuSumaRamasa = grupuriBurse
+                var grupuriCuSumaRamasa = grupuriBurse
                 .Select(grup =>
                 {
                     var sumaRamasa = fonduriRepartizate
@@ -537,15 +537,48 @@ namespace Burse.Controllers
                 }).ToList();
 
 
-            //ExcelUpdater.UpdateScholarshipCounts("D:\\Licenta\\Burse_Studenți (5).xlsx", studentiClasificati5);
-            using var inputStream = burseFile.OpenReadStream();
-            var updatedStream = ExcelUpdater.UpdateScholarshipCounts(inputStream, studentiClasificati5);
+            string etapa0Path = $"C:\\Licenta\\Etapa_0.xlsx";
+            using (var fileStream = new FileStream(etapa0Path, FileMode.Create, FileAccess.Write))
+           {
+                using var initialStream = burseFile.OpenReadStream();
+                await initialStream.CopyToAsync(fileStream);
+            }
 
+            // 🔁 Etape de procesare și salvare
+            List<List<StudentScholarshipData>> toateEtapele = new()
+            {
+                studentiClasificati1,
+                studentiClasificati2,
+                studentiClasificati3,
+                studentiClasificati4,
+                studentiClasificati5
+            };
+
+            string previousPath = etapa0Path;
+
+            for (int i = 0; i < toateEtapele.Count; i++)
+            {
+                string etapaInputPath = previousPath;
+                string etapaOutputPath = $"C:\\Licenta\\Etapa_{i + 1}.xlsx";
+
+                using var input = new FileStream(etapaInputPath, FileMode.Open, FileAccess.Read);
+                using var output = new FileStream(etapaOutputPath, FileMode.Create, FileAccess.Write);
+
+                var updatedStream = ExcelUpdater.UpdateScholarshipCounts(input, toateEtapele[i]);
+                updatedStream.Position = 0;
+                await updatedStream.CopyToAsync(output);
+
+                previousPath = etapaOutputPath; // pentru următoarea rundă
+            }
+
+            // 🟢 La final, returnăm ultimul fișier generat pentru download
+            string finalFilePath = previousPath;
+            var finalBytes = await System.IO.File.ReadAllBytesAsync(finalFilePath);
             return File(
-                updatedStream,
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    "Burse_Studenti_Actualizat.xlsx"
-                );
+                finalBytes,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                Path.GetFileName(finalFilePath)
+            );
 
         }
 
