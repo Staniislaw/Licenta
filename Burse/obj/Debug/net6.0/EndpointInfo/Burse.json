@@ -270,6 +270,77 @@
         }
       }
     },
+    "/api/Settings/program-studii/add": {
+      "post": {
+        "tags": [
+          "Settings"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrupProgramStudiiEntry"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrupProgramStudiiEntry"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrupProgramStudiiEntry"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Settings/program-studii/remove": {
+      "delete": {
+        "tags": [
+          "Settings"
+        ],
+        "parameters": [
+          {
+            "name": "grup",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "domeniu",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Settings/program-studii": {
+      "get": {
+        "tags": [
+          "Settings"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/Students/getStudents": {
       "get": {
         "tags": [
@@ -304,6 +375,24 @@
         "additionalProperties": false
       },
       "GrupDomeniuEntry": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "grup": {
+            "type": "string",
+            "nullable": true
+          },
+          "domeniu": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GrupProgramStudiiEntry": {
         "type": "object",
         "properties": {
           "id": {

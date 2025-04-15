@@ -16,5 +16,6 @@ namespace Burse.Data
         public DbSet<StudentRecord> StudentRecord { get;set;}
         public DbSet<GrupBursaEntry> GrupBursa { get; set; }
         public DbSet<GrupDomeniuEntry> GrupDomeniu { get; set; }
+        public DbSet<GrupProgramStudiiEntry> GrupProgramStudii { get; set; }
     }
 }

@@ -161,8 +161,8 @@ namespace Burse.Helpers
         public static Dictionary<string, List<string>> LoadColumnMappingsFromDatabase()
         {
             var columnMappings = new Dictionary<string, List<string>>();
-
-            columnMappings["Emplid"] = new List<string> { "Nr. matricol", "Emplid" };
+            columnMappings["Nr.matricol"] = new List<string> { "Nr. matricol" };
+            columnMappings["Emplid"] = new List<string> { "Emplid" };
             columnMappings["CNP"] = new List<string> { "CNP" };
             columnMappings["NumeStudent"] = new List<string> { "Nume Student", "Nume și Prenume" };
             columnMappings["TaraCetatenie"] = new List<string> { "Țară Cetățenie" };

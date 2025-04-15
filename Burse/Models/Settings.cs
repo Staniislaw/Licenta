@@ -13,4 +13,12 @@
         public string GrupBursa { get; set; }  // ex: "G1"
         public string Domeniu { get; set; }    // ex: "C"
     }
+
+    public class GrupProgramStudiiEntry
+    {
+        public int Id { get; set; }
+        public string Grup { get; set; } = string.Empty;
+        public string Domeniu { get; set; } = string.Empty;
+    }
+
 }

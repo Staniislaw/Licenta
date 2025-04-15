@@ -758,6 +758,39 @@ namespace Burse.Services
                     g => g.OrderByDescending(s => s.Media).ToList()
                 );
         }
+
+        public async Task<Dictionary<string, List<StudentRecord>>> GetStudentiEligibiliPeGrupProgramStudiiAsync()
+        {
+            var studenti = await _context.StudentRecord
+                .Include(s => s.FondBurseMeritRepartizat)
+                .Where(s => s.FondBurseMeritRepartizat != null)
+                .Where(s => s.Bursa == null || s.Bursa == "nicio bursă")
+                .ToListAsync();
+
+            var entries = await _context.GrupProgramStudii.ToListAsync();
+
+            var programToGrup = entries
+                .GroupBy(g => g.Grup)
+                .SelectMany(g => g.Select(x => new { Domeniu = x.Domeniu, Grup = g.Key }))
+                .ToDictionary(x => x.Domeniu, x => x.Grup);
+
+            return studenti
+                .GroupBy(s =>
+                {
+                    var domeniuComplet = s.FondBurseMeritRepartizat.domeniu;
+                    var domeniuSimplificat = domeniuComplet.Split(' ')[0].Trim(); 
+
+                    return programToGrup.TryGetValue(domeniuSimplificat, out var grup)
+                        ? grup
+                        : domeniuSimplificat; 
+                })
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.OrderByDescending(s => s.Media).ToList()
+                );
+        }
+
+
         public async Task<List<StudentRecord>> GetStudentiEligibiliPeDomeniiAsync(List<string> domenii)
         {
             return await _context.StudentRecord
@@ -780,55 +813,55 @@ namespace Burse.Services
             await _context.SaveChangesAsync();
         }
 
-        private async Task<List<(FormatiiStudii rec, string domeniu, string grupa)>> SortGroupLAsync(
-    List<FormatiiStudii> groupL)
-        {
-            var generator = new AcronymGenerator();
-
-            var domeniiProcesate = new List<(FormatiiStudii rec, string domeniu, string grupa)>();
-            var ordineGrupe = new List<string>();
-            var grupaToDomenii = new Dictionary<string, List<string>>();
-
-            foreach (var rec in groupL)
+            private async Task<List<(FormatiiStudii rec, string domeniu, string grupa)>> SortGroupLAsync(
+        List<FormatiiStudii> groupL)
             {
-                string domeniu = generator.GenerateAcronym(
-                    AcronymGenerator.RemoveDiacritics(rec.ProgramDeStudiu), rec.An);
+                var generator = new AcronymGenerator();
 
-                string grupa = await _grupuriHelper.GetGrupaAsync(domeniu);
+                var domeniiProcesate = new List<(FormatiiStudii rec, string domeniu, string grupa)>();
+                var ordineGrupe = new List<string>();
+                var grupaToDomenii = new Dictionary<string, List<string>>();
 
-                domeniiProcesate.Add((rec, domeniu, grupa));
-
-                if (!ordineGrupe.Contains(grupa))
-                    ordineGrupe.Add(grupa);
-
-                if (!grupaToDomenii.ContainsKey(grupa))
-                    grupaToDomenii[grupa] = new List<string>();
-
-                if (!grupaToDomenii[grupa].Contains(domeniu))
-                    grupaToDomenii[grupa].Add(domeniu);
-            }
-
-            var sorted = new List<(FormatiiStudii rec, string domeniu, string grupa)>();
-            var alreadyAdded = new HashSet<(string domeniu, string grupa)>();
-
-            foreach (var grupa in ordineGrupe)
-            {
-                foreach (var domeniu in grupaToDomenii[grupa])
+                foreach (var rec in groupL)
                 {
-                    var selectie = domeniiProcesate
-                        .Where(x => x.domeniu == domeniu && x.grupa == grupa && !alreadyAdded.Contains((domeniu, grupa)))
-                        .ToList();
+                    string domeniu = generator.GenerateAcronym(
+                        AcronymGenerator.RemoveDiacritics(rec.ProgramDeStudiu), rec.An);
 
-                    sorted.AddRange(selectie);
-                    foreach (var x in selectie)
-                        alreadyAdded.Add((x.domeniu, x.grupa));
+                    string grupa = await _grupuriHelper.GetGrupaAsync(domeniu);
+
+                    domeniiProcesate.Add((rec, domeniu, grupa));
+
+                    if (!ordineGrupe.Contains(grupa))
+                        ordineGrupe.Add(grupa);
+
+                    if (!grupaToDomenii.ContainsKey(grupa))
+                        grupaToDomenii[grupa] = new List<string>();
+
+                    if (!grupaToDomenii[grupa].Contains(domeniu))
+                        grupaToDomenii[grupa].Add(domeniu);
                 }
+
+                var sorted = new List<(FormatiiStudii rec, string domeniu, string grupa)>();
+                var alreadyAdded = new HashSet<(string domeniu, string grupa)>();
+
+                foreach (var grupa in ordineGrupe)
+                {
+                    foreach (var domeniu in grupaToDomenii[grupa])
+                    {
+                        var selectie = domeniiProcesate
+                            .Where(x => x.domeniu == domeniu && x.grupa == grupa && !alreadyAdded.Contains((domeniu, grupa)))
+                            .ToList();
+
+                        sorted.AddRange(selectie);
+                        foreach (var x in selectie)
+                            alreadyAdded.Add((x.domeniu, x.grupa));
+                    }
+                }
+
+                sorted.AddRange(domeniiProcesate
+                    .Where(x => !alreadyAdded.Contains((x.domeniu, x.grupa))));
+
+                return sorted;
             }
-
-            sorted.AddRange(domeniiProcesate
-                .Where(x => !alreadyAdded.Contains((x.domeniu, x.grupa))));
-
-            return sorted;
-        }
     }
 }

@@ -75,7 +75,7 @@ namespace Burse.Helpers
                         return grup.Key;
                 }
 
-                return "Necunoscut";
+                return domeniuSimplificat;
             }
             public async Task<Dictionary<string, List<string>>> GetGrupuriAsync()
             {
@@ -89,6 +89,14 @@ namespace Burse.Helpers
 
                 return entries
                     .GroupBy(g => g.GrupBursa)
+                    .ToDictionary(g => g.Key, g => g.Select(x => x.Domeniu).ToList());
+            }
+
+            public async Task<Dictionary<string, List<string>>> GetGrupuriProgramStudiiAsync()
+            {
+                var entries = await _context.GrupProgramStudii.ToListAsync();
+                return entries
+                    .GroupBy(g => g.Grup)
                     .ToDictionary(g => g.Key, g => g.Select(x => x.Domeniu).ToList());
             }
     }

@@ -163,6 +163,53 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "GetGrupuriProgramStudii",
+    "RelativePath": "api/Settings/program-studii",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "AddDomeniuToGrupProgramStudii",
+    "RelativePath": "api/Settings/program-studii/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "payload",
+        "Type": "Burse.Models.GrupProgramStudiiEntry",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "RemoveDomeniuFromGrupProgramStudii",
+    "RelativePath": "api/Settings/program-studii/remove",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "grup",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "domeniu",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Burse.Controllers.StudentsController",
     "Method": "GetStudents",
     "RelativePath": "api/Students/getStudents",

@@ -103,5 +103,49 @@ namespace Burse.Controllers
 
             return Ok();
         }
+
+
+        [HttpPost("program-studii/add")]
+        public async Task<IActionResult> AddDomeniuToGrupProgramStudii([FromBody] GrupProgramStudiiEntry payload)
+        {
+            // Verifici dacă există deja
+            var exists = await _context.GrupBursa
+                .AnyAsync(e => e.GrupBursa == payload.Grup && e.Domeniu == payload.Domeniu);
+
+            if (!exists)
+            {
+                _context.GrupProgramStudii.Add(payload);
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok();
+        }
+        [HttpDelete("program-studii/remove")]
+        public async Task<IActionResult> RemoveDomeniuFromGrupProgramStudii([FromQuery] string grup, [FromQuery] string domeniu)
+        {
+            var entry = await _context.GrupProgramStudii
+                .FirstOrDefaultAsync(e => e.Grup == grup && e.Domeniu == domeniu);
+
+            if (entry != null)
+            {
+                _context.GrupProgramStudii.Remove(entry);
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok();
+        }
+
+        [HttpGet("program-studii")]
+        public async Task<IActionResult> GetGrupuriProgramStudii()
+        {
+            var entries = await _context.GrupProgramStudii.ToListAsync();
+
+            var grouped = entries
+                .GroupBy(e => e.Grup)
+                .ToDictionary(g => g.Key, g => g.Select(x => x.Domeniu).ToList());
+
+            return Ok(grouped);
+        }
+
     }
 }
