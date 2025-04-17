@@ -33,6 +33,27 @@
   },
   {
     "ContainingType": "Burse.Controllers.FondBurseController",
+    "Method": "CompareExcelFiles",
+    "RelativePath": "api/FondBurse/compare",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trainFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "predictFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.FondBurseController",
     "Method": "GenerateExcel",
     "RelativePath": "api/FondBurse/generate",
     "HttpMethod": "GET",

@@ -353,7 +353,7 @@ namespace Burse.Controllers
             //PASUL 2 PRELUAM SUMELE DISPONIBILE PENTRU LICENTA/MASTER SI OFERIM BURSE IN FUNCTIE DE MEDIE
 
             //GRESIT  CRED SE FACE REPARTIZAREA DUPA LICENTA/MASTER
-            var sumaDisponibilaPeProgram = fonduriRepartizate
+          /*  var sumaDisponibilaPeProgram = fonduriRepartizate
                 .GroupBy(f => f.programStudiu)
                 .ToDictionary(
                     g => g.Key,
@@ -412,9 +412,9 @@ namespace Burse.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-            }
+            }*/
 
-            /*var studentiPeGrup = await _fondBurseService.GetStudentiEligibiliPeGrupProgramStudiiAsync();
+            var studentiPeGrup = await _fondBurseService.GetStudentiEligibiliPeGrupProgramStudiiAsync();
 
             var fonduriPeGrup = studentiPeGrup.Keys
                 .ToDictionary(
@@ -482,7 +482,7 @@ namespace Burse.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-            }*/
+            }
 
             // COUNT BURSE BP1 SI BPS2 SI INTRODUCEARE IN EXCEL
             List<StudentRecord> studentiCuBursa2 = await _fondBurseService.GetStudentsWithBursaFromDatabaseAsync();
@@ -940,12 +940,8 @@ namespace Burse.Controllers
                     ? fonduri[1].ValoreaLunara * 9.35M
                     : fonduri[1].ValoreaLunara * 12;
 
-                // Verifică fondul și suma lui
-                decimal fondDisponibil = fondId.HasValue && sumaRamasaPeFond.ContainsKey(fondId.Value)
-                    ? sumaRamasaPeFond[fondId.Value]
-                    : -1;
 
-                if (sumaDisponibila >= valoareBP2 && fondDisponibil >= valoareBP2)
+                if (sumaDisponibila >= valoareBP2)
                 {
                     student.Bursa = "BP2";
                     sumaDisponibila -= valoareBP2;
@@ -956,7 +952,6 @@ namespace Burse.Controllers
 
                     string comentariu = $"Etapa: {etapa} | Media: {student.Media:F2} | " +
                         $"Acordare BP2 ({valoareBP2:F2} lei) – fond ID {fondId?.ToString() ?? "—"} | " +
-                        $"Fond disponibil: {fondDisponibil:F2} lei, " +
                         $"Necesari: {valoareBP2:F2} lei | " +
                         $"Program: {program}, An: {an}, Durată: {infoDurata}";
 
@@ -1448,5 +1443,6 @@ namespace Burse.Controllers
                 package.Save();
             }
         }
+
     }
 }
