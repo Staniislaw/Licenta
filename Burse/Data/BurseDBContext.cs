@@ -17,5 +17,6 @@ namespace Burse.Data
         public DbSet<GrupBursaEntry> GrupBursa { get; set; }
         public DbSet<GrupDomeniuEntry> GrupDomeniu { get; set; }
         public DbSet<GrupProgramStudiiEntry> GrupProgramStudii { get; set; }
+        public DbSet<BursaIstoric> BursaIstoric { get; set; }
     }
 }

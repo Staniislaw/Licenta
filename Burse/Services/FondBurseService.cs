@@ -683,17 +683,15 @@ namespace Burse.Services
                  await _context.SaveChangesAsync();
              }
          }*/
-        public async Task SaveNewStudentsAsync(List<StudentRecord> students)
+        public async Task<List<StudentRecord>> SaveNewStudentsAsync(List<StudentRecord> students)
         {
-            // Obținem Emplid-urile din lista primită
             var emplids = students.Select(s => s.Emplid).ToList();
-
-            // Preluăm din DB studenții existenți cu acele Emplid-uri
             var existingStudents = await _context.StudentRecord
                 .Where(s => emplids.Contains(s.Emplid))
                 .ToListAsync();
 
             var studentsToAdd = new List<StudentRecord>();
+            var allProcessed = new List<StudentRecord>();
 
             foreach (var student in students)
             {
@@ -701,25 +699,27 @@ namespace Burse.Services
 
                 if (existingStudent == null)
                 {
-                    // Adăugăm student nou
                     studentsToAdd.Add(student);
+                    allProcessed.Add(student); // student nou, va primi Id după SaveChanges
                 }
                 else
                 {
-                    // 🔁 Actualizăm doar câmpul Bursa și, dacă vrei, FondBurseMeritRepartizatId
                     existingStudent.Bursa = student.Bursa;
+                    existingStudent.FondBurseMeritRepartizatId = student.FondBurseMeritRepartizatId;
+                    allProcessed.Add(existingStudent); // EXISTENT, cu Id deja complet
                 }
             }
 
-            // Adăugăm studenții noi
             if (studentsToAdd.Any())
             {
                 await _context.StudentRecord.AddRangeAsync(studentsToAdd);
             }
 
-            // Salvăm toate modificările (insert + update)
             await _context.SaveChangesAsync();
+
+            return allProcessed;
         }
+
 
         public async Task<List<StudentRecord>> GetStudentsWithBursaFromDatabaseAsync()
         {

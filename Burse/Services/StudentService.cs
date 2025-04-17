@@ -19,6 +19,7 @@ namespace Burse.Services
         {
             return await _context.StudentRecord
                 .Include(s => s.FondBurseMeritRepartizat)
+                 .Include(s => s.IstoricBursa)
                 .Where(s => !string.IsNullOrWhiteSpace(s.Bursa))
                 .ToListAsync();
         }

@@ -29,6 +29,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IBurseIstoricService, BurseIstoricService>();
 builder.Services.AddScoped<GrupuriDomeniiHelper, GrupuriDomeniiHelper>();
 
 var app = builder.Build();

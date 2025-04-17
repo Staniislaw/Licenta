@@ -24,5 +24,8 @@ namespace Burse.Models
         public int FondBurseMeritRepartizatId { get; set; }
 
         public FondBurseMeritRepartizat FondBurseMeritRepartizat { get; set; }
+        public virtual ICollection<BursaIstoric> IstoricBursa { get; set; }
+
+
     }
 }

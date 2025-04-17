@@ -21,6 +21,17 @@
         public string ProgramStudiu { get; set; }
         public string Grupa { get; set; }
         public decimal? SumaRamasa { get; set; }
+        public List<BursaIstoricDto> IstoricBursa { get; set; } = new();
     }
-
+    public class BursaIstoricDto
+    {
+        public string TipBursa { get; set; }
+        public string Motiv { get; set; }
+        public string Actiune { get; set; }
+        public decimal Suma { get; set; }
+        public string SursaFinantare { get; set; }
+        public string Comentarii { get; set; }
+        public string UserModificare { get; set; }
+        public DateTime DataModificare { get; set; }
+    }
 }

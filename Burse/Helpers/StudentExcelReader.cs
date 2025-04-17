@@ -126,13 +126,18 @@ namespace Burse.Helpers
         {
             foreach (var key in keys)
             {
-                if (columnMapping.ContainsKey(key.ToLower()))
+                if (columnMapping.TryGetValue(key.ToLower(), out var index))
                 {
-                    return reader.GetValue(columnMapping[key.ToLower()])?.ToString()?.Trim() ?? "";
+                    var value = reader.GetValue(index)?.ToString()?.Trim();
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        return value;
+                    }
                 }
             }
             return "";
         }
+
 
         private static int GetColumnValueAsInt(IDataReader reader, Dictionary<string, int> columnMapping, List<string> keys)
         {

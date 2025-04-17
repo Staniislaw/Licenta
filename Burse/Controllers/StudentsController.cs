@@ -31,7 +31,7 @@ namespace Burse.Controllers
                 Emplid = student.Emplid,
                 CNP = student.CNP,
                 NumeStudent = student.NumeStudent,
-                An = student.An+1,
+                An = student.An + 1,
                 Media = student.Media,
                 PunctajAn = student.PunctajAn,
                 CO = student.CO,
@@ -42,7 +42,18 @@ namespace Burse.Controllers
                 Domeniu = Regex.Replace(student.FondBurseMeritRepartizat.domeniu, @"\s*\(\d+\)", ""),
                 ProgramStudiu = student.FondBurseMeritRepartizat.programStudiu,
                 Grupa = student.FondBurseMeritRepartizat.Grupa,
+
+                IstoricBursa = student.IstoricBursa.Select(h => new BursaIstoricDto
+                {
+                    TipBursa = h.TipBursa,
+                    Motiv = h.Motiv,
+                    Actiune = h.Actiune,
+                    Suma = h.Suma,
+                    Comentarii = h.Comentarii,
+                    DataModificare = h.DataModificare
+                }).ToList()
             }).ToList();
+
 
             return Ok(studentDtos);
         }

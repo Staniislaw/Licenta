@@ -22,14 +22,15 @@ namespace Burse.Controllers
         private readonly IFondBurseService _fondBurseService;
         private readonly IFondBurseMeritRepartizatService _fondBurseMeritRepartizatService;
         private readonly GrupuriDomeniiHelper _grupuriHelper;
+        private readonly IBurseIstoricService _burseIstoricService;
 
-
-        public FondBurseController(BurseDBContext context, IFondBurseService fondBurseService, IFondBurseMeritRepartizatService fondBurseMeritRepartizatService, GrupuriDomeniiHelper grupuriHelper)
+        public FondBurseController(BurseDBContext context, IFondBurseService fondBurseService, IFondBurseMeritRepartizatService fondBurseMeritRepartizatService, GrupuriDomeniiHelper grupuriHelper, IBurseIstoricService burseIstoricService    )
         {
             _context = context;
             _fondBurseService = fondBurseService;
             _fondBurseMeritRepartizatService = fondBurseMeritRepartizatService;
             _grupuriHelper = grupuriHelper;
+            _burseIstoricService = burseIstoricService;
         }
 
         [HttpPost("AddFondBurse")]
@@ -154,6 +155,7 @@ namespace Burse.Controllers
                 using var stream = pathStudenti.OpenReadStream();
 
                 Dictionary<string, List<StudentRecord>> studentRecords = excelReader.ReadStudentRecordsFromExcel(stream, pathStudenti.FileName);
+                var istoricList = new List<(string Emplid, BursaIstoric Istoric)>();
 
                 foreach (var entry in studentRecords)
                 {
@@ -169,14 +171,70 @@ namespace Burse.Controllers
                     decimal sumaDisponibila = fondRepartizatByDomeniu.bursaAlocatata;
                     if (sumaDisponibila < 0)
                         continue;
-                    AssignScholarships(students, ref sumaDisponibila, valoareAnualBP1, valoareAnualBP2, epsilon);
+                    (var sumaRamasa, var istoricePerDomeniu) = AssignScholarships(
+                        students,
+                        sumaDisponibila,
+                        valoareAnualBP1,
+                        valoareAnualBP2,
+                        epsilon,
+                        "Etapa 1"
+                    );
+                    sumaDisponibila = sumaRamasa;
+
+                    istoricList.AddRange(istoricePerDomeniu);
+
 
                     students.ForEach(s => s.FondBurseMeritRepartizatId = fondRepartizatByDomeniu.ID);
-                    await _fondBurseService.SaveNewStudentsAsync(students);
+                    var studentiCuIdCorect = await _fondBurseService.SaveNewStudentsAsync(students);
+
+                    // ✅ actualizezi StudentRecordId în istoricul generat anterior
+                    foreach (var (emplid, istoric) in istoricList)
+                    {
+                        var match = studentiCuIdCorect.FirstOrDefault(s => s.Emplid == emplid);
+                        if (match != null)
+                            istoric.StudentRecordId = match.Id;
+                    }
 
                     fondRepartizatByDomeniu.SumaRamasa = sumaDisponibila;
                     await _fondBurseMeritRepartizatService.UpdateAsync(fondRepartizatByDomeniu);
                 }
+                try
+                {
+                    foreach (var item in istoricList)
+                    {
+                        var existing = await _context.BursaIstoric.FirstOrDefaultAsync(x =>
+                            x.StudentRecordId == item.Istoric.StudentRecordId
+                        );
+                        if (existing != null)
+                        {
+                            existing.Motiv = item.Istoric.Motiv;
+                            existing.Actiune = item.Istoric.Actiune;
+                            existing.Suma = item.Istoric.Suma;
+                            existing.Comentarii = item.Istoric.Comentarii;
+                        }
+                        else
+                        {
+                            _context.BursaIstoric.Add(item.Istoric);
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Eroare la salvarea în BursaIstoric:");
+                    Console.WriteLine(ex.Message);
+
+                    foreach (var i in istoricList)
+                    {
+                        Console.WriteLine($"Emplid: {i.Emplid}, StudentRecordId: {i.Istoric.StudentRecordId}, Bursa: {i.Istoric.TipBursa}, Suma: {i.Istoric.Suma}");
+                    }
+
+                    // Opțional: aruncă mai departe excepția dacă vrei să o tratezi mai sus
+                    // throw;
+                }
+
             }
             //verificare 
 
@@ -241,7 +299,10 @@ namespace Burse.Controllers
                 if (sumaDisponibila < 0)
                     continue;
                 // ✅ Atribuim DOAR BP2 pe această grupă
-                AssignOnlyBP2   (students, ref sumaDisponibila, fonduri, sumaRamasaPeFond);
+                //AssignOnlyBP2   (students, ref sumaDisponibila, fonduri, sumaRamasaPeFond);
+
+                (decimal sumaNoua, var istoricBP2) = AssignOnlyBP2(students, sumaDisponibila, fonduri, sumaRamasaPeFond,"2");
+                sumaDisponibila = sumaNoua;
 
                 await _fondBurseService.SaveNewStudentsAsync(students);
 
@@ -252,6 +313,26 @@ namespace Burse.Controllers
                     fond.SumaRamasa = sumaRamasaPeFond[fond.ID];
                     await _fondBurseMeritRepartizatService.UpdateAsync(fond);
                 }
+                foreach (var hist in istoricBP2)
+                {
+                    var existing = await _context.BursaIstoric.FirstOrDefaultAsync(x =>
+                        x.StudentRecordId == hist.Istoric.StudentRecordId 
+                    );
+
+                    if (existing != null)
+                    {
+                        existing.Motiv = hist.Istoric.Motiv;
+                        existing.Actiune = hist.Istoric.Actiune;
+                        existing.Suma = hist.Istoric.Suma;
+                        existing.Comentarii = hist.Istoric.Comentarii;
+                    }
+                    else
+                    {
+                        await _context.BursaIstoric.AddAsync(hist.Istoric);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
             }
 
             // COUNT BURSE BP1 SI BPS2 SI INTRODUCEARE IN EXCEL
@@ -272,7 +353,7 @@ namespace Burse.Controllers
             //PASUL 2 PRELUAM SUMELE DISPONIBILE PENTRU LICENTA/MASTER SI OFERIM BURSE IN FUNCTIE DE MEDIE
 
             //GRESIT  CRED SE FACE REPARTIZAREA DUPA LICENTA/MASTER
-            /*var sumaDisponibilaPeProgram = fonduriRepartizate
+            var sumaDisponibilaPeProgram = fonduriRepartizate
                 .GroupBy(f => f.programStudiu)
                 .ToDictionary(
                     g => g.Key,
@@ -299,8 +380,9 @@ namespace Burse.Controllers
                 if (sumaDisponibila < 0)
                     continue;
                 // ✅ Atribuim DOAR BP2 pe această grupă
-                AssignOnlyBP2(students, ref sumaDisponibila, fonduri, sumaRamasaPeProgramStudiu);
-
+                //AssignOnlyBP2(students, ref sumaDisponibila, fonduri, sumaRamasaPeProgramStudiu);
+                (decimal sumaNoua, var istoricBP2) = AssignOnlyBP2(students, sumaDisponibila, fonduri, sumaRamasaPeProgramStudiu, "3");
+                sumaDisponibila = sumaNoua;
                 await _fondBurseService.SaveNewStudentsAsync(students);
 
                 // 🔁 Update la suma rămasă pentru TOATE domeniile din acea grupă
@@ -310,9 +392,29 @@ namespace Burse.Controllers
                     fond.SumaRamasa = sumaRamasaPeProgramStudiu[fond.ID];
                     await _fondBurseMeritRepartizatService.UpdateAsync(fond);
                 }
-            }*/
+                foreach (var hist in istoricBP2)
+                {
+                    var existing = await _context.BursaIstoric.FirstOrDefaultAsync(x =>
+                        x.StudentRecordId == hist.Istoric.StudentRecordId 
+                    );
 
-            var studentiPeGrup = await _fondBurseService.GetStudentiEligibiliPeGrupProgramStudiiAsync();
+                    if (existing != null)
+                    {
+                        existing.Motiv = hist.Istoric.Motiv;
+                        existing.Actiune = hist.Istoric.Actiune;
+                        existing.Suma = hist.Istoric.Suma;
+                        existing.Comentarii = hist.Istoric.Comentarii;
+                    }
+                    else
+                    {
+                        await _context.BursaIstoric.AddAsync(hist.Istoric);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+            }
+
+            /*var studentiPeGrup = await _fondBurseService.GetStudentiEligibiliPeGrupProgramStudiiAsync();
 
             var fonduriPeGrup = studentiPeGrup.Keys
                 .ToDictionary(
@@ -348,7 +450,9 @@ namespace Burse.Controllers
 
                 if (sumaDisponibila <= 0) continue;
 
-                AssignOnlyBP2(students, ref sumaDisponibila, fonduri, sumaRamasaPeFond);
+                //AssignOnlyBP2(students, ref sumaDisponibila, fonduri, sumaRamasaPeFond);
+                (decimal sumaNoua, var istoricBP2) = AssignOnlyBP2(students, sumaDisponibila, fonduri, sumaRamasaPeFond, "3");
+                sumaDisponibila = sumaNoua;
                 await _fondBurseService.SaveNewStudentsAsync(students);
 
                 foreach (var fond in fonduriGrupa)
@@ -356,7 +460,29 @@ namespace Burse.Controllers
                     fond.SumaRamasa = sumaRamasaPeFond[fond.ID];
                     await _fondBurseMeritRepartizatService.UpdateAsync(fond);
                 }
-            }
+                foreach (var hist in istoricBP2)
+                {
+                    var existing = await _context.BursaIstoric.FirstOrDefaultAsync(x =>
+                        x.StudentRecordId == hist.Istoric.StudentRecordId &&
+                        x.TipBursa == hist.Istoric.TipBursa &&
+                        x.DataModificare == hist.Istoric.DataModificare
+                    );
+
+                    if (existing != null)
+                    {
+                        existing.Motiv = hist.Istoric.Motiv;
+                        existing.Actiune = hist.Istoric.Actiune;
+                        existing.Suma = hist.Istoric.Suma;
+                        existing.Comentarii = hist.Istoric.Comentarii;
+                    }
+                    else
+                    {
+                        await _context.BursaIstoric.AddAsync(hist.Istoric);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+            }*/
 
             // COUNT BURSE BP1 SI BPS2 SI INTRODUCEARE IN EXCEL
             List<StudentRecord> studentiCuBursa2 = await _fondBurseService.GetStudentsWithBursaFromDatabaseAsync();
@@ -418,8 +544,9 @@ namespace Burse.Controllers
                     .ToList();
 
                 // 🏆 Atribuire burse doar BP2
-                AssignOnlyBP2(studentiLicenta, ref sumaDisponibila, fonduri, sumaRamasaPeFond);
-
+               //AssignOnlyBP2(studentiLicenta, ref sumaDisponibila, fonduri, sumaRamasaPeFond);
+                (decimal sumaNoua, var istoricBP2) = AssignOnlyBP2(studentiLicenta, sumaDisponibila, fonduri, sumaRamasaPeFond, "4");
+                sumaDisponibila = sumaNoua;
                 // 💾 Salvare
                 await _fondBurseService.SaveNewStudentsAsync(studentiLicenta);
 
@@ -429,6 +556,26 @@ namespace Burse.Controllers
                     fond.SumaRamasa = sumaRamasaPeFond[fond.ID];
                     await _fondBurseMeritRepartizatService.UpdateAsync(fond);
                 }
+                foreach (var entry in istoricBP2)
+                {
+                    var existing = await _context.BursaIstoric.FirstOrDefaultAsync(x =>
+                        x.StudentRecordId == entry.Istoric.StudentRecordId 
+                    );
+
+                    if (existing != null)
+                    {
+                        existing.Motiv = entry.Istoric.Motiv;
+                        existing.Actiune = entry.Istoric.Actiune;
+                        existing.Suma = entry.Istoric.Suma;
+                        existing.Comentarii = entry.Istoric.Comentarii;
+                    }
+                    else
+                    {
+                        await _context.BursaIstoric.AddAsync(entry.Istoric);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
             }
 
 
@@ -502,7 +649,9 @@ namespace Burse.Controllers
                         .OrderByDescending(s => s.Media)
                         .ToList();
 
-                    AssignOnlyBP2(studentiGrup, ref sumaDisponibila, fonduri, sumaRamasaPeFond);
+                    //AssignOnlyBP2(studentiGrup, ref sumaDisponibila, fonduri, sumaRamasaPeFond);
+                    (decimal sumaNoua, var istoricBP2) = AssignOnlyBP2(studentiGrup, sumaDisponibila, fonduri, sumaRamasaPeFond, "5");
+                    sumaDisponibila = sumaNoua;
 
                     await _fondBurseService.SaveNewStudentsAsync(studentiGrup);
 
@@ -511,7 +660,26 @@ namespace Burse.Controllers
                         fond.SumaRamasa = sumaRamasaPeFond[fond.ID];
                         await _fondBurseMeritRepartizatService.UpdateAsync(fond);
                     }
+                    foreach (var entry in istoricBP2)
+                    {
+                        var existing = await _context.BursaIstoric.FirstOrDefaultAsync(x =>
+                            x.StudentRecordId == entry.Istoric.StudentRecordId 
+                        );
 
+                        if (existing != null)
+                        {
+                            existing.Motiv = entry.Istoric.Motiv;
+                            existing.Actiune = entry.Istoric.Actiune;
+                            existing.Suma = entry.Istoric.Suma;
+                            existing.Comentarii = entry.Istoric.Comentarii;
+                        }
+                        else
+                        {
+                            await _context.BursaIstoric.AddAsync(entry.Istoric);
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
                     Console.WriteLine("✅ Redistribuire finală aplicată cu succes.");
                 }
                 else
@@ -631,19 +799,31 @@ namespace Burse.Controllers
         /// <summary>
         /// Alocă bursele studenților, respectând regulile de diferență între medii.
         /// </summary>
-        private void AssignScholarships(List<StudentRecord> students, ref decimal sumaDisponibila, decimal valoareAnualBP1, decimal valoareAnualBP2, decimal epsilon)
+        private (decimal, List<(string Emplid, BursaIstoric Istoric)>) AssignScholarships(
+    List<StudentRecord> students,
+    decimal sumaDisponibila,
+    decimal valoareAnualBP1,
+    decimal valoareAnualBP2,
+    decimal epsilon,
+    string etapa)
         {
+            var istoricList = new List<(string Emplid, BursaIstoric Istoric)>();
             decimal ultimaMedie = -1;
             bool aFostAcordatBP2 = false;
 
             foreach (var student in students)
             {
                 decimal diferenta = ultimaMedie < 0 ? 0 : Math.Abs(ultimaMedie - student.Media);
-                Console.WriteLine($"Compar {ultimaMedie} cu {student.Media}. Diferență = {diferenta}, Epsilon = {epsilon}");
+                string bursaAtribuita = null;
+                decimal suma = 0;
+                string motiv = "";
+                string explicatie = "";
+                string fallback = "";
 
                 if (sumaDisponibila <= 0)
                 {
                     student.Bursa = null;
+                    ultimaMedie = student.Media;
                     continue;
                 }
 
@@ -653,61 +833,90 @@ namespace Burse.Controllers
                     {
                         if (sumaDisponibila >= valoareAnualBP1)
                         {
-                            student.Bursa = "BP1";
-                            sumaDisponibila -= valoareAnualBP1;
-                            Console.WriteLine($"{student.Media} ofer BP1");
-
+                            bursaAtribuita = "BP1";
+                            suma = valoareAnualBP1;
+                            motiv = "Media ≥ 9.00 și Δ ≤ ε – BP1 acordat";
                         }
-                        else if(sumaDisponibila >= valoareAnualBP2)
+                        else if (sumaDisponibila >= valoareAnualBP2)
                         {
-                            student.Bursa = "BP2";
-                            sumaDisponibila -= valoareAnualBP2;
+                            bursaAtribuita = "BP2";
+                            suma = valoareAnualBP2;
+                            motiv = "Fond insuficient pentru BP1 – fallback la BP2";
+                            fallback = $"(necesar BP1: {valoareAnualBP1:F2} lei, dar disponibil doar: {sumaDisponibila:F2} lei)";
                             aFostAcordatBP2 = true;
-                            Console.WriteLine($"{student.Media} ofer BP2");
-                        }
-                        else
-                        {
-                            student.Bursa = null;
-                            Console.WriteLine($"{student.Media} ofer NICA");
-                            continue;
                         }
                     }
-                    else
+                    else if (sumaDisponibila >= valoareAnualBP2)
                     {
-                        if (sumaDisponibila >= valoareAnualBP2)
-                        {
-                            student.Bursa = "BP2";
-                            sumaDisponibila -= valoareAnualBP2;
-                        }
-                        else
-                        {
-                            student.Bursa = null;
-                        }
+                        bursaAtribuita = "BP2";
+                        suma = valoareAnualBP2;
+                        motiv = "Δ > ε – fallback la BP2";
+                        fallback = $"(Δ = {diferenta:F2} > ε = {epsilon:F2})";
                         aFostAcordatBP2 = true;
                     }
                 }
+                else if (sumaDisponibila >= valoareAnualBP2)
+                {
+                    bursaAtribuita = "BP2";
+                    suma = valoareAnualBP2;
+                    motiv = "Media < 9.00 – BP2 acordat";
+                    fallback = "(criteriu media)";
+                    aFostAcordatBP2 = true;
+                }
+
+                // Explicație detaliată pentru istoric
+                if (ultimaMedie < 0)
+                {
+                    explicatie = "Primul student – fără comparație anterioară";
+                }
                 else
                 {
-                    if (sumaDisponibila >= valoareAnualBP2)
+                    explicatie = $"Media precedentă: {ultimaMedie:F2} → Δ = {diferenta:F2} {(diferenta <= epsilon ? "(Δ ≤ ε)" : "(Δ > ε)")}";
+                }
+
+                if (!string.IsNullOrEmpty(bursaAtribuita))
+                {
+                    student.Bursa = bursaAtribuita;
+                    sumaDisponibila -= suma;
+
+                    string comentariu = $"Etapa: {etapa} | Media: {student.Media:F2} | {motiv} {fallback} | " +
+                                        $"{explicatie} | Suma acordată: {suma:F2} lei | Rămas fond: {sumaDisponibila:F2} lei";
+
+                    istoricList.Add((student.Emplid, new BursaIstoric
                     {
-                        student.Bursa = "BP2";
-                        sumaDisponibila -= valoareAnualBP2;
-                    }
-                    else
-                    {
-                        student.Bursa = null;
-                    }
-                    aFostAcordatBP2 = true;
+                        StudentRecordId = student.Id,
+                        TipBursa = bursaAtribuita,
+                        Actiune = "Acordare",
+                        Suma = suma,
+                        Motiv = motiv,
+                        Comentarii = comentariu,
+                        DataModificare = DateTime.Now
+                    }));
+                }
+                else
+                {
+                    student.Bursa = null;
                 }
 
                 ultimaMedie = student.Media;
             }
+
+            return (sumaDisponibila, istoricList);
         }
-        private void AssignOnlyBP2(List<StudentRecord> students,ref decimal sumaDisponibila,List<FondBurse> fonduri,Dictionary<int, decimal> sumaRamasaPeFond)
+
+
+
+        private (decimal, List<(string Emplid, BursaIstoric Istoric)>) AssignOnlyBP2(
+    List<StudentRecord> students,
+    decimal sumaDisponibila,
+    List<FondBurse> fonduri,
+    Dictionary<int, decimal> sumaRamasaPeFond,
+    string etapa)
         {
+            var istoricList = new List<(string Emplid, BursaIstoric Istoric)>();
+
             foreach (var student in students)
             {
-                // ⚠️ Preluăm anul din domeniu, ex: "C (4)" => 4
                 string domeniu = student.FondBurseMeritRepartizat?.domeniu;
                 if (string.IsNullOrEmpty(domeniu))
                 {
@@ -724,30 +933,55 @@ namespace Burse.Controllers
 
                 int an = int.Parse(match.Groups[1].Value);
                 string program = student.FondBurseMeritRepartizat?.programStudiu;
+                int? fondId = student.FondBurseMeritRepartizatId;
 
-                // 🎯 Calculează valoarea corectă BP2
+                // Calculează valoare BP2
                 decimal valoareBP2 = (an == 4 || (program == "master" && an == 2))
                     ? fonduri[1].ValoreaLunara * 9.35M
                     : fonduri[1].ValoreaLunara * 12;
 
-                if (sumaDisponibila >= valoareBP2)
+                // Verifică fondul și suma lui
+                decimal fondDisponibil = fondId.HasValue && sumaRamasaPeFond.ContainsKey(fondId.Value)
+                    ? sumaRamasaPeFond[fondId.Value]
+                    : -1;
+
+                if (sumaDisponibila >= valoareBP2 && fondDisponibil >= valoareBP2)
                 {
                     student.Bursa = "BP2";
                     sumaDisponibila -= valoareBP2;
+                    if (fondId.HasValue)
+                        sumaRamasaPeFond[fondId.Value] -= valoareBP2;
 
-                    // 🧮 Scădem și din sumaRamasaPeFond în funcție de domeniu (ID)
-                    if (student.FondBurseMeritRepartizatId != null &&
-                        sumaRamasaPeFond.ContainsKey(student.FondBurseMeritRepartizatId))
+                    string infoDurata = (an == 4 || (program == "master" && an == 2)) ? "9.35 luni" : "12 luni";
+
+                    string comentariu = $"Etapa: {etapa} | Media: {student.Media:F2} | " +
+                        $"Acordare BP2 ({valoareBP2:F2} lei) – fond ID {fondId?.ToString() ?? "—"} | " +
+                        $"Fond disponibil: {fondDisponibil:F2} lei, " +
+                        $"Necesari: {valoareBP2:F2} lei | " +
+                        $"Program: {program}, An: {an}, Durată: {infoDurata}";
+
+                    istoricList.Add((student.Emplid, new BursaIstoric
                     {
-                        sumaRamasaPeFond[student.FondBurseMeritRepartizatId] -= valoareBP2;
-                    }
+                        StudentRecordId = student.Id,
+                        TipBursa = "BP2",
+                        Actiune = "Acordare",
+                        Suma = valoareBP2,
+                        Motiv = "Acordare BP2 – fonduri suficiente",
+                        Comentarii = comentariu,
+                        DataModificare = DateTime.Now
+                    }));
                 }
                 else
                 {
                     student.Bursa = null;
                 }
             }
+
+            return (sumaDisponibila, istoricList);
         }
+
+
+
 
 
         public static List<StudentRecord> EliminaStudentiNeeligibili(List<StudentRecord> students)
