@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using Burse.Services;
 using Microsoft.EntityFrameworkCore;
 using DocumentFormat.OpenXml.Vml.Office;
+using ClosedXML.Excel;
 
 namespace Burse.Controllers
 {
@@ -1442,6 +1443,88 @@ namespace Burse.Controllers
                 // 3) Salvăm fișierul
                 package.Save();
             }
+        }
+        [HttpPost("EvaluateAcurracy")]
+        public async void EvaluateAcurracy()
+        {
+            string filePath1 = @"C:\Users\grati\Downloads\New Microsoft Excel Worksheet.xlsx";
+            string filePath2 = @"C:\Users\grati\Downloads\Burse_Studenti_Actualizat (5).xlsx";
+            string outputPath = @"C:\Users\grati\Downloads\OutputFile_Differences.xlsx";
+
+            using var wb1 = new XLWorkbook(filePath1);
+            using var wb2 = new XLWorkbook(filePath2);
+            using var wbOut = new XLWorkbook();
+
+            var ws1 = wb1.Worksheet(1); // Domenii + BM1
+            var ws2 = wb2.Worksheet(1); // Domenii + BM2
+            var wsOut = wbOut.AddWorksheet("Comparatie");
+
+            int startRow = 20;
+            int colDomeniu = 1; // A
+            int colBM1 = 4;     // D din Excel 1
+            int colBM2 = 6;     // F din Excel 2
+
+            // Header
+            wsOut.Cell(1, 1).Value = "Domeniu";
+            wsOut.Cell(1, 2).Value = "BM1 (B.Perf.1)";
+            wsOut.Cell(1, 3).Value = "BM2 (B.Perf.2)";
+            wsOut.Row(1).Style.Font.Bold = true;
+
+            int maxRows = Math.Max(ws1.LastRowUsed().RowNumber(), ws2.LastRowUsed().RowNumber());
+
+            for (int i = 0; i <= maxRows - startRow; i++)
+            {
+                int currentRow = startRow + i;
+                int outputRow = i + 2;
+
+                string domeniu = ws1.Cell(currentRow, colDomeniu).GetValue<string>().Trim();
+
+                // Fallback la 0 pentru celule goale
+                double bm1_excel1 = GetNumericValue(ws1.Cell(currentRow, colBM1));
+                double bm1_excel2 = GetNumericValue(ws2.Cell(currentRow, colBM1));
+
+                double bm2_excel1 = GetNumericValue(ws1.Cell(currentRow, colBM2));
+                double bm2_excel2 = GetNumericValue(ws2.Cell(currentRow, colBM2));
+
+                wsOut.Cell(outputRow, 1).Value = domeniu;
+
+                // BM1 (D)
+                var cellBM1 = wsOut.Cell(outputRow, 2);
+                if (bm1_excel1 == bm1_excel2)
+                {
+                    cellBM1.Value = bm1_excel1;
+                }
+                else
+                {
+                    cellBM1.Value = $"{bm1_excel1} -> {bm1_excel2}";
+                    cellBM1.Style.Fill.BackgroundColor = XLColor.LightPink;
+                }
+
+                // BM2 (F)
+                var cellBM2 = wsOut.Cell(outputRow, 3);
+                if (bm2_excel1 == bm2_excel2)
+                {
+                    cellBM2.Value = bm2_excel2;
+                }
+                else
+                {
+                    cellBM2.Value = $"{bm2_excel2} -> {bm2_excel1}";
+                    cellBM2.Style.Fill.BackgroundColor = XLColor.LightPink;
+                }
+            }
+
+            wbOut.SaveAs(outputPath);
+            Console.WriteLine("✅ Fișierul cu comparația a fost generat corect (cu valori lipsă tratate ca 0).");
+        }
+
+        // Funcție helper pentru extragere numerică cu fallback
+        private double GetNumericValue(IXLCell cell)
+        {
+            if (cell == null || string.IsNullOrWhiteSpace(cell.GetValue<string>()))
+                return 0;
+
+            double.TryParse(cell.GetValue<string>(), out double result);
+            return result;
         }
 
     }
