@@ -3,7 +3,6 @@ using Burse.Services.Abstractions;
 using Burse.Services;
 
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 using Burse.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +25,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = null; // sau nu seta deloc această opțiune
+
 });
 
 builder.Services.AddScoped<IStudentService, StudentService>();

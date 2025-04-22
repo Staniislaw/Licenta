@@ -128,38 +128,11 @@
         }
       }
     },
-    "/api/FondBurse/compare": {
+    "/api/FondBurse/EvaluateAcurracy": {
       "post": {
         "tags": [
           "FondBurse"
         ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "trainFile": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "predictFile": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              },
-              "encoding": {
-                "trainFile": {
-                  "style": "form"
-                },
-                "predictFile": {
-                  "style": "form"
-                }
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Success"

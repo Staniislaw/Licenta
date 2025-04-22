@@ -863,5 +863,6 @@ namespace Burse.Services
 
                 return sorted;
             }
+
     }
 }

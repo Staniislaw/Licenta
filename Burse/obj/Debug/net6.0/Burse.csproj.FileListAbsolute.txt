@@ -196,6 +196,8 @@ C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Burse.deps.json
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Burse.runtimeconfig.json
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Burse.dll
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Burse.pdb
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\ClosedXML.dll
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\ClosedXML.Parser.dll
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\DocumentFormat.OpenXml.dll
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\DocumentFormat.OpenXml.Framework.dll
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\EPPlus.dll
@@ -203,6 +205,7 @@ C:\Licenta\Licenta\Burse\bin\Debug\net6.0\EPPlus.Interfaces.dll
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\EPPlus.System.Drawing.dll
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\ExcelDataReader.dll
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\ExcelDataReader.DataSet.dll
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\ExcelNumberFormat.dll
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Humanizer.dll
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Microsoft.Bcl.Cryptography.dll
@@ -231,6 +234,9 @@ C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Microsoft.IO.RecyclableMemoryStream.dl
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Microsoft.Office.Interop.Excel.dll
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Microsoft.OpenApi.dll
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\RBush.dll
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\SixLabors.Fonts.dll
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -276,10 +282,10 @@ C:\Licenta\Licenta\Burse\obj\Debug\net6.0\staticwebassets\msbuild.build.Burse.pr
 C:\Licenta\Licenta\Burse\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.Burse.props
 C:\Licenta\Licenta\Burse\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.Burse.props
 C:\Licenta\Licenta\Burse\obj\Debug\net6.0\staticwebassets.pack.json
+C:\Licenta\Licenta\Burse\obj\Debug\net6.0\staticwebassets.upToDateCheck.txt
 C:\Licenta\Licenta\Burse\obj\Debug\net6.0\Burse.csproj.Up2Date
 C:\Licenta\Licenta\Burse\obj\Debug\net6.0\Burse.dll
 C:\Licenta\Licenta\Burse\obj\Debug\net6.0\refint\Burse.dll
 C:\Licenta\Licenta\Burse\obj\Debug\net6.0\Burse.pdb
 C:\Licenta\Licenta\Burse\obj\Debug\net6.0\Burse.genruntimeconfig.cache
 C:\Licenta\Licenta\Burse\obj\Debug\net6.0\ref\Burse.dll
-C:\Licenta\Licenta\Burse\obj\Debug\net6.0\staticwebassets.upToDateCheck.txt
