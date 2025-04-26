@@ -85,6 +85,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Burse.Controllers.PdfController",
+    "Method": "GeneratePdf",
+    "RelativePath": "api/pdf/generate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Burse.Models.TemplatePDF.PdfRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Burse.Controllers.SettingsController",
     "Method": "GetGrupuri",
     "RelativePath": "api/Settings/grupuri",
@@ -233,6 +249,48 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.TemplateController",
+    "Method": "GetTemplate",
+    "RelativePath": "api/template/GetTemplate",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.TemplateController",
+    "Method": "GetTemplates",
+    "RelativePath": "api/template/GetTemplates",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.TemplateController",
+    "Method": "SaveTemplate",
+    "RelativePath": "api/template/SaveTemplate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "template",
+        "Type": "Burse.Models.TemplatePDF.TemplateEntity",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   }
 ]

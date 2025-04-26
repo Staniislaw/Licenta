@@ -4,9 +4,9 @@ using Burse.Services;
 
 using Microsoft.EntityFrameworkCore;
 using Burse.Helpers;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 builder.Services.AddScoped<IFondBurseService, FondBurseService>();
 builder.Services.AddScoped<IFondBurseMeritRepartizatService, FondBurseMeritRepartizatService>();
@@ -31,6 +31,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IBurseIstoricService, BurseIstoricService>();
 builder.Services.AddScoped<GrupuriDomeniiHelper, GrupuriDomeniiHelper>();
+QuestPDF.Settings.License = LicenseType.Community;
 
 var app = builder.Build();
 

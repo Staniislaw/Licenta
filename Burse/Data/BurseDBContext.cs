@@ -1,4 +1,5 @@
 ﻿using Burse.Models;
+using Burse.Models.TemplatePDF;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -18,5 +19,6 @@ namespace Burse.Data
         public DbSet<GrupDomeniuEntry> GrupDomeniu { get; set; }
         public DbSet<GrupProgramStudiiEntry> GrupProgramStudii { get; set; }
         public DbSet<BursaIstoric> BursaIstoric { get; set; }
+        public DbSet<TemplateEntity> TemplateEntity { get; set; }
     }
 }

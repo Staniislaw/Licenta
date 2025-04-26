@@ -526,7 +526,7 @@ namespace Burse.Controllers
             string grupCastigatorNume = null;
             List<string> domeniiGrupCastigator = null;
             List<FondBurseMeritRepartizat> fonduriCastigatoare = null;
-            decimal sumaDisponibilaMax = 0;
+            decimal fractiuneMaxima = 0;
             decimal sumaDisponibilaAdd = 0;
             foreach (var grup in grupuriBurse)
             {
@@ -542,11 +542,15 @@ namespace Burse.Controllers
                 if (!fonduriInGrup.Any()) continue;
 
                 decimal sumaDisponibila = fonduriInGrup.Sum(f => f.SumaRamasa);
+                decimal sumaInitiala = fonduriInGrup.Sum(f => f.bursaAlocatata);
+                decimal fractiune = sumaDisponibila / sumaInitiala;
+
                 if (sumaDisponibila <= 0) continue;
                 sumaDisponibilaAdd += sumaDisponibila;
-                if (sumaDisponibila > sumaDisponibilaMax)
+
+                if (fractiune > fractiuneMaxima)
                 {
-                    sumaDisponibilaMax = sumaDisponibila;
+                    fractiuneMaxima = fractiune;
                     grupCastigatorNume = numeGrup;
                     domeniiGrupCastigator = domeniiGrup;
                     fonduriCastigatoare = fonduriInGrup;
@@ -706,22 +710,30 @@ namespace Burse.Controllers
             var grupuriCuSumaRamasa = grupuriBurse
                 .Select(grup =>
                 {
-                    var sumaRamasa = fonduriRepartizate
+                    var fonduriGrup = fonduriRepartizate
                         .Where(f =>
                             GetDomeniiDinGrupa(f.Grupa)
                                 .Any(d => grup.Value.Contains(d)))
-                        .Sum(f => f.SumaRamasa);
+                        .ToList();
+
+                    var sumaRamasa = fonduriGrup.Sum(f => f.SumaRamasa);
+                    var sumaInitiala = fonduriGrup.Sum(f => f.bursaAlocatata);
+
+                    decimal fractiune = sumaInitiala > 0 ? sumaRamasa / sumaInitiala : 0;
 
                     return new
                     {
                         NumeGrup = grup.Key,
                         Domenii = grup.Value,
-                        SumaRamasa = sumaRamasa
+                        SumaRamasa = sumaRamasa,
+                        Fractiune = fractiune,
+                        Fonduri = fonduriGrup
                     };
                 })
-                .OrderByDescending(g => g.SumaRamasa)
+                .OrderByDescending(g => g.Fractiune)
                 .ToList();
 
+            //preiau grupul cu sumaMaxima 
             var grupCuSumaMaxima = grupuriCuSumaRamasa.FirstOrDefault();
 
             if (grupCuSumaMaxima != null && grupCuSumaMaxima.SumaRamasa > 0)
@@ -732,9 +744,9 @@ namespace Burse.Controllers
 
                 if (studentiGrup.Any())
                 {
+                    //preiau toti studentii din acel grup pentru a ii oferi burse
                     var fonduriGrup = fonduriRepartizate
                         .Where(f =>
-                            f.programStudiu == "licenta" &&
                             GetDomeniiDinGrupa(f.Grupa)
                                 .Any(d => grupCuSumaMaxima.Domenii.Contains(d)))
                         .ToList();
@@ -907,12 +919,13 @@ namespace Burse.Controllers
     string etapa)
         {
             var istoricList = new List<(string Emplid, BursaIstoric Istoric)>();
-            decimal ultimaMedie = -1;
+
+            decimal? primaMedie = students.FirstOrDefault()?.Media;
             bool aFostAcordatBP2 = false;
 
             foreach (var student in students)
             {
-                decimal diferenta = ultimaMedie < 0 ? 0 : Math.Abs(ultimaMedie - student.Media);
+                decimal diferenta = primaMedie.HasValue ? Math.Abs(primaMedie.Value - student.Media) : 0;
                 string bursaAtribuita = null;
                 decimal suma = 0;
                 string motiv = "";
@@ -922,7 +935,6 @@ namespace Burse.Controllers
                 if (sumaDisponibila <= 0)
                 {
                     student.Bursa = null;
-                    ultimaMedie = student.Media;
                     continue;
                 }
 
@@ -963,19 +975,19 @@ namespace Burse.Controllers
                     aFostAcordatBP2 = true;
                 }
 
-                // Explicație detaliată pentru istoric
-                if (ultimaMedie < 0)
+                if (primaMedie == null)
                 {
                     explicatie = "Primul student – fără comparație anterioară";
                 }
                 else
                 {
-                    explicatie = $"Media precedentă: {ultimaMedie:F2} → Δ = {diferenta:F2} {(diferenta <= epsilon ? "(Δ ≤ ε)" : "(Δ > ε)")}";
+                    explicatie = $"Media primului student: {primaMedie:F2} → Δ = {diferenta:F2} {(diferenta <= epsilon ? "(Δ ≤ ε)" : "(Δ > ε)")}";
                 }
 
                 if (!string.IsNullOrEmpty(bursaAtribuita))
                 {
                     student.Bursa = bursaAtribuita;
+                    student.SumaBursa = suma;
                     sumaDisponibila -= suma;
 
                     string comentariu = $"Etapa: {etapa} | Media: {student.Media:F2} | {motiv} {fallback} | " +
@@ -996,12 +1008,11 @@ namespace Burse.Controllers
                 {
                     student.Bursa = null;
                 }
-
-                ultimaMedie = student.Media;
             }
 
             return (sumaDisponibila, istoricList);
         }
+
 
 
 
@@ -1043,6 +1054,7 @@ namespace Burse.Controllers
                 if (sumaDisponibila >= valoareBP2)
                 {
                     student.Bursa = "BP2";
+                    student.SumaBursa = valoareBP2;
                     sumaDisponibila -= valoareBP2;
                     if (fondId.HasValue)
                         sumaRamasaPeFond[fondId.Value] -= valoareBP2;

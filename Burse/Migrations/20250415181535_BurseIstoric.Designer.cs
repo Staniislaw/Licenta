@@ -53,7 +53,7 @@ namespace Burse.Migrations
                     b.Property<decimal>("Suma")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("TipBursa")
+                    b.Property<string>("Bursa")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

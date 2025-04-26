@@ -5,7 +5,6 @@ namespace Burse.Models
     public class StudentRecord
     {
         public int Id { get; set; }
-        public int NrCrt { get; set; }  // Număr crt.
         public string Emplid { get; set; }  // ID angajat
         public string CNP { get; set; }  // Cod Numeric Personal
         public string NumeStudent { get; set; }  // Nume student
@@ -19,6 +18,7 @@ namespace Burse.Models
         public int TR { get; set; }  // TR – restanţele anii precedenti + restante anul curent
         public string SursaFinantare { get; set; }  // Sursa de finanțare
         public string Bursa { get; set; }
+        public decimal SumaBursa { get; set; }
 
         [ForeignKey("FondBurseMeritRepartizat")]
         public int FondBurseMeritRepartizatId { get; set; }

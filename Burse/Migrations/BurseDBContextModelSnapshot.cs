@@ -58,7 +58,7 @@ namespace Burse.Migrations
 
                     b.HasIndex("StudentRecordId");
 
-                    b.ToTable("BursaIstoric", (string)null);
+                    b.ToTable("BursaIstoric");
                 });
 
             modelBuilder.Entity("Burse.Models.FondBurse", b =>
@@ -77,7 +77,7 @@ namespace Burse.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FondBurse", (string)null);
+                    b.ToTable("FondBurse");
                 });
 
             modelBuilder.Entity("Burse.Models.FondBurseMeritRepartizat", b =>
@@ -105,7 +105,7 @@ namespace Burse.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("FondBurseMeritRepartizat", (string)null);
+                    b.ToTable("FondBurseMeritRepartizat");
                 });
 
             modelBuilder.Entity("Burse.Models.FormatiiStudii", b =>
@@ -157,7 +157,7 @@ namespace Burse.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("FormatiiStudii", (string)null);
+                    b.ToTable("FormatiiStudii");
                 });
 
             modelBuilder.Entity("Burse.Models.GrupBursaEntry", b =>
@@ -176,7 +176,7 @@ namespace Burse.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GrupBursa", (string)null);
+                    b.ToTable("GrupBursa");
                 });
 
             modelBuilder.Entity("Burse.Models.GrupDomeniuEntry", b =>
@@ -195,7 +195,7 @@ namespace Burse.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GrupDomeniu", (string)null);
+                    b.ToTable("GrupDomeniu");
                 });
 
             modelBuilder.Entity("Burse.Models.GrupProgramStudiiEntry", b =>
@@ -214,7 +214,7 @@ namespace Burse.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GrupProgramStudii", (string)null);
+                    b.ToTable("GrupProgramStudii");
                 });
 
             modelBuilder.Entity("Burse.Models.StudentRecord", b =>
@@ -246,9 +246,6 @@ namespace Burse.Migrations
                     b.Property<decimal>("Media")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("NrCrt")
-                        .HasColumnType("int");
-
                     b.Property<string>("NumeStudent")
                         .HasColumnType("nvarchar(max)");
 
@@ -257,6 +254,9 @@ namespace Burse.Migrations
 
                     b.Property<int>("RO")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("SumaBursa")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("SursaFinantare")
                         .HasColumnType("nvarchar(max)");
@@ -274,7 +274,29 @@ namespace Burse.Migrations
 
                     b.HasIndex("FondBurseMeritRepartizatId");
 
-                    b.ToTable("StudentRecord", (string)null);
+                    b.ToTable("StudentRecord");
+                });
+
+            modelBuilder.Entity("Burse.Models.TemplatePDF.TemplateEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ElementsJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TemplateEntity");
                 });
 
             modelBuilder.Entity("Burse.Models.BursaIstoric", b =>

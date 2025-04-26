@@ -3,6 +3,8 @@ using DocumentFormat.OpenXml.Drawing;
 
 using ExcelDataReader;
 using System.Data;
+using System.Globalization;
+using System.Text;
 
 namespace Burse.Helpers
 {
@@ -97,7 +99,6 @@ namespace Burse.Helpers
                         {
                             var student = new StudentRecord
                             {
-                                NrCrt = nrCrt,
                                 Emplid = GetColumnValue(reader, columnMapping, columnMappings["Emplid"]),
                                 CNP = GetColumnValue(reader, columnMapping, columnMappings["CNP"]),
                                 NumeStudent = GetColumnValue(reader, columnMapping, columnMappings["NumeStudent"]),
@@ -111,6 +112,10 @@ namespace Burse.Helpers
                                 TR = GetColumnValueAsInt(reader, columnMapping, columnMappings["TR"]),
                                 SursaFinantare = GetColumnValue(reader, columnMapping, columnMappings["SursaFinantare"])
                             };
+                            //Stare înmatriculare
+                            //Forma de finanțare
+                            //Sursa de    finanțare
+
 
                             Console.WriteLine($"👨‍🎓 Student detectat: {student.NumeStudent} - Media: {student.Media}");
                             studentRecordsByDomain[domeniu].Add(student);
@@ -126,17 +131,45 @@ namespace Burse.Helpers
         {
             foreach (var key in keys)
             {
-                if (columnMapping.TryGetValue(key.ToLower(), out var index))
+                var normalizedKey = NormalizeKey(key);
+                foreach (var mapping in columnMapping)
                 {
-                    var value = reader.GetValue(index)?.ToString()?.Trim();
-                    if (!string.IsNullOrEmpty(value))
+                    var normalizedMappingKey = NormalizeKey(mapping.Key);
+                    if (normalizedKey == normalizedMappingKey)
                     {
-                        return value;
+                        var value = reader.GetValue(mapping.Value)?.ToString()?.Trim();
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            return value;
+                        }
                     }
                 }
             }
             return "";
         }
+
+        // Funcție pentru normalizarea cheilor: fără diacritice și spații
+        private static string NormalizeKey(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return "";
+
+            var normalized = input.Normalize(System.Text.NormalizationForm.FormD);
+            var sb = new StringBuilder();
+
+            foreach (var ch in normalized)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(ch);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    if (!char.IsWhiteSpace(ch))
+                        sb.Append(ch);
+                }
+            }
+
+            return sb.ToString().ToLowerInvariant();
+        }
+
 
 
         private static int GetColumnValueAsInt(IDataReader reader, Dictionary<string, int> columnMapping, List<string> keys)
@@ -177,8 +210,7 @@ namespace Burse.Helpers
             columnMappings["RO"] = new List<string> { "RO" };
             columnMappings["TC"] = new List<string> { "TC" };
             columnMappings["TR"] = new List<string> { "TR" };
-            columnMappings["SursaFinantare"] = new List<string> { "Sursa Finanțare" };
-
+            columnMappings["SursaFinantare"] = new List<string> { "Sursa Finanțare", "Stare înmatriculare", "Forma de finanțare", "Sursa de    finanțare" };
             return columnMappings;
         }
 
@@ -280,7 +312,6 @@ namespace Burse.Helpers
                                 // ✅ Adaugă studentul în listă
                                 var studentRecord = new StudentRecord
                                 {
-                                    NrCrt = nrCrt,
                                     Emplid = emplid,
                                     CNP = cnp,
                                     NumeStudent = numeStudent,
