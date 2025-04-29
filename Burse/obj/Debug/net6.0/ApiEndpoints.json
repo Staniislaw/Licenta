@@ -1,5 +1,21 @@
 [
   {
+    "ContainingType": "Burse.Controllers.ExcelUploadController",
+    "Method": "UploadExcel",
+    "RelativePath": "api/ExcelUpload/upload",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "files",
+        "Type": "System.Collections.Generic.List\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=6.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Burse.Controllers.FondBurseController",
     "Method": "GetFondBurseById",
     "RelativePath": "api/FondBurse/{id}",
@@ -253,6 +269,64 @@
   },
   {
     "ContainingType": "Burse.Controllers.TemplateController",
+    "Method": "UpdateTemplate",
+    "RelativePath": "api/template/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "updatedTemplate",
+        "Type": "Burse.Models.TemplatePDF.TemplateEntity",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.TemplateController",
+    "Method": "AnalyzeDocument",
+    "RelativePath": "api/template/AnalyzeDocument",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "ModelId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.TemplateController",
+    "Method": "DeleteTemplate",
+    "RelativePath": "api/template/DeleteTemplate{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.TemplateController",
     "Method": "GetTemplate",
     "RelativePath": "api/template/GetTemplate",
     "HttpMethod": "GET",
@@ -289,6 +363,22 @@
         "Name": "template",
         "Type": "Burse.Models.TemplatePDF.TemplateEntity",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.TemplateController",
+    "Method": "UpscalingImage",
+    "RelativePath": "api/template/UpscalingImage",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "img",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

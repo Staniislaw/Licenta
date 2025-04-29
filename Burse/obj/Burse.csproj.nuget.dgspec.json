@@ -50,6 +50,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Azure.AI.FormRecognizer": {
+              "target": "Package",
+              "version": "[4.1.0, )"
+            },
             "ClosedXML": {
               "target": "Package",
               "version": "[0.104.2, )"
@@ -83,6 +87,14 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[6.0.6, )"
+            },
+            "Microsoft.ML.OnnxRuntime": {
+              "target": "Package",
+              "version": "[1.21.0, )"
+            },
+            "Microsoft.ML.OnnxRuntime.Managed": {
+              "target": "Package",
+              "version": "[1.21.2, )"
             },
             "Microsoft.Office.Interop.Excel": {
               "target": "Package",
