@@ -101,13 +101,39 @@ namespace Burse.Controllers
             var operation = await client.AnalyzeDocumentAsync(WaitUntil.Completed, request.ModelId, stream);
             var result = operation.Value;
 
+            // Extragem datele normale (field-uri)
             var extractedData = result.Documents[0].Fields.ToDictionary(
                 f => f.Key,
-                f => f.Value.Content
-            );
+                f => (object)f.Value.Content
+);
+            // Extragem tabelele (inclusiv "Programe", dacă e tabel)
+            var extractedTables = new List<List<string>>();
+
+            foreach (var table in result.Tables)
+            {
+                foreach (var cell in table.Cells)
+                {
+                    // Asigurăm structura rândurilor
+                    while (extractedTables.Count <= cell.RowIndex)
+                    {
+                        extractedTables.Add(new List<string>());
+                    }
+
+                    var row = extractedTables[cell.RowIndex];
+                    while (row.Count <= cell.ColumnIndex)
+                    {
+                        row.Add(string.Empty);
+                    }
+
+                    row[cell.ColumnIndex] = cell.Content;
+                }
+            }
+
+            extractedData["Tabel_Programe"] = extractedTables;
 
 
             return Ok(extractedData);
+
         }
         [HttpPost("UpscalingImage")]
         [Consumes("multipart/form-data")]
@@ -123,7 +149,7 @@ namespace Burse.Controllers
             }
 
             // 🔥 Fix important: Redimensionăm la multiplu de 4
-            bitmap = ResizeToMultiple(bitmap, 4);
+            bitmap = ResizeToMultiple(bitmap, 2);
 
             var inputTensor = ImageToTensor(bitmap);
 

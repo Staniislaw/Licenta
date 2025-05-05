@@ -101,6 +101,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Burse.Controllers.OcrController",
+    "Method": "ExtractTextFromImage",
+    "RelativePath": "api/Ocr/extract-text",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "imageFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Burse.Controllers.PdfController",
     "Method": "GeneratePdf",
     "RelativePath": "api/pdf/generate",
@@ -253,6 +269,27 @@
         "Name": "domeniu",
         "Type": "System.String",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.StudentsController",
+    "Method": "UpdateBursa",
+    "RelativePath": "api/Students/{id}/bursa",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Burse.Controllers.StudentsController\u002BUpdateBursaDto",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

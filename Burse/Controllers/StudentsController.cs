@@ -57,6 +57,52 @@ namespace Burse.Controllers
 
             return Ok(studentDtos);
         }
+        /// <summary>
+        /// Actualizează doar bursa unui student.
+        /// </summary>
+        /// 
+        public class UpdateBursaDto
+        {
+            public string Bursa { get; set; }
+        }
+        [HttpPatch("{id}/bursa")]
+        public async Task<IActionResult> UpdateBursa(int id, [FromBody] UpdateBursaDto dto)
+        {
+            var updatedEntity = await _studentService.UpdateBursaAsync(id, dto.Bursa);
+            if (updatedEntity == null)
+                return NotFound();
+
+            // Mapăm entitatea la DTO-ul de răspuns
+            var updatedDto = new StudentDto
+            {
+                Id = updatedEntity.Id,
+                Emplid = updatedEntity.Emplid,
+                CNP = updatedEntity.CNP,
+                NumeStudent = updatedEntity.NumeStudent,
+                An = updatedEntity.An + 1,
+                Media = updatedEntity.Media,
+                PunctajAn = updatedEntity.PunctajAn,
+                CO = updatedEntity.CO,
+                RO = updatedEntity.RO,
+                TC = updatedEntity.TC,
+                TR = updatedEntity.TR,
+                Bursa = updatedEntity.Bursa,
+                Domeniu = Regex.Replace(updatedEntity.FondBurseMeritRepartizat.domeniu, @"\s*\(\d+\)", ""),
+                ProgramStudiu = updatedEntity.FondBurseMeritRepartizat.programStudiu,
+                Grupa = updatedEntity.FondBurseMeritRepartizat.Grupa,
+                IstoricBursa = updatedEntity.IstoricBursa.Select(h => new BursaIstoricDto
+                {
+                    TipBursa = h.TipBursa,
+                    Motiv = h.Motiv,
+                    Actiune = h.Actiune,
+                    Suma = h.Suma,
+                    Comentarii = h.Comentarii,
+                    DataModificare = h.DataModificare
+                }).ToList()
+            };
+
+            return Ok(updatedDto);
+        }
 
     }
 

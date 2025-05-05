@@ -33,6 +33,11 @@ namespace Burse.Controllers
         [HttpPost("generate")]
         public async Task<IActionResult> GeneratePdf([FromBody] PdfRequest request)
         {
+            if (request.Elements == null)
+            {
+                return BadRequest("Request-ul este invalid sau nu conține niciun ID de template.");
+            }
+
             QuestPDF.Settings.License = LicenseType.Community;
 
             var studentiCuBursa0 = await _fondBurseService.GetStudentsWithBursaFromDatabaseAsync();
