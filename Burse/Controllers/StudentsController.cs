@@ -50,7 +50,8 @@ namespace Burse.Controllers
                     Actiune = h.Actiune,
                     Suma = h.Suma,
                     Comentarii = h.Comentarii,
-                    DataModificare = h.DataModificare
+                    DataModificare = h.DataModificare,
+                    ComentariiAI = h.ComentariiAI
                 }).ToList()
             }).ToList();
 

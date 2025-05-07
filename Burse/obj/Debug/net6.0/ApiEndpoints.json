@@ -101,22 +101,6 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Burse.Controllers.OcrController",
-    "Method": "ExtractTextFromImage",
-    "RelativePath": "api/Ocr/extract-text",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "imageFile",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "Burse.Controllers.PdfController",
     "Method": "GeneratePdf",
     "RelativePath": "api/pdf/generate",

@@ -520,96 +520,160 @@ namespace Burse.Controllers
 
             //PASUL 3 OFERIM BURSE PE GRUPUIRIDE DOMENII
             // PASUL 3 – Repartizare burse pe grupuri de domenii
-
             var grupuriBurse = await _grupuriHelper.GetGrupuriBurseAsync();
-
-            string grupCastigatorNume = null;
-            List<string> domeniiGrupCastigator = null;
-            List<FondBurseMeritRepartizat> fonduriCastigatoare = null;
-            decimal fractiuneMaxima = 0;
-            decimal sumaDisponibilaAdd = 0;
             foreach (var grup in grupuriBurse)
             {
                 string numeGrup = grup.Key;
                 List<string> domeniiGrup = grup.Value;
 
+                // Fondurile doar din acest grup
                 var fonduriInGrup = fonduriRepartizate
-                    .Where(f =>
-                        GetDomeniiDinGrupa(f.Grupa)
-                            .Any(domeniu => domeniiGrup.Contains(domeniu)))
+                    .Where(f => GetDomeniiDinGrupa(f.Grupa)
+                        .Any(domeniu => domeniiGrup.Contains(domeniu)))
                     .ToList();
 
                 if (!fonduriInGrup.Any()) continue;
 
                 decimal sumaDisponibila = fonduriInGrup.Sum(f => f.SumaRamasa);
-                decimal sumaInitiala = fonduriInGrup.Sum(f => f.bursaAlocatata);
-                decimal fractiune = sumaDisponibila / sumaInitiala;
-
                 if (sumaDisponibila <= 0) continue;
-                sumaDisponibilaAdd += sumaDisponibila;
 
-                if (fractiune > fractiuneMaxima)
-                {
-                    fractiuneMaxima = fractiune;
-                    grupCastigatorNume = numeGrup;
-                    domeniiGrupCastigator = domeniiGrup;
-                    fonduriCastigatoare = fonduriInGrup;
-                }
-            }
+                var sumaRamasaPeFond = fonduriInGrup.ToDictionary(f => f.ID, f => f.SumaRamasa);
 
-            // ❗ Verificare dacă am un grup câștigător
-            if (domeniiGrupCastigator == null || !fonduriCastigatoare.Any())
-                return BadRequest("Nu există fonduri disponibile în niciun grup.");
-            var fonduriInGrupFinal = fonduriRepartizate
-                    .Where(f =>
-                        GetDomeniiDinGrupa(f.Grupa)
-                            .Any(domeniu => domeniiGrupCastigator.Contains(domeniu)))
+                // Studenții eligibili DOAR din acest grup și DOAR licență
+                var studentiGrup = (await _fondBurseService
+                    .GetStudentiEligibiliPeDomeniiAsync(domeniiGrup))
+                    .Where(s => s.FondBurseMeritRepartizat?.programStudiu?.ToLower() == "licenta")
+                    .OrderByDescending(s => s.Media)
                     .ToList();
 
-            var sumaRamasaPeFondFinal = fonduriInGrupFinal.ToDictionary(f => f.ID, f => f.SumaRamasa);
+                // Aloc burse doar cu suma disponibilă din grup
+                (decimal sumaNoua, var istoricBP2) = AssignOnlyBP2(studentiGrup, sumaDisponibila, fonduri, sumaRamasaPeFond, "3");
 
-            // 🎓 Toți studenții eligibili din domeniile grupului
-            var studentiLicentaFinal = (await _fondBurseService
-                .GetStudentiEligibiliPeDomeniiAsync(domeniiGrupCastigator))
-                .Where(s => s.FondBurseMeritRepartizat?.programStudiu?.ToLower() == "licenta")
-                .OrderByDescending(s => s.Media)
-                .ToList();
+                // Salvez studenții
+                await _fondBurseService.SaveNewStudentsAsync(studentiGrup);
 
-
-            studentiLicentaFinal = studentiLicentaFinal
-                   .OrderByDescending(s => s.Media)
-                   .ToList();
-
-            (decimal sumaNouaFinal, var istoricBP2Final) = AssignOnlyBP2(studentiLicentaFinal, sumaDisponibilaAdd, fonduri, sumaRamasaPeFondFinal, "3");
-            sumaDisponibilaAdd = sumaNouaFinal;
-            // 💾 Salvare
-            await _fondBurseService.SaveNewStudentsAsync(studentiLicentaFinal);
-            foreach (var fond in fonduriInGrupFinal)
-            {
-                fond.SumaRamasa = sumaRamasaPeFondFinal[fond.ID];
-                await _fondBurseMeritRepartizatService.UpdateAsync(fond);
-            }
-            foreach (var entry in istoricBP2Final)
-            {
-                var existing = await _context.BursaIstoric.FirstOrDefaultAsync(x =>
-                    x.StudentRecordId == entry.Istoric.StudentRecordId
-                );
-
-                if (existing != null)
+                // Actualizez fondurile
+                foreach (var fond in fonduriInGrup)
                 {
-                    existing.Motiv = entry.Istoric.Motiv;
-                    existing.Actiune = entry.Istoric.Actiune;
-                    existing.Suma = entry.Istoric.Suma;
-                    existing.Etapa = "3";
-                    existing.Comentarii = entry.Istoric.Comentarii;
+                    fond.SumaRamasa = sumaRamasaPeFond[fond.ID];
+                    await _fondBurseMeritRepartizatService.UpdateAsync(fond);
                 }
-                else
+
+                // Actualizez istoric
+                foreach (var entry in istoricBP2)
                 {
-                    await _context.BursaIstoric.AddAsync(entry.Istoric);
+                    var existing = await _context.BursaIstoric.FirstOrDefaultAsync(x =>
+                        x.StudentRecordId == entry.Istoric.StudentRecordId);
+
+                    if (existing != null)
+                    {
+                        existing.Motiv = entry.Istoric.Motiv;
+                        existing.Actiune = entry.Istoric.Actiune;
+                        existing.Suma = entry.Istoric.Suma;
+                        existing.Etapa = "3";
+                        existing.Comentarii = entry.Istoric.Comentarii;
+                    }
+                    else
+                    {
+                        await _context.BursaIstoric.AddAsync(entry.Istoric);
+                    }
                 }
+
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
+            //etapa gresita se ofera burse pentru 1 singru grup cand trebuie pentru fiecare grup in parte gresit mai mult seamana cu etapa 4 mai mult.
+                                                                /*var grupuriBurse = await _grupuriHelper.GetGrupuriBurseAsync();
+
+                                                                string grupCastigatorNume = null;
+                                                                List<string> domeniiGrupCastigator = null;
+                                                                List<FondBurseMeritRepartizat> fonduriCastigatoare = null;
+                                                                decimal fractiuneMaxima = 0;
+                                                                decimal sumaDisponibilaAdd = 0;
+                                                                foreach (var grup in grupuriBurse)
+                                                                {
+                                                                    string numeGrup = grup.Key;
+                                                                    List<string> domeniiGrup = grup.Value;
+
+                                                                    var fonduriInGrup = fonduriRepartizate
+                                                                        .Where(f =>
+                                                                            GetDomeniiDinGrupa(f.Grupa)
+                                                                                .Any(domeniu => domeniiGrup.Contains(domeniu)))
+                                                                        .ToList();
+
+                                                                    if (!fonduriInGrup.Any()) continue;
+
+                                                                    decimal sumaDisponibila = fonduriInGrup.Sum(f => f.SumaRamasa);
+                                                                    decimal sumaInitiala = fonduriInGrup.Sum(f => f.bursaAlocatata);
+                                                                    decimal fractiune = sumaDisponibila / sumaInitiala;
+
+                                                                    if (sumaDisponibila <= 0) continue;
+                                                                    sumaDisponibilaAdd += sumaDisponibila;
+
+                                                                    if (fractiune > fractiuneMaxima)
+                                                                    {
+                                                                        fractiuneMaxima = fractiune;
+                                                                        grupCastigatorNume = numeGrup;
+                                                                        domeniiGrupCastigator = domeniiGrup;
+                                                                        fonduriCastigatoare = fonduriInGrup;
+                                                                    }
+                                                                }
+
+                                                                // ❗ Verificare dacă am un grup câștigător
+                                                                if (domeniiGrupCastigator == null || !fonduriCastigatoare.Any())
+                                                                    return BadRequest("Nu există fonduri disponibile în niciun grup.");
+                                                                var fonduriInGrupFinal = fonduriRepartizate
+                                                                        .Where(f =>
+                                                                            GetDomeniiDinGrupa(f.Grupa)
+                                                                                .Any(domeniu => domeniiGrupCastigator.Contains(domeniu)))
+                                                                        .ToList();
+
+                                                                var sumaRamasaPeFondFinal = fonduriInGrupFinal.ToDictionary(f => f.ID, f => f.SumaRamasa);
+
+                                                                // 🎓 Toți studenții eligibili din domeniile grupului
+                                                                var studentiLicentaFinal = (await _fondBurseService
+                                                                    .GetStudentiEligibiliPeDomeniiAsync(domeniiGrupCastigator))
+                                                                    .Where(s => s.FondBurseMeritRepartizat?.programStudiu?.ToLower() == "licenta")
+                                                                    .OrderByDescending(s => s.Media)
+                                                                    .ToList();
+
+
+                                                                studentiLicentaFinal = studentiLicentaFinal
+                                                                       .OrderByDescending(s => s.Media)
+                                                                       .ToList();
+
+                                                                (decimal sumaNouaFinal, var istoricBP2Final) = AssignOnlyBP2(studentiLicentaFinal, sumaDisponibilaAdd, fonduri, sumaRamasaPeFondFinal, "3");
+                                                                sumaDisponibilaAdd = sumaNouaFinal;
+                                                                // 💾 Salvare
+                                                                await _fondBurseService.SaveNewStudentsAsync(studentiLicentaFinal);
+                                                                foreach (var fond in fonduriInGrupFinal)
+                                                                {
+                                                                    fond.SumaRamasa = sumaRamasaPeFondFinal[fond.ID];
+                                                                    await _fondBurseMeritRepartizatService.UpdateAsync(fond);
+                                                                }
+                                                                foreach (var entry in istoricBP2Final)
+                                                                {
+                                                                    var existing = await _context.BursaIstoric.FirstOrDefaultAsync(x =>
+                                                                        x.StudentRecordId == entry.Istoric.StudentRecordId
+                                                                    );
+
+                                                                    if (existing != null)
+                                                                    {
+                                                                        existing.Motiv = entry.Istoric.Motiv;
+                                                                        existing.Actiune = entry.Istoric.Actiune;
+                                                                        existing.Suma = entry.Istoric.Suma;
+                                                                        existing.Etapa = "3";
+                                                                        existing.Comentarii = entry.Istoric.Comentarii;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        await _context.BursaIstoric.AddAsync(entry.Istoric);
+                                                                    }
+                                                                }
+
+                                                                await _context.SaveChangesAsync();
+                                                                //etapa gresita se ofera burse pentru 1 singru grup cand trebuie pentru fiecare grup in parte gresit mai mult seamana cu etapa 4 mai mult.
+            /*
 
            /* foreach (var grup in grupuriBurse)
             {
@@ -752,7 +816,8 @@ namespace Burse.Controllers
                         .ToList();
 
                     var sumaRamasaPeFond = fonduriGrup.ToDictionary(f => f.ID, f => f.SumaRamasa);
-                    decimal sumaDisponibila = grupCuSumaMaxima.SumaRamasa;
+                    //decimal sumaDisponibila = grupCuSumaMaxima.SumaRamasa;
+                    decimal sumaDisponibila = fonduriRepartizate.Sum(f => f.SumaRamasa);
 
                     // 🔽 Sortează după medie descrescător
                     studentiGrup = studentiGrup
@@ -922,10 +987,13 @@ namespace Burse.Controllers
 
             decimal? primaMedie = students.FirstOrDefault()?.Media;
             bool aFostAcordatBP2 = false;
+            StudentRecord studentAnterior = null;
 
             foreach (var student in students)
             {
                 decimal diferenta = primaMedie.HasValue ? Math.Abs(primaMedie.Value - student.Media) : 0;
+                //decimal diferenta = studentAnterior != null ? Math.Abs(studentAnterior.Media - student.Media) : 0;
+
                 string bursaAtribuita = null;
                 decimal suma = 0;
                 string motiv = "";
@@ -984,7 +1052,7 @@ namespace Burse.Controllers
                     explicatie = $"Media primului student: {primaMedie:F2} → Δ = {diferenta:F2} {(diferenta <= epsilon ? "(Δ ≤ ε)" : "(Δ > ε)")}";
                 }
 
-                if (!string.IsNullOrEmpty(bursaAtribuita))
+                /*if (!string.IsNullOrEmpty(bursaAtribuita))
                 {
                     student.Bursa = bursaAtribuita;
                     student.SumaBursa = suma;
@@ -1007,7 +1075,54 @@ namespace Burse.Controllers
                 else
                 {
                     student.Bursa = null;
+                }*/
+                if (!string.IsNullOrEmpty(bursaAtribuita))
+                {
+                    student.Bursa = bursaAtribuita;
+                    student.SumaBursa = suma;
+                    sumaDisponibila -= suma;
+
+                    // Construim Comentariu AI
+                    string anterior = studentAnterior != null
+                        ? $"Studentul anterior: {studentAnterior.NumeStudent} (media {studentAnterior.Media:F2}, bursă {studentAnterior.Bursa})"
+                        : "Acesta este primul student care primește bursă.";
+
+                    var urmatorii = students
+                        .Where(s => s.Bursa == null && s != student)
+                        .Take(5)
+                        .Select(s => $"{s.Emplid} (Media: {s.Media:F2}, An: {s.An+1}, Bursa: {s.Bursa ?? "—"})")
+                        .ToList();
+
+                    string urmatoriiText = urmatorii.Count > 0
+                        ? $"Următorii studenți eligibili: {string.Join(", ", urmatorii)}"
+                        : "Nu mai sunt studenți eligibili în acest moment.";
+
+                    string comentariuAI = $"Studentul {student.NumeStudent} cu media {student.Media:F2} a primit bursa de tip {bursaAtribuita} pentru că {motiv.ToLower()}. " +
+                                          $"{(string.IsNullOrEmpty(fallback) ? "" : fallback + " ")}{anterior}. {urmatoriiText}. " +
+                                          $"Fonduri rămase: {sumaDisponibila:F2} lei.";
+
+                    string comentariu = $"Etapa: {etapa} | Media: {student.Media:F2} | {motiv} {fallback} | " +
+                                        $"{explicatie} | Suma acordată: {suma:F2} lei | Rămas fond: {sumaDisponibila:F2} lei";
+
+                    istoricList.Add((student.Emplid, new BursaIstoric
+                    {
+                        StudentRecordId = student.Id,
+                        TipBursa = bursaAtribuita,
+                        Actiune = "Acordare",
+                        Suma = suma,
+                        Motiv = motiv,
+                        Comentarii = comentariu,
+                        ComentariiAI = comentariuAI, // NOU
+                        DataModificare = DateTime.Now
+                    }));
+
+                    studentAnterior = student; // actualizăm pentru următorul student
                 }
+                else
+                {
+                    student.Bursa = null;
+                }
+
             }
 
             return (sumaDisponibila, istoricList);
@@ -1024,6 +1139,7 @@ namespace Burse.Controllers
     string etapa)
         {
             var istoricList = new List<(string Emplid, BursaIstoric Istoric)>();
+            StudentRecord studentAnterior = null;
 
             foreach (var student in students)
             {
@@ -1066,6 +1182,26 @@ namespace Burse.Controllers
                         $"Necesari: {valoareBP2:F2} lei | " +
                         $"Program: {program}, An: {an}, Durată: {infoDurata}";
 
+                    var urmatorii = students
+                        .Where(s => s.Bursa == null && s.Id != student.Id)
+                        .Take(5)
+                        .Select(s => $"{s.NumeStudent} (Media: {s.Media:F2}, An: {an}, Domeniu: {s.FondBurseMeritRepartizat?.domeniu ?? "—"})")
+                        .ToList();
+
+                    string urmatoriiText = urmatorii.Count > 0
+                        ? $"Următorii studenți eligibili: {string.Join(", ", urmatorii)}"
+                        : "Nu mai sunt studenți eligibili în acest moment.";
+                    string anterior = studentAnterior != null
+                        ? $"Studentul anterior: {studentAnterior.NumeStudent} (media {studentAnterior.Media:F2}, bursă {studentAnterior.Bursa}, Domeniu: {studentAnterior.FondBurseMeritRepartizat?.domeniu ?? "—"})"
+                        : "Acesta este primul student care primește bursă.";
+
+                    string comentariuAI = $"Studentul {student.NumeStudent} (media {student.Media:F2}) a primit bursa de tip BP2 " +
+                        $"pentru anul {an}, program {program}, cu durata {infoDurata}. " +
+                        $"Fondurile disponibile au permis acordarea integrală a bursei din fondul #{fondId?.ToString() ?? "—"}. " +
+                        $"{anterior}. {urmatoriiText}. Fonduri rămase: {sumaDisponibila:F2} lei.";
+
+
+
                     istoricList.Add((student.Emplid, new BursaIstoric
                     {
                         StudentRecordId = student.Id,
@@ -1074,8 +1210,10 @@ namespace Burse.Controllers
                         Suma = valoareBP2,
                         Motiv = "Acordare BP2 – fonduri suficiente",
                         Comentarii = comentariu,
+                        ComentariiAI = comentariuAI, 
                         DataModificare = DateTime.Now
                     }));
+                    studentAnterior = student;
                 }
                 else
                 {

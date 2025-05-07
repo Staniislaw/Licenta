@@ -36,6 +36,9 @@ namespace Burse.Migrations
                     b.Property<string>("Comentarii")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ComentariiAI")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("DataModificare")
                         .HasColumnType("datetime2");
 

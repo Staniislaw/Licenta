@@ -175,38 +175,6 @@
         }
       }
     },
-    "/api/Ocr/extract-text": {
-      "post": {
-        "tags": [
-          "Ocr"
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "imageFile": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              },
-              "encoding": {
-                "imageFile": {
-                  "style": "form"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
     "/api/pdf/generate": {
       "post": {
         "tags": [

@@ -16,7 +16,7 @@ namespace Burse.Models
         public decimal Suma { get; set; } //Suma acordata -> 
         public string Comentarii { get; set; }
         public DateTime DataModificare { get; set; }
-
+        public string ComentariiAI { get; set; }
         public StudentRecord StudentRecord { get; set; }
     }
 

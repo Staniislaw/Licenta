@@ -33,5 +33,6 @@
         public string Comentarii { get; set; }
         public string UserModificare { get; set; }
         public DateTime DataModificare { get; set; }
+        public string ComentariiAI { get; set; }
     }
 }

@@ -62,6 +62,26 @@ namespace Burse.Helpers
                             domeniu = "RST (4)";
                         }
                     }
+                    
+                    if(fileName.ToUpper() =="IEN")
+                    {
+                        if (formattedSheetName == "1")
+                        {
+                            domeniu = "IEN (1)";
+                        }
+                        else if (formattedSheetName == "2")
+                        {
+                            domeniu = "IEN (2)";
+                        }
+                        else if (formattedSheetName == "3")
+                        {
+                            domeniu = "ME (3)";
+                        }
+                        else if (formattedSheetName == "4")
+                        {
+                            domeniu = "ETI (4)";
+                        }
+                    }
 
                     bool isTableStarted = false;
                     Dictionary<string, int> columnMapping = new Dictionary<string, int>();

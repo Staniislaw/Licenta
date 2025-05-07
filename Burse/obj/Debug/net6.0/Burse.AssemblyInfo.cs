@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Burse")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8b9abcf6381e1f663699a3b3295e1652a19a40cf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+90d94e3001ef17c6fe2a2a2e5ca04d979dd5391f")]
 [assembly: System.Reflection.AssemblyProductAttribute("Burse")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Burse")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
