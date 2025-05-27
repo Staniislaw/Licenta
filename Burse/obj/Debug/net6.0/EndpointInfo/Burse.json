@@ -206,6 +206,49 @@
         }
       }
     },
+    "/api/pdf/generate-all-pdfs": {
+      "post": {
+        "tags": [
+          "Pdf"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PdfRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PdfRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PdfRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/pdf/export-excel-studenti": {
+      "get": {
+        "tags": [
+          "Pdf"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/Settings/grupuri-burse/add": {
       "post": {
         "tags": [
@@ -419,6 +462,77 @@
         }
       }
     },
+    "/api/Settings/grupuri-pdf": {
+      "get": {
+        "tags": [
+          "Settings"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Settings/grupuri-pdf/add": {
+      "post": {
+        "tags": [
+          "Settings"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrupPdfEntry"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrupPdfEntry"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrupPdfEntry"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Settings/grupuri-pdf/remove": {
+      "delete": {
+        "tags": [
+          "Settings"
+        ],
+        "parameters": [
+          {
+            "name": "grup",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "valoare",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/Students/getStudents": {
       "get": {
         "tags": [
@@ -466,6 +580,18 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Students/program-studiu-options": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
         "responses": {
           "200": {
             "description": "Success"
@@ -712,6 +838,24 @@
         },
         "additionalProperties": false
       },
+      "GrupPdfEntry": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "grup": {
+            "type": "string",
+            "nullable": true
+          },
+          "valoare": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GrupProgramStudiiEntry": {
         "type": "object",
         "properties": {
@@ -761,6 +905,14 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PdfElement"
+            },
+            "nullable": true
+          },
+          "dynamicFields": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "nullable": true
             },
             "nullable": true
           }

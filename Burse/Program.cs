@@ -31,6 +31,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IBurseIstoricService, BurseIstoricService>();
 builder.Services.AddScoped<GrupuriDomeniiHelper, GrupuriDomeniiHelper>();
+builder.Services.AddScoped<IPdfGeneratorService, PdfGeneratorService>();
+builder.Services.AddScoped<IGrupuriService, GrupuriService>();
 QuestPDF.Settings.License = LicenseType.Community;
 
 var app = builder.Build();

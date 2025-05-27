@@ -19,6 +19,7 @@
     public class PdfRequest
     {
         public List<PdfElement> Elements { get; set; }
+        public Dictionary<string, string> DynamicFields { get; set; }
     }
 
 }

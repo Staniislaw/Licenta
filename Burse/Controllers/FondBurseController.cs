@@ -146,6 +146,100 @@ namespace Burse.Controllers
             {
                 return BadRequest("Fișierul Burse_Studenti.xlsx nu a fost găsit.");
             }
+            var grupuriHelper = new GrupuriDomeniiHelper(_context);
+            var grupuriProgramStudii = await grupuriHelper.GetGrupuriProgramStudiiAsync();
+            var domeniiDinDb = grupuriProgramStudii.SelectMany(g => g.Value).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+
+            var programeDeStudii = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
+            foreach (var file in pathStudentiList)
+            {
+                string programPrincipal = Path.GetFileNameWithoutExtension(file.FileName).ToUpper();
+                programeDeStudii.Add(programPrincipal);
+
+                using var stream = file.OpenReadStream();
+                using var reader = ExcelReaderFactory.CreateReader(stream);
+
+                do
+                {
+                    string sheetName = reader.Name?.Trim();
+                    if (string.IsNullOrWhiteSpace(sheetName))
+                        continue;
+
+                    // Tratare exactă pentru foi numerice în IEN/IETTI
+                    bool handledSpecial = false;
+
+                    if (programPrincipal == "IEN")
+                    {
+                        switch (sheetName)
+                        {
+                            case "1":
+                            case "2":
+                                programeDeStudii.Add("IEN");
+                                handledSpecial = true;
+                                break;
+                            case "3":
+                                programeDeStudii.Add("ME");
+                                handledSpecial = true;
+                                break;
+                            case "4":
+                                programeDeStudii.Add("ETI");
+                                handledSpecial = true;
+                                break;
+                        }
+                    }
+                    else if (programPrincipal == "IETTI")
+                    {
+                        switch (sheetName)
+                        {
+                            case "1":
+                            case "2":
+                                programeDeStudii.Add("IETTI");
+                                handledSpecial = true;
+                                break;
+                            case "3":
+                            case "4":
+                                programeDeStudii.Add("RST");
+                                handledSpecial = true;
+                                break;
+                        }
+                    }
+
+                    if (!handledSpecial)
+                    {
+                        // Tratăm foi de genul: 1rcc, 2sc, etc.
+                        var match = Regex.Match(sheetName, @"^(\d*)([a-zA-Z]+)$", RegexOptions.IgnoreCase);
+                        if (match.Success)
+                        {
+                            string raw = match.Groups[2].Value.ToUpper();
+                            string subProgram = raw.EndsWith("DUAL")
+                                ? $"{(raw[..^4].Length > 0 ? raw[..^4] : programPrincipal)}-DUAL"
+                                : raw;
+
+                            programeDeStudii.Add(subProgram);
+                        }
+                    }
+
+                } while (reader.NextResult());
+            }
+
+
+
+            // 3. Verifică ce domenii lipsesc
+            var domeniiLipsa = domeniiDinDb
+                    .Where(db => !programeDeStudii.Contains(db, StringComparer.OrdinalIgnoreCase))
+                    .ToList();
+
+
+
+            if (domeniiLipsa.Any())
+            {
+                return BadRequest($"Nu au fost găsite toate domeniile de studii. Lipsesc: {string.Join(", ", domeniiLipsa)}.");
+            }
+
+
+            
             var streamBurseFile = burseFile.OpenReadStream();
 
             StudentExcelReader excelReader = new StudentExcelReader();
@@ -552,7 +646,7 @@ namespace Burse.Controllers
                     {
                         g.ProgramStudiu,
                         g.Fonduri,
-                        Fractiune = g.SumaRamasa / g.SumaInitiala
+                        Fractiune = g.SumaRamasa 
                     })
                     .OrderByDescending(g => g.Fractiune)
                     .FirstOrDefault();

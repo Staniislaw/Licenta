@@ -20,5 +20,12 @@
         public string Grup { get; set; } = string.Empty;
         public string Domeniu { get; set; } = string.Empty;
     }
+    public class GrupPdfEntry
+    {
+        public int Id { get; set; }
+        public string Grup { get; set; } = null!;
+        public string Valoare { get; set; } = null!;
+    }
+
 
 }

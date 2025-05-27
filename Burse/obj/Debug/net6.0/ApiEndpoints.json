@@ -102,8 +102,34 @@
   },
   {
     "ContainingType": "Burse.Controllers.PdfController",
+    "Method": "ExportExcelStudenti",
+    "RelativePath": "api/pdf/export-excel-studenti",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.PdfController",
     "Method": "GeneratePdf",
     "RelativePath": "api/pdf/generate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Burse.Models.TemplatePDF.PdfRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.PdfController",
+    "Method": "GenerateAllPdfs",
+    "RelativePath": "api/pdf/generate-all-pdfs",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -138,7 +164,7 @@
   },
   {
     "ContainingType": "Burse.Controllers.SettingsController",
-    "Method": "AddDomeniuToGrup",
+    "Method": "AddDomeniuToGrupBursa",
     "RelativePath": "api/Settings/grupuri-burse/add",
     "HttpMethod": "POST",
     "IsController": true,
@@ -167,6 +193,53 @@
       },
       {
         "Name": "domeniu",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "GetGrupuriPdf",
+    "RelativePath": "api/Settings/grupuri-pdf",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "AddValToPdfGroup",
+    "RelativePath": "api/Settings/grupuri-pdf/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "payload",
+        "Type": "Burse.Models.GrupPdfEntry",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "RemoveValFromPdfGroup",
+    "RelativePath": "api/Settings/grupuri-pdf/remove",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "grup",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "valoare",
         "Type": "System.String",
         "IsRequired": false
       }
@@ -282,6 +355,16 @@
     "ContainingType": "Burse.Controllers.StudentsController",
     "Method": "GetStudents",
     "RelativePath": "api/Students/getStudents",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.StudentsController",
+    "Method": "GetProgramStudiuOptions",
+    "RelativePath": "api/Students/program-studiu-options",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

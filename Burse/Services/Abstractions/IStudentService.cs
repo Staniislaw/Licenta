@@ -6,6 +6,7 @@ namespace Burse.Services.Abstractions
     {
         Task<List<StudentRecord>> GetAllAsync();
         Task<StudentRecord> UpdateBursaAsync(int id, string bursa);
+        Task<byte[]> ExportStudentiExcelAsync();
 
     }
 }

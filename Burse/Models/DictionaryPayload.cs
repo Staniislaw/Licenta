@@ -5,6 +5,7 @@
         public Dictionary<string, List<string>> GrupuriBurse { get; set; }
         public Dictionary<string, List<string>> Grupuri { get; set; }
         public Dictionary<string, List<string>> GrupProgramStudii { get; set; }
+        public Dictionary<string, List<string>> GrupPDF { get; set; }
     }
 
 }

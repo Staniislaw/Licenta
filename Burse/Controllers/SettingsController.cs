@@ -11,141 +11,107 @@ namespace Burse.Controllers
     [Route("api/[controller]")]
     public class SettingsController : ControllerBase
     {
-        private readonly BurseDBContext _context;
+        private readonly IGrupuriService _grupuriService;
 
-        public SettingsController(BurseDBContext context)
+        public SettingsController(IGrupuriService grupuriService)
         {
-            _context = context;
+            _grupuriService = grupuriService;
         }
 
+        // Grupuri Bursa
         [HttpPost("grupuri-burse/add")]
-        public async Task<IActionResult> AddDomeniuToGrup([FromBody] GrupBursaEntry payload)
+        public async Task<IActionResult> AddDomeniuToGrupBursa([FromBody] GrupBursaEntry payload)
         {
-            // Verifici dacă există deja
-            var exists = await _context.GrupBursa
-                .AnyAsync(e => e.GrupBursa == payload.GrupBursa && e.Domeniu == payload.Domeniu);
-
-            if (!exists)
-            {
-                _context.GrupBursa.Add(payload);
-                await _context.SaveChangesAsync();
-            }
-
-            return Ok();
+            var added = await _grupuriService.AddDomeniuToGrupBursaAsync(payload);
+            if (added)
+                return Ok();
+            return BadRequest("Entry already exists");
         }
+
         [HttpDelete("grupuri-burse/remove")]
         public async Task<IActionResult> RemoveDomeniuFromGrupBursa([FromQuery] string grup, [FromQuery] string domeniu)
         {
-            var entry = await _context.GrupBursa
-                .FirstOrDefaultAsync(e => e.GrupBursa == grup && e.Domeniu == domeniu);
-
-            if (entry != null)
-            {
-                _context.GrupBursa.Remove(entry);
-                await _context.SaveChangesAsync();
-            }
-
+            await _grupuriService.RemoveDomeniuFromGrupBursaAsync(grup, domeniu);
             return Ok();
         }
 
         [HttpGet("grupuri-burse")]
         public async Task<IActionResult> GetGrupuriBurse()
         {
-            var entries = await _context.GrupBursa.ToListAsync();
-
-            var grouped = entries
-                .GroupBy(e => e.GrupBursa)
-                .ToDictionary(g => g.Key, g => g.Select(x => x.Domeniu).ToList());
-
-            return Ok(grouped);
+            var result = await _grupuriService.GetGrupuriBurseAsync();
+            return Ok(result);
         }
 
-
-
+        // Grupuri Domeniu
         [HttpGet("grupuri")]
         public async Task<IActionResult> GetGrupuri()
         {
-            var entries = await _context.GrupDomeniu.ToListAsync();
-
-            var grouped = entries
-                .GroupBy(e => e.Grup)
-                .ToDictionary(g => g.Key, g => g.Select(x => x.Domeniu).ToList());
-
-            return Ok(grouped);
+            var result = await _grupuriService.GetGrupuriAsync();
+            return Ok(result);
         }
 
         [HttpPost("grupuri/add")]
         public async Task<IActionResult> AddDomeniuToGrup([FromBody] GrupDomeniuEntry payload)
         {
-            var exists = await _context.GrupDomeniu
-                .AnyAsync(e => e.Grup == payload.Grup && e.Domeniu == payload.Domeniu);
-
-            if (!exists)
-            {
-                _context.GrupDomeniu.Add(payload);
-                await _context.SaveChangesAsync();
-            }
-
-            return Ok();
+            var added = await _grupuriService.AddDomeniuToGrupAsync(payload);
+            if (added)
+                return Ok();
+            return BadRequest("Entry already exists");
         }
 
         [HttpDelete("grupuri/remove")]
         public async Task<IActionResult> RemoveDomeniuFromGrup([FromQuery] string grup, [FromQuery] string domeniu)
         {
-            var entry = await _context.GrupDomeniu
-                .FirstOrDefaultAsync(e => e.Grup == grup && e.Domeniu == domeniu);
-
-            if (entry != null)
-            {
-                _context.GrupDomeniu.Remove(entry);
-                await _context.SaveChangesAsync();
-            }
-
+            await _grupuriService.RemoveDomeniuFromGrupAsync(grup, domeniu);
             return Ok();
         }
 
-
+        // Grupuri Program Studii
         [HttpPost("program-studii/add")]
         public async Task<IActionResult> AddDomeniuToGrupProgramStudii([FromBody] GrupProgramStudiiEntry payload)
         {
-            // Verifici dacă există deja
-            var exists = await _context.GrupBursa
-                .AnyAsync(e => e.GrupBursa == payload.Grup && e.Domeniu == payload.Domeniu);
-
-            if (!exists)
-            {
-                _context.GrupProgramStudii.Add(payload);
-                await _context.SaveChangesAsync();
-            }
-
-            return Ok();
+            var added = await _grupuriService.AddDomeniuToGrupProgramStudiiAsync(payload);
+            if (added)
+                return Ok();
+            return BadRequest("Entry already exists");
         }
+
         [HttpDelete("program-studii/remove")]
         public async Task<IActionResult> RemoveDomeniuFromGrupProgramStudii([FromQuery] string grup, [FromQuery] string domeniu)
         {
-            var entry = await _context.GrupProgramStudii
-                .FirstOrDefaultAsync(e => e.Grup == grup && e.Domeniu == domeniu);
-
-            if (entry != null)
-            {
-                _context.GrupProgramStudii.Remove(entry);
-                await _context.SaveChangesAsync();
-            }
-
+            await _grupuriService.RemoveDomeniuFromGrupProgramStudiiAsync(grup, domeniu);
             return Ok();
         }
 
         [HttpGet("program-studii")]
         public async Task<IActionResult> GetGrupuriProgramStudii()
         {
-            var entries = await _context.GrupProgramStudii.ToListAsync();
-
-            var grouped = entries
-                .GroupBy(e => e.Grup)
-                .ToDictionary(g => g.Key, g => g.Select(x => x.Domeniu).ToList());
-
-            return Ok(grouped);
+            var result = await _grupuriService.GetGrupuriProgramStudiiAsync();
+            return Ok(result);
         }
 
+        // Grupuri PDF
+        [HttpGet("grupuri-pdf")]
+        public async Task<IActionResult> GetGrupuriPdf()
+        {
+            var result = await _grupuriService.GetGrupuriPdfAsync();
+            return Ok(result);
+        }
+
+        [HttpPost("grupuri-pdf/add")]
+        public async Task<IActionResult> AddValToPdfGroup([FromBody] GrupPdfEntry payload)
+        {
+            var added = await _grupuriService.AddValToPdfGroupAsync(payload);
+            if (added)
+                return Ok();
+            return BadRequest("Entry already exists");
+        }
+
+        [HttpDelete("grupuri-pdf/remove")]
+        public async Task<IActionResult> RemoveValFromPdfGroup([FromQuery] string grup, [FromQuery] string valoare)
+        {
+            await _grupuriService.RemoveValFromPdfGroupAsync(grup, valoare);
+            return Ok();
+        }
     }
 }

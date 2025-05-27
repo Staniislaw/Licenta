@@ -1,6 +1,9 @@
 ﻿using Burse.Data;
+using Burse.Helpers;
 using Burse.Models.DTO;
 using Burse.Services.Abstractions;
+
+using ClosedXML.Excel;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +16,13 @@ namespace Burse.Controllers
     public class StudentsController : ControllerBase
     {
         private readonly IStudentService _studentService;
+        private readonly GrupuriDomeniiHelper _helper;
 
-        public StudentsController(IStudentService studentService)
+        public StudentsController(IStudentService studentService, GrupuriDomeniiHelper helper)
         {
             _studentService = studentService;
+            _helper = helper;
+
         }
 
         [HttpGet("getStudents")]
@@ -103,6 +109,20 @@ namespace Burse.Controllers
             };
 
             return Ok(updatedDto);
+        }
+
+        [HttpGet("program-studiu-options")]
+        public async Task<IActionResult> GetProgramStudiuOptions()
+        {
+            var grupuri = await _helper.GetGrupuriProgramStudiiAsync();
+
+            var domenii = grupuri
+                .SelectMany(g => g.Value)
+                .Distinct()
+                .OrderBy(d => d)
+                .ToList();
+
+            return Ok(domenii);
         }
 
     }

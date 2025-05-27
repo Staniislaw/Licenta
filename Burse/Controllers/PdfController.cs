@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System;
 using Burse.Data;
 using Microsoft.EntityFrameworkCore;
+using Burse.Services;
 namespace Burse.Controllers
 {
     [ApiController]
@@ -18,134 +19,93 @@ namespace Burse.Controllers
     {
         private readonly IFondBurseService _fondBurseService;
         private readonly BurseDBContext _context;
+        private readonly IPdfGeneratorService _pdfGeneratorService;
+        private readonly IGrupuriService _grupuriService;
+        private readonly IStudentService _studentService;
 
-        public PdfController(IFondBurseService fondBurseService, BurseDBContext context)
+        public PdfController(IFondBurseService fondBurseService, BurseDBContext context, IPdfGeneratorService pdfGeneratorService, IGrupuriService grupuriService, IStudentService studentService)
         {
             _fondBurseService = fondBurseService;
             _context = context;
-
+            _pdfGeneratorService = pdfGeneratorService;
+            _grupuriService = grupuriService;
+            _studentService = studentService;
         }
-        private static IContainer CellStyle(IContainer container) =>
-    container.Padding(0)      // Eliminăm padding-ul pentru a face tabelul mai compact
-             .Border(0.5f)       // Eliminăm borderul (sau îl facem foarte subțire)
-             .AlignCenter();
+
+
 
         [HttpPost("generate")]
         public async Task<IActionResult> GeneratePdf([FromBody] PdfRequest request)
         {
-            if (request.Elements == null)
+            try
             {
-                return BadRequest("Request-ul este invalid sau nu conține niciun ID de template.");
+                var stream = await _pdfGeneratorService.GeneratePdfAsync(request);
+                return File(stream, "application/pdf", "generated.pdf");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("generate-all-pdfs")]
+        public async Task<IActionResult> GenerateAllPdfs([FromBody] PdfRequest request)
+        {
+            // Preia toate grupurile cu valorile lor
+            var grupuriPdf = await _grupuriService.GetGrupuriPdfAsync();
+
+            var pdfStreams = new List<(MemoryStream Stream, string FileName)>();
+
+            foreach (var grup in grupuriPdf)
+            {
+                // Construim un DynamicFields cu valorile grupului, separate prin virgulă
+                var dynamicFields = new Dictionary<string, string>
+                {
+                    { "ProgramStudiu.Dynamic", string.Join(", ", grup.Value) }
+                };
+
+                var pdfRequest = new PdfRequest
+                {
+                    Elements = request.Elements, 
+                    DynamicFields = dynamicFields
+                };
+
+
+                var stream = await _pdfGeneratorService.GeneratePdfAsync(pdfRequest);
+                stream.Position = 0;
+
+                pdfStreams.Add((stream, $"{grup.Key}.pdf"));
             }
 
-            QuestPDF.Settings.License = LicenseType.Community;
-
-            var studentiCuBursa0 = await _fondBurseService.GetStudentsWithBursaFromDatabaseAsync();
-
-            var document = Document.Create(container =>
+            var zipStream = new MemoryStream();
+            using (var archive = new System.IO.Compression.ZipArchive(zipStream, System.IO.Compression.ZipArchiveMode.Create, true))
             {
-                container.Page(page =>
+                foreach (var (stream, fileName) in pdfStreams)
                 {
-                    page.Size(PageSizes.A4);
-                    page.Margin(30);
-                    page.DefaultTextStyle(x => x.FontSize(9));
-
-                    page.Content().Column(col =>
+                    var zipEntry = archive.CreateEntry(fileName);
+                    using (var entryStream = zipEntry.Open())
                     {
-                        foreach (var el in request.Elements)
-                        {
-                            var style = el.Style ?? new PdfStyle();
+                        await stream.CopyToAsync(entryStream);
+                    }
+                }
+            }
+            zipStream.Position = 0;
 
-                            if (el.Type == "table")
-                            {
-                                var domeniiSelectate = el.Domenii ?? new List<string>();
-
-                                var filtrati = studentiCuBursa0
-                                    .Where(s => domeniiSelectate
-                                        .Any(d => RemoveYearFromDomain(s.FondBurseMeritRepartizat.domeniu).Equals(RemoveYearFromDomain(d))))
-                                    .OrderBy(s => s.An).ThenByDescending(S=>S.Media)
-                                    .ToList();
-                                col.Item().Table(table =>
-                                {
-                                    table.ColumnsDefinition(columns =>
-                                    {
-                                        columns.ConstantColumn(20);   // Nr. crt.
-                                        columns.ConstantColumn(60);   // ID
-                                        columns.ConstantColumn(30);   // An de studii
-                                        columns.ConstantColumn(35);   // Media
-                                        columns.ConstantColumn(55);  // Sursa de finanțare
-                                        columns.ConstantColumn(30);  // Categorie bursă
-                                        columns.ConstantColumn(50);  // Valoarea / 12 luni
-
-                                    });
-
-                                    table.Header(header =>
-                                    {
-                                        header.Cell().Element(CellStyle).Text("Nr. crt.").FontSize(9).Bold();
-                                        header.Cell().Element(CellStyle).Text("ID").FontSize(9).Bold();
-                                        header.Cell().Element(CellStyle).Text("An de studii").FontSize(9).Bold();
-                                        header.Cell().Element(CellStyle).Text("Media").FontSize(9).Bold();
-                                        header.Cell().Element(CellStyle).Text("Sursa de finanțare").FontSize(9).Bold();
-                                        header.Cell().Element(CellStyle).RotateLeft().Text(text =>
-                                        {
-                                            text.Span("Categorie").FontSize(9).Bold();
-                                            text.EmptyLine();
-                                            text.Span("bursă").FontSize(9).Bold();
-                                        });
-                                        header.Cell().Element(CellStyle).Text("Valoarea / 12 luni").FontSize(9).Bold();
-                                    });
-
-                                    int index = 1;
-                                    foreach (var s in filtrati)
-                                    {
-                                        table.Cell().Element(CellStyle).Text(index++.ToString()).FontSize(9);
-                                        table.Cell().Element(CellStyle).Text(s.Emplid).FontSize(9);
-                                        table.Cell().Element(CellStyle).Text((s.An+1).ToString()).FontSize(9);
-                                        table.Cell().Element(CellStyle).Text(s.Media.ToString("0.00")).FontSize(9);
-                                        table.Cell().Element(CellStyle).Text(s.SursaFinantare).FontSize(9);
-                                        table.Cell().Element(CellStyle).Text(s.Bursa).FontSize(9);
-                                        table.Cell().Element(CellStyle).Text((s.SumaBursa).ToString("0")).FontSize(9);
-                                    }
-                                });
-
-
-
-                                col.Item().Height(20);
-                                continue;
-                            }
-
-                            col.Item().Text(text =>
-                            {
-                                // Aplică stilul textului
-                                text.Span(el.Content)
-                                    .FontSize(style.FontSize)
-                                    .FontColor(style.Color);
-
-                                switch (style.TextAlign)
-                                {
-                                    case "center": text.AlignCenter(); break;
-                                    case "right": text.AlignRight(); break;
-                                    default: text.AlignLeft(); break;
-                                }
-                            });
-
-                            col.Item().Height(10);
-                        }
-                    });
-                });
-            });
-
-            var stream = new MemoryStream();
-            document.GeneratePdf(stream);
-            stream.Position = 0;
-
-            return File(stream, "application/pdf", "generated.pdf");
+            return File(zipStream, "application/zip", "all-pdfs.zip");
         }
 
-        // Functia pentru eliminarea anului și a sufixului "-DUAL"
-        private string RemoveYearFromDomain(string domeniu)
+        [HttpGet("export-excel-studenti")]
+        public async Task<IActionResult> ExportExcelStudenti()
         {
-            return Regex.Replace(domeniu, @"\s*\(\d+\)|\-DUAL", "").Trim().ToLower();
+            var fileBytes = await _studentService.ExportStudentiExcelAsync();
+            var fileName = $"studenti_{DateTime.Now:yyyyMMdd_HHmm}.xlsx";
+            return File(fileBytes,
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        fileName);
         }
+
+
+
+
     }
 }
