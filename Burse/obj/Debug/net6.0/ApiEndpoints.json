@@ -101,6 +101,53 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Burse.Controllers.LogsController",
+    "Method": "GetAvailableLogDates",
+    "RelativePath": "api/Logs/availabledates",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "logType",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.LogsController",
+    "Method": "GetLogContent",
+    "RelativePath": "api/Logs/content",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "logType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "date",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.LogsController",
+    "Method": "GetLogCategories",
+    "RelativePath": "api/Logs/GetLogCategories",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Burse.Controllers.PdfController",
     "Method": "ExportExcelStudenti",
     "RelativePath": "api/pdf/export-excel-studenti",

@@ -7,7 +7,7 @@ namespace Burse.Helpers
     {
         // Lista de cuvinte de legătură (stop words) care sunt ignorate
         private static readonly HashSet<string> StopWords = new HashSet<string>(
-            new[] { "ȘI", "SI", "DE", "LA", "DIN", "CU", "ÎN","IN", "INVĂȚĂMÂNT","PENTRU","INVATAMANT" },
+            new[] { "ȘI", "SI", "DE", "LA", "DIN", "CU", "ÎN","IN", "INVĂȚĂMÂNT","PENTRU","INVATAMANT","DUAL" },
             StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Burse.Helpers
                 return string.Empty;
 
             // Convertim la majuscule pentru consistență
-            string upperProgram = programName.ToUpperInvariant();
+            string upperProgram = AcronymGenerator.RemoveDiacritics(programName).ToUpperInvariant();
 
             // Dacă programul conține "ÎNVĂȚĂMÂNT DUAL", tratăm separat
             if (upperProgram.Contains("INVATAMANT DUAL"))

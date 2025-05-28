@@ -51,6 +51,37 @@ namespace Burse.Services
 
             return formatiiStudii;
         }
+
+        public async Task<Dictionary<string, List<FormatiiStudii>>> GetGroupedFormatiiStudiiAsync()
+        {
+            var formatii = await _context.FormatiiStudii.ToListAsync();
+            var generator = new AcronymGenerator();
+
+            var grouped = new Dictionary<string, List<FormatiiStudii>>();
+
+            foreach (var f in formatii)
+            {
+                if (!int.TryParse(f.An, out int anValid) || anValid <= 0)
+                    continue;
+
+                string acronim = generator.GenerateAcronym(f.ProgramDeStudiu, f.An.ToString());
+
+                if (f.ProgramDeStudiu.ToUpper().Contains("DUAL") && !acronim.EndsWith("-DUAL"))
+                {
+                    acronim += "-DUAL";
+                }
+
+                if (!grouped.ContainsKey(acronim))
+                {
+                    grouped[acronim] = new List<FormatiiStudii>();
+                }
+
+                grouped[acronim].Add(f);
+            }
+
+            return grouped;
+        }
+
         public async Task<byte[]> GenerateCustomLayout2(string filePath, List<FondBurse> fonduri, List<FormatiiStudii> formatiiStudii, decimal disponibilBM)
         {
             // 1) Licență EPPlus

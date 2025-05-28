@@ -24,14 +24,16 @@ namespace Burse.Controllers
         private readonly IFondBurseMeritRepartizatService _fondBurseMeritRepartizatService;
         private readonly GrupuriDomeniiHelper _grupuriHelper;
         private readonly IBurseIstoricService _burseIstoricService;
+        private readonly AppLogger _logger;
 
-        public FondBurseController(BurseDBContext context, IFondBurseService fondBurseService, IFondBurseMeritRepartizatService fondBurseMeritRepartizatService, GrupuriDomeniiHelper grupuriHelper, IBurseIstoricService burseIstoricService    )
+        public FondBurseController(BurseDBContext context, IFondBurseService fondBurseService, IFondBurseMeritRepartizatService fondBurseMeritRepartizatService, GrupuriDomeniiHelper grupuriHelper, IBurseIstoricService burseIstoricService, AppLogger logger)
         {
             _context = context;
             _fondBurseService = fondBurseService;
             _fondBurseMeritRepartizatService = fondBurseMeritRepartizatService;
             _grupuriHelper = grupuriHelper;
             _burseIstoricService = burseIstoricService;
+            _logger = logger;
         }
 
         [HttpPost("AddFondBurse")]
@@ -150,6 +152,8 @@ namespace Burse.Controllers
             var grupuriProgramStudii = await grupuriHelper.GetGrupuriProgramStudiiAsync();
             var domeniiDinDb = grupuriProgramStudii.SelectMany(g => g.Value).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
 
+            Dictionary<string, List<FormatiiStudii>> groupedFormatii = await _fondBurseService.GetGroupedFormatiiStudiiAsync();
+
             var programeDeStudii = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
@@ -235,21 +239,86 @@ namespace Burse.Controllers
 
             if (domeniiLipsa.Any())
             {
-                return BadRequest($"Nu au fost găsite toate domeniile de studii. Lipsesc: {string.Join(", ", domeniiLipsa)}.");
+                var msg = $"Nu au fost găsite toate domeniile de studii in listele cu studenti incarcate. Lipsesc: {string.Join(", ", domeniiLipsa)}.";
+                _logger.LogFormatiiInfo(msg);
+                return BadRequest("Eroare: unele domenii de studii lipsesc. Consultați logurile Formatii pentru detalii.");
             }
 
 
-            
+
             var streamBurseFile = burseFile.OpenReadStream();
 
             StudentExcelReader excelReader = new StudentExcelReader();
             List<FondBurse> fonduri = await _fondBurseService.GetDateFromBursePerformanteAsync();
 
+            var allStudentRecordsList = new List<Dictionary<string, List<StudentRecord>>>();
+
+            bool toateCoincid = true;
+            var discrepante = new List<string>();
+
             foreach (var pathStudenti in pathStudentiList)
             {
                 using var stream = pathStudenti.OpenReadStream();
+                var studentRecords = excelReader.ReadStudentRecordsFromExcel(stream, pathStudenti.FileName);
 
-                Dictionary<string, List<StudentRecord>> studentRecords = excelReader.ReadStudentRecordsFromExcel(stream, pathStudenti.FileName);
+                // Procesăm fiecare listă de studenți înainte de a o adăuga
+                var processed = new Dictionary<string, List<StudentRecord>>();
+                foreach (var kvp in studentRecords)
+                {
+                   
+                    string processedKeyNormalized = AcronymGenerator.RemoveDiacritics(kvp.Key).ToUpperInvariant();
+
+                    var matchedKey = groupedFormatii.Keys
+                        .FirstOrDefault(k => AcronymGenerator.RemoveDiacritics(k).ToUpperInvariant() == processedKeyNormalized);
+
+                    if (matchedKey == null)
+                    {
+                        _logger.LogFormatiiInfo($"Procesare date Studenti -> Domeniul '{kvp.Key} studentului' nu există în formatii studii.");
+                        continue;
+                    }
+
+                    int processedCount = kvp.Value.Count;
+
+                    int groupedCount = groupedFormatii[matchedKey].Sum(f =>
+                        ParseIntOrZero(f.FaraTaxaRomani) +
+                        ParseIntOrZero(f.FaraTaxaRp) +
+                        ParseIntOrZero(f.FaraTaxaUECEE) +
+                        ParseIntOrZero(f.CuTaxaRomani) +
+                        ParseIntOrZero(f.CuTaxaRM) +
+                        ParseIntOrZero(f.CuTaxaUECEE) +
+                        ParseIntOrZero(f.BursieriAIStatuluiRoman) +
+                        ParseIntOrZero(f.CPV)
+                    );
+
+                    if (processedCount != groupedCount)
+                    {
+                        if (processedCount != groupedCount)
+                        {
+                            var msg = $"Numărul studenților pentru Domeniul '{kvp.Key}' în fișierul '{pathStudenti.FileName}' nu coincide. Procesați: {processedCount}, Preluați din fișierul FormatiiStudii: {groupedCount}";
+                            _logger.LogStudentsExcels(msg);
+                            discrepante.Add(msg); 
+                        }
+                    }
+                    var processedStudents = ProcessStudents(kvp.Value);
+                    processed[kvp.Key] = processedStudents;
+
+                }
+
+                allStudentRecordsList.Add(processed);
+            }
+
+            if (discrepante.Any())
+            {
+                var msg = "A apărut o eroare. Consultați logurile din Students-Excels pentru detalii.";
+                _logger.LogError(msg);
+                throw new Exception(msg);
+            }
+
+            foreach (var studentRecords in allStudentRecordsList)
+            {
+               /// using var stream = pathStudenti.OpenReadStream();
+
+               // Dictionary<string, List<StudentRecord>> studentRecords = excelReader.ReadStudentRecordsFromExcel(stream, pathStudenti.FileName);
                 var istoricList = new List<(string Emplid, BursaIstoric Istoric)>();
 
                 foreach (var entry in studentRecords)
@@ -281,6 +350,30 @@ namespace Burse.Controllers
 
 
                     students.ForEach(s => s.FondBurseMeritRepartizatId = fondRepartizatByDomeniu.ID);
+                    var groupedByMedia = students.GroupBy(s => s.Media);
+
+                    foreach (var group in groupedByMedia)
+                    {
+                        // Colectăm toate valorile burselor distincte (inclusiv null)
+                        var valoriDistincteBursa = group
+                            .Select(s => string.IsNullOrWhiteSpace(s.Bursa) ? null : s.Bursa.Trim())
+                            .Distinct()
+                            .ToList();
+
+
+                        // Dacă sunt 2 sau mai multe valori distincte, înseamnă inconsistență
+                        if (valoriDistincteBursa.Count > 1)
+                        {
+                            var studentiCuAceeasiMedia = group.Select(s =>
+                                $"Emplid: {s.Emplid}, Nume: {s.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(s.Bursa) ? "NU" : s.Bursa)}, Program: {fondRepartizatByDomeniu.domeniu}"
+                            );
+
+                            var mesaj = $"⚠️ Atenție! etapa 0: Studenți cu media {group.Key} au situație mixtă la bursă (valori diferite):\n" +
+                                        string.Join("\n", studentiCuAceeasiMedia);
+
+                            _logger.LogStudentInfo(mesaj);
+                        }
+                    }
                     var studentiCuIdCorect = await _fondBurseService.SaveNewStudentsAsync(students);
 
                     // ✅ actualizezi StudentRecordId în istoricul generat anterior
@@ -320,8 +413,7 @@ namespace Burse.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Eroare la salvarea în BursaIstoric:");
-                    Console.WriteLine(ex.Message);
+                    _logger.LogError( "Eroare la salvarea în BursaIstoric "+ex.Message);
 
                     foreach (var i in istoricList)
                     {
@@ -401,7 +493,33 @@ namespace Burse.Controllers
                  (decimal sumaNoua, var istoricBP2) = AssignOnlyBP2(students, sumaDisponibila, fonduri, sumaRamasaPeFond,"1");
                  sumaDisponibila = sumaNoua;
 
-                 await _fondBurseService.SaveNewStudentsAsync(students);
+                var groupedByMedia = students.GroupBy(s => s.Media);
+
+                foreach (var group in groupedByMedia)
+                {
+                    // Colectăm toate valorile burselor distincte (inclusiv null)
+                    var valoriDistincteBursa = group
+                        .Select(s => string.IsNullOrWhiteSpace(s.Bursa) ? null : s.Bursa.Trim())
+                        .Distinct()
+                        .ToList();
+
+
+                    // Dacă sunt 2 sau mai multe valori distincte, înseamnă inconsistență
+                    if (valoriDistincteBursa.Count > 1)
+                    {
+                        var studentiCuAceeasiMedia = group.Select(s =>
+                            $"Emplid: {s.Emplid}, Nume: {s.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(s.Bursa) ? "NU" : s.Bursa)}, Program: {s.FondBurseMeritRepartizat.domeniu}"
+                        );
+
+                        var mesaj = $"⚠️ Atenție! etapa1: Studenți cu media {group.Key} au situație mixtă la bursă (valori diferite):\n" +
+                                    string.Join("\n", studentiCuAceeasiMedia);
+
+                        _logger.LogStudentInfo(mesaj);
+                    }
+                }
+
+
+                await _fondBurseService.SaveNewStudentsAsync(students);
 
                  // 🔁 Update la suma rămasă pentru TOATE domeniile din acea grupă
 
@@ -561,6 +679,32 @@ namespace Burse.Controllers
                 //AssignOnlyBP2(students, ref sumaDisponibila, fonduri, sumaRamasaPeFond);
                 (decimal sumaNoua, var istoricBP2) = AssignOnlyBP2(students, sumaDisponibila, fonduri, sumaRamasaPeFond, "2");
                 sumaDisponibila = sumaNoua;
+
+
+                var groupedByMedia = students.GroupBy(s => s.Media);
+
+                foreach (var group in groupedByMedia)
+                {
+                    // Colectăm toate valorile burselor distincte (inclusiv null)
+                    var valoriDistincteBursa = group
+                        .Select(s => string.IsNullOrWhiteSpace(s.Bursa) ? null : s.Bursa.Trim())
+                        .Distinct()
+                        .ToList();
+
+
+                    // Dacă sunt 2 sau mai multe valori distincte, înseamnă inconsistență
+                    if (valoriDistincteBursa.Count > 1)
+                    {
+                        var studentiCuAceeasiMedia = group.Select(s =>
+                            $"Emplid: {s.Emplid}, Nume: {s.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(s.Bursa) ? "NU" : s.Bursa)}, Program: {s.FondBurseMeritRepartizat.domeniu}"
+                        );
+
+                        var mesaj = $"⚠️ Atenție!etapa2: Studenți cu media {group.Key} au situație mixtă la bursă (valori diferite):\n" +
+                                    string.Join("\n", studentiCuAceeasiMedia);
+
+                        _logger.LogStudentInfo(mesaj);
+                    }
+                }
                 await _fondBurseService.SaveNewStudentsAsync(students);
 
                 foreach (var fond in fonduriGrupa)
@@ -678,6 +822,31 @@ namespace Burse.Controllers
                     "3"
                 );
 
+
+                var groupedByMedia = studentiEligibili.GroupBy(s => s.Media);
+
+                foreach (var group in groupedByMedia)
+                {
+                    // Colectăm toate valorile burselor distincte (inclusiv null)
+                    var valoriDistincteBursa = group
+                        .Select(s => string.IsNullOrWhiteSpace(s.Bursa) ? null : s.Bursa.Trim())
+                        .Distinct()
+                        .ToList();
+
+
+                    // Dacă sunt 2 sau mai multe valori distincte, înseamnă inconsistență
+                    if (valoriDistincteBursa.Count > 1)
+                    {
+                        var studentiCuAceeasiMedia = group.Select(s =>
+                            $"Emplid: {s.Emplid}, Nume: {s.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(s.Bursa) ? "NU" : s.Bursa)}, Program: {s.FondBurseMeritRepartizat.domeniu}"
+                        );
+
+                        var mesaj = $"⚠️ Atenție! etapa3: Studenți cu media {group.Key} au situație mixtă la bursă (valori diferite):\n" +
+                                    string.Join("\n", studentiCuAceeasiMedia);
+
+                        _logger.LogStudentInfo(mesaj);
+                    }
+                }
                 await _fondBurseService.SaveNewStudentsAsync(studentiEligibili);
 
                 foreach (var fond in fonduriPeProgram.Fonduri)
@@ -954,6 +1123,31 @@ await _context.SaveChangesAsync();
                     //AssignOnlyBP2(studentiGrup, ref sumaDisponibila, fonduri, sumaRamasaPeFond);
                     (decimal sumaNoua, var istoricBP2) = AssignOnlyBP2(studentiGrup, sumaDisponibila, fonduri, sumaRamasaPeFond, "4");
                     sumaDisponibila = sumaNoua;
+
+                    var groupedByMedia = studentiGrup.GroupBy(s => s.Media);
+
+                    foreach (var group in groupedByMedia)
+                    {
+                        // Colectăm toate valorile burselor distincte (inclusiv null)
+                        var valoriDistincteBursa = group
+                            .Select(s => string.IsNullOrWhiteSpace(s.Bursa) ? null : s.Bursa.Trim())
+                            .Distinct()
+                            .ToList();
+
+
+                        // Dacă sunt 2 sau mai multe valori distincte, înseamnă inconsistență
+                        if (valoriDistincteBursa.Count > 1)
+                        {
+                            var studentiCuAceeasiMedia = group.Select(s =>
+                                $"Emplid: {s.Emplid}, Nume: {s.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(s.Bursa) ? "NU" : s.Bursa)}, Program: {s.FondBurseMeritRepartizat.domeniu}"
+                            );
+
+                            var mesaj = $"⚠️ Atenție! etapa 4: Studenți cu media {group.Key} au situație mixtă la bursă (valori diferite):\n" +
+                                        string.Join("\n", studentiCuAceeasiMedia);
+
+                            _logger.LogStudentInfo(mesaj);
+                        }
+                    }
 
                     await _fondBurseService.SaveNewStudentsAsync(studentiGrup);
 
@@ -1904,6 +2098,11 @@ await _context.SaveChangesAsync();
             double.TryParse(cell.GetValue<string>(), out double result);
             return result;
         }
+        private int ParseIntOrZero(string s)
+        {
+            return int.TryParse(s, out int result) ? result : 0;
+        }
+
 
     }
 }

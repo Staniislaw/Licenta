@@ -11,6 +11,11 @@ namespace Burse.Models
         public string TaraCetatenie { get; set; }  // Țară Cetățenie
         public int An { get; set; }  // Anul de studiu
         public decimal Media { get; set; }  // Media generală
+        public decimal MediaBac { get; set; } //Media BAC pentru anii 1
+        public decimal MediaBacMat { get; set; }//media BAC matematica
+        public decimal MediaInterviu { get; set; }
+        public decimal MediaDL { get; set; }
+        public decimal MEDG_ASL { get; set; }
         public int PunctajAn { get; set; }  // Punctajul anual
         public int CO { get; set; }  // Coloana CO CO – credite obţinute in anul curent
         public int RO { get; set; }  // RO – restanţe anul curent

@@ -33,6 +33,8 @@ builder.Services.AddScoped<IBurseIstoricService, BurseIstoricService>();
 builder.Services.AddScoped<GrupuriDomeniiHelper, GrupuriDomeniiHelper>();
 builder.Services.AddScoped<IPdfGeneratorService, PdfGeneratorService>();
 builder.Services.AddScoped<IGrupuriService, GrupuriService>();
+builder.Services.AddSingleton<AppLogger>();
+
 QuestPDF.Settings.License = LicenseType.Community;
 
 var app = builder.Build();

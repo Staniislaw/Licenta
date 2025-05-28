@@ -125,6 +125,11 @@ namespace Burse.Helpers
                                 TaraCetatenie = GetColumnValue(reader, columnMapping, columnMappings["TaraCetatenie"]),
                                 An = GetColumnValueAsInt(reader, columnMapping, columnMappings["An"]),
                                 Media = GetColumnValueAsDecimal(reader, columnMapping, columnMappings["Media"]),
+                                MediaBac = GetColumnValueAsDecimal(reader, columnMapping, columnMappings["MediaBac"]),
+                                MediaBacMat = GetColumnValueAsDecimal(reader, columnMapping, columnMappings["MediaBacMat"]),
+                                MediaDL = GetColumnValueAsDecimal(reader, columnMapping, columnMappings["MediaDL"]),
+                                MediaInterviu = GetColumnValueAsDecimal(reader, columnMapping, columnMappings["MediaInterviu"]),
+                                MEDG_ASL = GetColumnValueAsDecimal(reader, columnMapping, columnMappings["MEDG_ASL"]),
                                 PunctajAn = GetColumnValueAsInt(reader, columnMapping, columnMappings["PunctajAn"]),
                                 CO = GetColumnValueAsInt(reader, columnMapping, columnMappings["CO"]),
                                 RO = GetColumnValueAsInt(reader, columnMapping, columnMappings["RO"]),
@@ -225,6 +230,11 @@ namespace Burse.Helpers
             columnMappings["TaraCetatenie"] = new List<string> { "Țară Cetățenie" };
             columnMappings["An"] = new List<string> { "An" };
             columnMappings["Media"] = new List<string> { "Media", "Media de admitere", };
+            columnMappings["MediaBac"] = new List<string> { "Mbac",  };
+            columnMappings["MediaBacMat"] = new List<string> { "Mbac mat", };
+            columnMappings["MediaInterviu"] = new List<string> { "Interviu",  };
+            columnMappings["MediaDL"] = new List<string> { "MED D/L",  };
+            columnMappings["MEDG_ASL"] = new List<string> { "MEDG_ASL", };
             columnMappings["PunctajAn"] = new List<string> { "Punctaj An" };
             columnMappings["CO"] = new List<string> { "CO" };
             columnMappings["RO"] = new List<string> { "RO" };
