@@ -1,0 +1,4 @@
+2025-05-31 11:48:33.338 +03:00 [INF] Nu au fost găsite toate domeniile de studii in listele cu studenti incarcate. Lipsesc: SC, IETTI, RCC, RST, SMCPE, IEN, ME, ETI, SE, TAMAE, SE-DUAL, ESM, ESCCA.
+2025-05-31 16:56:56.486 +03:00 [INF] Nu au fost găsite toate domeniile de studii in listele cu studenti incarcate. Lipsesc: RST.
+2025-05-31 17:29:56.843 +03:00 [INF] Procesare date Studenti -> Domeniul 'IEN  (1) studentului' nu există în formatii studii.
+2025-05-31 17:29:56.863 +03:00 [INF] Procesare date Studenti -> Domeniul 'IEN  (2) studentului' nu există în formatii studii.

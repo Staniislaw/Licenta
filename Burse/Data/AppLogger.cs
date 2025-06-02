@@ -14,6 +14,7 @@ namespace Burse.Data
         private readonly Serilog.ILogger _formatiiLogger;
         private readonly Serilog.ILogger _excelLogger;
         private readonly Serilog.ILogger _fisiereStudenti;
+        private readonly Serilog.ILogger _modificareBursa;
 
         public AppLogger()
         {
@@ -41,6 +42,10 @@ namespace Burse.Data
                 .MinimumLevel.Information()
                 .WriteTo.File("logs/students-excels-.txt", rollingInterval: RollingInterval.Day, shared: true)
                 .CreateLogger();
+            _modificareBursa = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.File("logs/modificare-bursa-.txt", rollingInterval: RollingInterval.Day, shared: true)
+                .CreateLogger();
         }
 
         public void LogError(string message, Exception ex = null) =>
@@ -57,6 +62,8 @@ namespace Burse.Data
 
         public void LogStudentsExcels(string message) =>
             _fisiereStudenti.Information(message);
+        public void LogModificareBursa(string message) =>
+           _modificareBursa.Information(message);
 
     }
 

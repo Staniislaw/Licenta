@@ -96,8 +96,23 @@
         "Name": "burseFile",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
+      },
+      {
+        "Name": "epsilonValue",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.FondBurseController",
+    "Method": "GetSituatieStudenti",
+    "RelativePath": "api/FondBurse/situatie-studenti",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -397,6 +412,37 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.StudentsController",
+    "Method": "CanChangeBursa",
+    "RelativePath": "api/Students/{id}/can-change-bursa",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "bursaNoua",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Burse.Models.BursaChangeResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "Burse.Controllers.StudentsController",

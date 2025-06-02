@@ -126,6 +126,17 @@
         "tags": [
           "FondBurse"
         ],
+        "parameters": [
+          {
+            "name": "epsilonValue",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double",
+              "default": 0.05
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -165,6 +176,18 @@
     },
     "/api/FondBurse/EvaluateAcurracy": {
       "post": {
+        "tags": [
+          "FondBurse"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/FondBurse/situatie-studenti": {
+      "get": {
         "tags": [
           "FondBurse"
         ],
@@ -606,6 +629,53 @@
         }
       }
     },
+    "/api/Students/{id}/can-change-bursa": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "bursaNoua",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BursaChangeResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BursaChangeResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BursaChangeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Students/{id}/bursa": {
       "patch": {
         "tags": [
@@ -863,6 +933,19 @@
   },
   "components": {
     "schemas": {
+      "BursaChangeResponse": {
+        "type": "object",
+        "properties": {
+          "canChange": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GrupBursaEntry": {
         "type": "object",
         "properties": {

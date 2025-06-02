@@ -24,6 +24,14 @@ namespace Burse.Services
                  .Include(s => s.IstoricBursa)
                 .ToListAsync();
         }
+        public async Task<StudentRecord> GetByIdAsync(int id)
+        {
+            return await _context.StudentRecord
+                .Include(s => s.FondBurseMeritRepartizat)
+                .Include(s => s.IstoricBursa)
+                .FirstOrDefaultAsync(s => s.Id == id);
+        }
+
         public async Task<StudentRecord> UpdateBursaAsync(int id, string bursa)
         {
             var student = await _context.StudentRecord

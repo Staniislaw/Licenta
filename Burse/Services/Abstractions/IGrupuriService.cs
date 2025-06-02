@@ -14,6 +14,8 @@ public interface IGrupuriService
     Task<bool> AddDomeniuToGrupAsync(GrupDomeniuEntry payload);
     Task RemoveDomeniuFromGrupAsync(string grup, string domeniu);
     Task<Dictionary<string, List<string>>> GetGrupuriAsync();
+    Task<List<string>> GetGrupuriAsyncByGrup(string grup);
+
 
     // Grupuri Program Studii
     Task<bool> AddDomeniuToGrupProgramStudiiAsync(GrupProgramStudiiEntry payload);

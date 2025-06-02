@@ -58,6 +58,19 @@ public class GrupuriService : IGrupuriService
             .ToDictionary(g => g.Key, g => g.Select(x => x.Domeniu).ToList());
     }
 
+    public async Task<List<string>> GetGrupuriAsyncByGrup(string grup)
+    {
+        var grupLower = grup.ToLower();
+
+        var entries = await _context.GrupDomeniu
+            .Where(e => e.Grup.ToLower() == grupLower)
+            .ToListAsync();
+
+        return entries.Select(e => e.Domeniu).ToList();
+    }
+
+
+
     public async Task<bool> AddDomeniuToGrupAsync(GrupDomeniuEntry payload)
     {
         var exists = await _context.GrupDomeniu.AnyAsync(e => e.Grup == payload.Grup && e.Domeniu == payload.Domeniu);

@@ -1,5 +1,6 @@
 ﻿using Burse.Models;
 using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 using ExcelDataReader;
 using System.Data;
@@ -10,7 +11,8 @@ namespace Burse.Helpers
 {
     public class StudentExcelReader
     {
-        public Dictionary<string, List<StudentRecord>> ReadStudentRecordsFromExcel(Stream stream, string fisier)
+
+        public Dictionary<string, List<StudentRecord>> ReadStudentRecordsFromExcel(Stream stream, string fisier, Dictionary<string, List<string>> domenii)
         {
             var studentRecordsByDomain = new Dictionary<string, List<StudentRecord>>();
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
@@ -42,8 +44,61 @@ namespace Burse.Helpers
                             domeniu = formattedSheetName;
                         }
                     }
-                       
-                    if (fileName.ToUpper() == "IETTI")
+
+
+                    string fileNameUpper = fileName.ToUpper();
+
+                    var keyFound = domenii.Keys.FirstOrDefault(k => k.Contains(fileNameUpper));
+
+                    if (keyFound != null && domenii.TryGetValue(keyFound, out List<string>? listaDomenii))
+                    {
+                        // gasim domeniul potrivit din lista domenii pentru cheia respectiva
+                        string? domeniuPotrivit = listaDomenii.FirstOrDefault(d => d.Contains($"({formattedSheetName})"));
+                        if (!string.IsNullOrEmpty(domeniuPotrivit))
+                        {
+                            int index = domeniuPotrivit.IndexOf('(');
+                            string baza = (index > 0) ? domeniuPotrivit.Substring(0, index) : domeniuPotrivit;
+                            domeniu = $"{baza} ({formattedSheetName})";
+                        }
+                        else
+                        {
+                            if (fileNameUpper == "IETTI")
+                            {
+                                if (formattedSheetName == "1") domeniu = "IETTI (1)";
+                                else if (formattedSheetName == "2") domeniu = "IETTI (2)";
+                                else if (formattedSheetName == "3") domeniu = "RST (3)";
+                                else if (formattedSheetName == "4") domeniu = "RST (4)";
+                            }
+                            else if (fileNameUpper == "IEN")
+                            {
+                                if (formattedSheetName == "1") domeniu = "IEN (1)";
+                                else if (formattedSheetName == "2") domeniu = "IEN (2)";
+                                else if (formattedSheetName == "3") domeniu = "ME (3)";
+                                else if (formattedSheetName == "4") domeniu = "ETI (4)";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (fileNameUpper == "IETTI")
+                        {
+                            if (formattedSheetName == "1") domeniu = "IETTI (1)";
+                            else if (formattedSheetName == "2") domeniu = "IETTI (2)";
+                            else if (formattedSheetName == "3") domeniu = "RST (3)";
+                            else if (formattedSheetName == "4") domeniu = "RST (4)";
+                        }
+                        else if (fileNameUpper == "IEN")
+                        {
+                            if (formattedSheetName == "1") domeniu = "IEN (1)";
+                            else if (formattedSheetName == "2") domeniu = "IEN (2)";
+                            else if (formattedSheetName == "3") domeniu = "ME (3)";
+                            else if (formattedSheetName == "4") domeniu = "ETI (4)";
+                        }
+                    }
+
+
+
+                    /*if (fileName.ToUpper() == "IETTI")
                     {
                         if (formattedSheetName == "1")
                         {
@@ -81,7 +136,7 @@ namespace Burse.Helpers
                         {
                             domeniu = "ETI (4)";
                         }
-                    }
+                    }*/
 
                     bool isTableStarted = false;
                     Dictionary<string, int> columnMapping = new Dictionary<string, int>();

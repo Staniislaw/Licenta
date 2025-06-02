@@ -91,6 +91,31 @@ namespace Burse.Services
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<bool> UpdateFondAsync(int id, decimal suma, bool scade)
+        {
+            var fond = await _context.FondBurseMeritRepartizat
+                                     .FirstOrDefaultAsync(f => f.ID == id);
+
+            if (fond == null)
+            {
+                return false;
+            }
+
+            if (scade)
+            {
+                fond.SumaRamasa -= suma;
+            }
+            else
+            {
+                fond.SumaRamasa += suma;
+            }
+
+            _context.FondBurseMeritRepartizat.Update(fond);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+
     }
 
 }

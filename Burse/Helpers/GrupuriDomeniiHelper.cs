@@ -71,11 +71,11 @@ namespace Burse.Helpers
 
             foreach (var grup in grupuri)
                 {
-                    if (grup.Value.Contains(domeniuSimplificat))
+                    if (grup.Value.Any(d => d.Contains(domeniuSimplificat)))
                         return grup.Key;
                 }
 
-                return domeniuSimplificat;
+            return domeniuSimplificat;
             }
             public async Task<Dictionary<string, List<string>>> GetGrupuriAsync()
             {

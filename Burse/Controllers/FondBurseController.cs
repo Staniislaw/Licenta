@@ -22,11 +22,12 @@ namespace Burse.Controllers
         private readonly BurseDBContext _context;
         private readonly IFondBurseService _fondBurseService;
         private readonly IFondBurseMeritRepartizatService _fondBurseMeritRepartizatService;
-        private readonly GrupuriDomeniiHelper _grupuriHelper;
         private readonly IBurseIstoricService _burseIstoricService;
         private readonly AppLogger _logger;
+        private readonly GrupuriDomeniiHelper _grupuriHelper;
+        private readonly IGrupuriService _grupuriService;
 
-        public FondBurseController(BurseDBContext context, IFondBurseService fondBurseService, IFondBurseMeritRepartizatService fondBurseMeritRepartizatService, GrupuriDomeniiHelper grupuriHelper, IBurseIstoricService burseIstoricService, AppLogger logger)
+        public FondBurseController(BurseDBContext context, IFondBurseService fondBurseService, IFondBurseMeritRepartizatService fondBurseMeritRepartizatService, GrupuriDomeniiHelper grupuriHelper, IBurseIstoricService burseIstoricService, AppLogger logger, IGrupuriService grupuriService)
         {
             _context = context;
             _fondBurseService = fondBurseService;
@@ -34,6 +35,7 @@ namespace Burse.Controllers
             _grupuriHelper = grupuriHelper;
             _burseIstoricService = burseIstoricService;
             _logger = logger;
+            _grupuriService = grupuriService;
         }
 
         [HttpPost("AddFondBurse")]
@@ -138,11 +140,12 @@ namespace Burse.Controllers
         }
 
         [HttpPost("process")]
-        public async Task<IActionResult> ProcessExcelFiles([FromForm] List<IFormFile> pathStudentiList,IFormFile burseFile)
+        public async Task<IActionResult> ProcessExcelFiles([FromForm] List<IFormFile> pathStudentiList,IFormFile burseFile, [FromQuery]decimal? epsilonValue = 0.05M)
         {
             //await _fondBurseService.ResetSumaRamasaAsync();
             //await _fondBurseService.ResetStudentiAsync();
-            decimal epsilon = 0.05M;
+            decimal epsilon = epsilonValue ?? 0.05M;
+
 
             if (burseFile == null)
             {
@@ -156,7 +159,7 @@ namespace Burse.Controllers
 
             var programeDeStudii = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-
+            Dictionary<string, List<string>> domenii = await _grupuriService.GetGrupuriAsync();
             foreach (var file in pathStudentiList)
             {
                 string programPrincipal = Path.GetFileNameWithoutExtension(file.FileName).ToUpper();
@@ -174,41 +177,28 @@ namespace Burse.Controllers
                     // Tratare exactă pentru foi numerice în IEN/IETTI
                     bool handledSpecial = false;
 
-                    if (programPrincipal == "IEN")
+                    string grupa = await _grupuriHelper.GetGrupaAsync(programPrincipal);
+                    List<string> domeniiByGrup;
+
+                    if (domenii.TryGetValue(grupa, out var listaDomenii))
                     {
-                        switch (sheetName)
-                        {
-                            case "1":
-                            case "2":
-                                programeDeStudii.Add("IEN");
-                                handledSpecial = true;
-                                break;
-                            case "3":
-                                programeDeStudii.Add("ME");
-                                handledSpecial = true;
-                                break;
-                            case "4":
-                                programeDeStudii.Add("ETI");
-                                handledSpecial = true;
-                                break;
-                        }
+                        domeniiByGrup = listaDomenii;
                     }
-                    else if (programPrincipal == "IETTI")
+                    else
                     {
-                        switch (sheetName)
-                        {
-                            case "1":
-                            case "2":
-                                programeDeStudii.Add("IETTI");
-                                handledSpecial = true;
-                                break;
-                            case "3":
-                            case "4":
-                                programeDeStudii.Add("RST");
-                                handledSpecial = true;
-                                break;
-                        }
+                        domeniiByGrup = new List<string>();
                     }
+
+                    string? domeniuPotrivit = domeniiByGrup.FirstOrDefault(d => d.Contains($"({sheetName})"));
+
+                    if (!string.IsNullOrEmpty(domeniuPotrivit))
+                    {
+                        string domeniuCurat = new string(domeniuPotrivit.TakeWhile(c => c != '(').ToArray()).Trim();
+
+                        programeDeStudii.Add(domeniuCurat);
+                        handledSpecial = true;
+                    }
+
 
                     if (!handledSpecial)
                     {
@@ -255,11 +245,11 @@ namespace Burse.Controllers
 
             bool toateCoincid = true;
             var discrepante = new List<string>();
-
+            
             foreach (var pathStudenti in pathStudentiList)
             {
                 using var stream = pathStudenti.OpenReadStream();
-                var studentRecords = excelReader.ReadStudentRecordsFromExcel(stream, pathStudenti.FileName);
+                var studentRecords =excelReader.ReadStudentRecordsFromExcel(stream, pathStudenti.FileName, domenii);
 
                 // Procesăm fiecare listă de studenți înainte de a o adăuga
                 var processed = new Dictionary<string, List<StudentRecord>>();
@@ -335,7 +325,7 @@ namespace Burse.Controllers
                     decimal sumaDisponibila = fondRepartizatByDomeniu.bursaAlocatata;
                     if (sumaDisponibila < 0)
                         continue;
-                    (var sumaRamasa, var istoricePerDomeniu) = AssignScholarships(
+                    (var sumaRamasa, var istoricePerDomeniu) = AssignScholarshipsOptimezedWithCriteriaMediilorAceleasi(
                         students,
                         sumaDisponibila,
                         valoareAnualBP1,
@@ -1306,7 +1296,6 @@ await _context.SaveChangesAsync();
     string etapa)
         {
             var istoricList = new List<(string Emplid, BursaIstoric Istoric)>();
-
             decimal? primaMedie = students.FirstOrDefault()?.Media;
             bool aFostAcordatBP2 = false;
             StudentRecord studentAnterior = null;
@@ -1450,6 +1439,379 @@ await _context.SaveChangesAsync();
             }
 
             return (sumaDisponibila, istoricList);
+        }
+        private (decimal, List<(string Emplid, BursaIstoric Istoric)>) AssignScholarshipsOptimezedWithCriteriaMediilorAceleasi(
+    List<StudentRecord> students,
+    decimal sumaDisponibila,
+    decimal valoareAnualBP1,
+    decimal valoareAnualBP2,
+    decimal epsilon,
+    FondBurseMeritRepartizat fondBurseMeritRepartizat,
+    string etapa)
+        {
+            var istoricList = new List<(string Emplid, BursaIstoric Istoric)>();
+
+            // --- NEW: Sort students based on Media and tie-breaking criteria ---
+            // This is the crucial change to apply your tie-breaking rules.
+            students.Sort(new StudentScholarshipComparer(fondBurseMeritRepartizat));
+            // --- END NEW ---
+
+            // The rest of your existing logic
+            decimal? primaMedie = students.FirstOrDefault()?.Media; // Note: primaMedie will now be the media of the first student *after* sorting.
+            bool aFostAcordatBP2 = false;
+            StudentRecord studentAnterior = null;
+
+            foreach (var student in students)
+            {
+                decimal diferenta = studentAnterior != null ? Math.Abs(studentAnterior.Media - student.Media) : 0;
+                // The 'diferenta' calculation will now reflect the media of the previously processed student
+                // in the *sorted* list. If two students had the same primary Media and were ordered by tie-breakers,
+                // their 'diferenta' will be 0, correctly triggering the logic for close averages.
+
+                string bursaAtribuita = null;
+                decimal suma = 0;
+                string motiv = "";
+                string explicatie = "";
+                string fallback = "";
+
+                if (sumaDisponibila <= 0)
+                {
+                    student.Bursa = null;
+                    // No need to continue if no funds, but consider what "continue" does.
+                    // If you want to log why no scholarship is given, do it here.
+                    continue;
+                }
+
+                bool eligibilPentruBP1 = ("licenta".Equals(fondBurseMeritRepartizat.programStudiu) && student.Media >= 9.00M)
+                                       || ("master".Equals(fondBurseMeritRepartizat.programStudiu) && student.Media >= 9.5M);
+
+                if (eligibilPentruBP1)
+                {
+                    if (!aFostAcordatBP2 && diferenta <= epsilon)
+                    {
+                        if (sumaDisponibila >= valoareAnualBP1)
+                        {
+                            bursaAtribuita = "BP1";
+                            suma = valoareAnualBP1;
+                            motiv = "Media ≥ 9.00 și Δ ≤ ε – BP1 acordat";
+                        }
+                        else if (sumaDisponibila >= valoareAnualBP2)
+                        {
+                            bursaAtribuita = "BP2";
+                            suma = valoareAnualBP2;
+                            motiv = "Fond insuficient pentru BP1 – fallback la BP2";
+                            fallback = $"(necesar BP1: {valoareAnualBP1:F2} lei, dar disponibil doar: {sumaDisponibila:F2} lei)";
+                            aFostAcordatBP2 = true;
+                        }
+                    }
+                    else if (sumaDisponibila >= valoareAnualBP2)
+                    {
+                        bursaAtribuita = "BP2";
+                        suma = valoareAnualBP2;
+                        motiv = "Δ > ε – fallback la BP2";
+                        fallback = $"(Δ = {diferenta:F2} > ε = {epsilon:F2})";
+                        aFostAcordatBP2 = true;
+                    }
+                }
+                else if (sumaDisponibila >= valoareAnualBP2 && student.Media >= 8.00M)
+                {
+                    bursaAtribuita = "BP2";
+                    suma = valoareAnualBP2;
+                    motiv = "Media < 9.00 – BP2 acordat";
+                    fallback = "(criteriu media)";
+                    aFostAcordatBP2 = true;
+                }
+
+                // Logic for explicatie and Comentarii AI as you have it
+                if (primaMedie == null) // This will now apply to the first student in the *sorted* list
+                {
+                    explicatie = "Primul student – fără comparație anterioară";
+                }
+                else
+                {
+                    explicatie = $"Media primului student: {primaMedie:F2} → Δ = {diferenta:F2} {(diferenta <= epsilon ? "(Δ ≤ ε)" : "(Δ > ε)")}";
+                }
+
+                if (!string.IsNullOrEmpty(bursaAtribuita))
+                {
+                    student.Bursa = bursaAtribuita;
+                    student.SumaBursa = suma;
+                    sumaDisponibila -= suma;
+
+                    string anterior = studentAnterior != null
+                        ? $"Studentul anterior: {studentAnterior.NumeStudent} (media {studentAnterior.Media:F2}, bursă {studentAnterior.Bursa})"
+                        : "Acesta este primul student care primește bursă.";
+
+                    // Filter for students who haven't received a scholarship yet, after the current one
+                    var urmatorii = students
+                        .Where(s => s.Bursa == null && s != student) // Ensure 's != student' is used for the current iteration
+                        .Take(5)
+                        .Select(s => $"(Emplid: {s.Emplid}, Media: {s.Media:F2}, An: {s.An}, Bursa: {s.Bursa ?? "—"})")
+                        .ToList();
+
+                    string urmatoriiText = urmatorii.Count > 0
+                        ? $"Următorii studenți eligibili: {string.Join(", ", urmatorii)}"
+                        : "Nu mai sunt studenți eligibili în acest moment.";
+
+                    string comentariuAI = $"Studentul {student.NumeStudent} cu media {student.Media:F2} a primit bursa de tip {bursaAtribuita} pentru că {motiv.ToLower()}. " +
+                                          $"{(string.IsNullOrEmpty(fallback) ? "" : fallback + " ")}{anterior}. {urmatoriiText}. " +
+                                          $"Fonduri rămase: {sumaDisponibila:F2} lei.";
+
+                    string comentariu = $"Etapa: {etapa} | Media: {student.Media:F2} | {motiv} {fallback} | " +
+                                        $"{explicatie} | Suma acordată: {suma:F2} lei | Rămas fond: {sumaDisponibila:F2} lei";
+
+                    istoricList.Add((student.Emplid, new BursaIstoric
+                    {
+                        StudentRecordId = student.Id,
+                        TipBursa = bursaAtribuita,
+                        Actiune = "Acordare",
+                        Suma = suma,
+                        Motiv = motiv,
+                        Comentarii = comentariu,
+                        ComentariiAI = comentariuAI,
+                        DataModificare = DateTime.Now
+                    }));
+
+                    studentAnterior = student;
+                }
+                else
+                {
+                    student.Bursa = null;
+                }
+            }
+
+            return (sumaDisponibila, istoricList);
+        }
+
+
+        private (decimal, List<(string Emplid, BursaIstoric Istoric)>) AssignScholarshipsOptimized(
+    List<StudentRecord> students,
+    decimal sumaDisponibila,
+    decimal valoareAnualBP1,
+    decimal valoareAnualBP2,
+    decimal epsilon,
+    FondBurseMeritRepartizat fondBurseMeritRepartizat,
+    string etapa)
+        {
+            var istoricList = new List<(string Emplid, BursaIstoric Istoric)>();
+            decimal sumaDisponibilaInitiala = sumaDisponibila; // Păstrăm suma inițială pentru referință
+
+            // 1. Pre-procesarea și categorizarea studenților
+            // Sortăm studenții o singură dată la început pentru a asigura ordinea mediilor
+            var sortedStudents = students.OrderByDescending(s => s.Media).ToList();
+
+            var eligibleBP1Strict = new List<StudentRecord>(); // Studenți eligibili pentru BP1 cu diferență mică (sau primul)
+            var eligibleBP1FallbackToBP2 = new List<StudentRecord>(); // Studenți eligibili pentru BP1, dar care ar primi BP2 dacă diferența e mare
+            var eligibleOnlyBP2 = new List<StudentRecord>(); // Studenți eligibili doar pentru BP2 (media < 9.00/9.50, dar >= 8.00)
+
+            StudentRecord previousStudentForEpsilonCheck = null; // Folosit pentru calculul diferenței epsilon
+
+            foreach (var student in sortedStudents)
+            {
+                // Regula de eligibilitate BP1
+                bool isEligibleForBP1Criterion = ("licenta".Equals(fondBurseMeritRepartizat.programStudiu) && student.Media >= 9.00M) ||
+                                                 ("master".Equals(fondBurseMeritRepartizat.programStudiu) && student.Media >= 9.5M);
+
+                // Regula de eligibilitate BP2 (dacă nu e eligibil pentru BP1)
+                bool isEligibleForBP2Criterion = student.Media >= 8.00M;
+
+                if (isEligibleForBP1Criterion)
+                {
+                    decimal diferenta = previousStudentForEpsilonCheck != null ? Math.Abs(previousStudentForEpsilonCheck.Media - student.Media) : 0;
+
+                    if (previousStudentForEpsilonCheck == null || diferenta <= epsilon)
+                    {
+                        eligibleBP1Strict.Add(student);
+                    }
+                    else
+                    {
+                        // Este eligibil pentru BP1 după medie, dar diferența e prea mare -> ar cădea pe BP2 în alocarea efectivă
+                        eligibleBP1FallbackToBP2.Add(student);
+                    }
+                    previousStudentForEpsilonCheck = student; // Actualizăm pentru următorul student
+                }
+                else if (isEligibleForBP2Criterion)
+                {
+                    eligibleOnlyBP2.Add(student);
+                }
+                // Studenții sub 8.00 nu sunt incluși în nicio listă de eligibilitate merit
+            }
+
+            // Combinăm toți studenții care pot primi cel puțin BP2 (inclusiv cei care ar fi putut primi BP1, dar cu diferență mare)
+            // Această listă este esențială pentru a calcula numărul total de BP2 care pot fi acordate
+            var potentialBP2Recipients = eligibleBP1FallbackToBP2
+                                            .Concat(eligibleOnlyBP2)
+                                            .OrderByDescending(s => s.Media)
+                                            .ToList();
+
+            int maxBP1Possible = eligibleBP1Strict.Count;
+            int maxBP2Possible = potentialBP2Recipients.Count; // BP2 este mai general, poate fi acordat și celor ce nu au primit BP1
+
+            int bestNumBP1 = 0;
+            int bestNumBP2 = 0;
+            int maxTotalScholarships = -1; // Folosim -1 pentru a ne asigura că orice combinație validă va fi mai bună
+
+            // 2. Simularea tuturor combinațiilor posibile
+            // Iterăm de la numărul maxim posibil de BP1 în jos, pentru a prioritiza BP1 dacă fondurile permit
+            for (int numBP1 = maxBP1Possible; numBP1 >= 0; numBP1--)
+            {
+                // Asigurăm că avem suficienți studenți eligibili pentru numBP1
+                if (numBP1 > eligibleBP1Strict.Count) continue;
+
+                decimal costBP1 = numBP1 * valoareAnualBP1;
+                decimal remainingFundsAfterBP1 = sumaDisponibila - costBP1;
+
+                if (remainingFundsAfterBP1 < 0) continue; // Nu avem fonduri suficiente pentru acest număr de BP1
+
+                // Câte BP2 putem acorda cu fondurile rămase?
+                // Prioritizăm studenții din `potentialBP2Recipients` care nu au primit deja BP1
+                int numBP2 = 0;
+                int currentBP2Count = 0;
+
+                foreach (var student in potentialBP2Recipients)
+                {
+                    // Asigurăm că studentul nu a fost deja selectat pentru un BP1 în această simulare
+                    // (e.g., studentul din eligibleBP1Strict dacă am fi avut o listă combinată inițial)
+                    // Pentru simplitate aici, ne bazăm pe faptul că eligibleBP1Strict și potentialBP2Recipients sunt disjuncte
+                    // pentru studenții eligibili la BP1 cu epsilon ok și cei care cad pe BP2.
+                    // Dacă un student e în eligibleBP1Strict, el nu e în potentialBP2Recipients.
+                    if (currentBP2Count < maxBP2Possible && remainingFundsAfterBP1 >= valoareAnualBP2)
+                    {
+                        numBP2++;
+                        remainingFundsAfterBP1 -= valoareAnualBP2;
+                        currentBP2Count++;
+                    }
+                    else
+                    {
+                        break; // Nu mai avem fonduri sau studenți pentru BP2
+                    }
+                }
+
+
+                int currentTotalScholarships = numBP1 + numBP2;
+
+                // 3. Alegerea celei mai bune combinații
+                if (currentTotalScholarships > maxTotalScholarships)
+                {
+                    maxTotalScholarships = currentTotalScholarships;
+                    bestNumBP1 = numBP1;
+                    bestNumBP2 = numBP2;
+                }
+                else if (currentTotalScholarships == maxTotalScholarships)
+                {
+                    // Criteriu de departajare: preferăm mai multe BP1 dacă numărul total e același
+                    if (numBP1 > bestNumBP1)
+                    {
+                        bestNumBP1 = numBP1;
+                        bestNumBP2 = numBP2;
+                    }
+                }
+            }
+
+            // 4. Alocarea efectivă a burselor pe baza celei mai bune combinații
+            // Resetăm suma disponibilă pentru alocarea reală
+            sumaDisponibila = sumaDisponibilaInitiala;
+
+            // Alocăm BP1
+            int bp1AllocatedCount = 0;
+            foreach (var student in eligibleBP1Strict.OrderByDescending(s => s.Media)) // Re-sortăm pentru siguranță
+            {
+                if (bp1AllocatedCount < bestNumBP1 && sumaDisponibila >= valoareAnualBP1)
+                {
+                    student.Bursa = "BP1";
+                    student.SumaBursa = valoareAnualBP1;
+                    sumaDisponibila -= valoareAnualBP1;
+                    bp1AllocatedCount++;
+
+                    string motiv = "Media eligibilă și diferență de medie în limita epsilon.";
+                    string explicatie = $"Media: {student.Media:F2}, Diferență față de anterior: {(student == sortedStudents.First() ? "N/A (primul)" : Math.Abs(previousStudentForEpsilonCheck.Media - student.Media).ToString("F2"))} (ε={epsilon:F2})";
+                    string comentariu = $"Etapa: {etapa} | Media: {student.Media:F2} | {motiv} | {explicatie} | Suma acordată: {valoareAnualBP1:F2} lei | Rămas fond: {sumaDisponibila:F2} lei";
+                    string comentariuAI = GenerateAIComment(student, null, sumaDisponibila, "BP1", motiv, "", etapa, sortedStudents); // Adapt AI comment
+
+                    istoricList.Add((student.Emplid, new BursaIstoric
+                    {
+                        StudentRecordId = student.Id,
+                        TipBursa = "BP1",
+                        Actiune = "Acordare",
+                        Suma = valoareAnualBP1,
+                        Motiv = motiv,
+                        Comentarii = comentariu,
+                        ComentariiAI = comentariuAI,
+                        DataModificare = DateTime.Now
+                    }));
+                }
+                else
+                {
+                    // Dacă nu a primit BP1, asigură-te că nu are bursa setată dacă a fost setată anterior
+                    student.Bursa = null;
+                    student.SumaBursa = 0;
+                }
+            }
+
+            // Alocăm BP2 pentru studenții rămași eligibili (cei din potentialBP2Recipients și cei din eligibleBP1FallbackToBP2 care nu au primit BP1)
+            int bp2AllocatedCount = 0;
+            foreach (var student in sortedStudents.Where(s => s.Bursa == null).OrderByDescending(s => s.Media))
+            {
+                // Verificăm dacă studentul este eligibil pentru BP2 (dacă media >= 8.00)
+                bool isEligibleForBP2Criterion = student.Media >= 8.00M;
+
+                if (isEligibleForBP2Criterion && bp2AllocatedCount < bestNumBP2 && sumaDisponibila >= valoareAnualBP2)
+                {
+                    student.Bursa = "BP2";
+                    student.SumaBursa = valoareAnualBP2;
+                    sumaDisponibila -= valoareAnualBP2;
+                    bp2AllocatedCount++;
+
+                    string motiv = "Media eligibilă pentru BP2.";
+                    string fallback = ""; // Nu mai avem fallback aici, e alocare directă de BP2
+                    string explicatie = $"Media: {student.Media:F2}";
+                    string comentariu = $"Etapa: {etapa} | Media: {student.Media:F2} | {motiv} {fallback} | {explicatie} | Suma acordată: {valoareAnualBP2:F2} lei | Rămas fond: {sumaDisponibila:F2} lei";
+                    string comentariuAI = GenerateAIComment(student, null, sumaDisponibila, "BP2", motiv, fallback, etapa, sortedStudents); // Adapt AI comment
+
+                    istoricList.Add((student.Emplid, new BursaIstoric
+                    {
+                        StudentRecordId = student.Id,
+                        TipBursa = "BP2",
+                        Actiune = "Acordare",
+                        Suma = valoareAnualBP2,
+                        Motiv = motiv,
+                        Comentarii = comentariu,
+                        ComentariiAI = comentariuAI,
+                        DataModificare = DateTime.Now
+                    }));
+                }
+                else
+                {
+                    student.Bursa = null;
+                    student.SumaBursa = 0;
+                }
+            }
+
+            return (sumaDisponibila, istoricList);
+        }
+
+        // Această metodă este un placeholder. Va trebui să adaptezi logica reală de generare a comentariului AI
+        // în funcție de contextul alocării specifice și de studenții anteriori/următori.
+        private string GenerateAIComment(StudentRecord currentStudent, StudentRecord previousStudent, decimal remainingFunds, string scholarshipType, string reason, string fallback, string etapa, List<StudentRecord> allStudents)
+        {
+            string previousStudentInfo = previousStudent != null
+                ? $"Studentul anterior: {previousStudent.NumeStudent} (media {previousStudent.Media:F2}, bursă {previousStudent.Bursa ?? "N/A"})"
+                : "Acesta este primul student care primește bursă sau primul din categoria sa.";
+
+            var nextEligibleStudents = allStudents
+                .Where(s => s.Bursa == null && s.Media >= 8.00M && s != currentStudent) // Considerăm toți studenții eligibili pentru o bursă merit
+                .OrderByDescending(s => s.Media)
+                .Take(3) // Afișăm următorii 3 studenți relevanți
+                .Select(s => $"(Emplid: {s.Emplid}, Media: {s.Media:F2})")
+                .ToList();
+
+            string nextStudentsText = nextEligibleStudents.Any()
+                ? $"Următorii potențiali beneficiari: {string.Join(", ", nextEligibleStudents)}"
+                : "Nu mai sunt studenți eligibili cu bursă merit în acest moment.";
+
+            return $"Studentul {currentStudent.NumeStudent} (Emplid: {currentStudent.Emplid}) cu media {currentStudent.Media:F2} a primit bursa de tip {scholarshipType} pentru că {reason.ToLower()}. " +
+                   $"{(string.IsNullOrEmpty(fallback) ? "" : fallback + " ")}{previousStudentInfo}. {nextStudentsText}. " +
+                   $"Fonduri rămase: {remainingFunds:F2} lei.";
         }
 
 
@@ -2102,6 +2464,51 @@ await _context.SaveChangesAsync();
         {
             return int.TryParse(s, out int result) ? result : 0;
         }
+        [HttpGet("situatie-studenti")]
+        public async Task<IActionResult> GetSituatieStudenti()
+        {
+            try
+            {
+                List<FondBurse> fonduri = await _fondBurseService.GetDateFromBursePerformanteAsync();
+                List<FormatiiStudii> formatiiStudii = await _fondBurseService.GetAllFromFormatiiStudiiAsync();
+
+                string etapa0Path = Path.Combine(Path.GetTempPath(), "SituatieStudenti_modificati.xlsx");
+
+                byte[] initialFileBytes = await _fondBurseService.GenerateCustomLayout2(etapa0Path, fonduri, formatiiStudii, 1671770.95m);
+                await System.IO.File.WriteAllBytesAsync(etapa0Path, initialFileBytes);
+
+                List<StudentRecord> totiStudentii = await _fondBurseService.GetStudentsWithBursaFromDatabaseAsync();
+
+                List<StudentScholarshipData> studentiClasificati0 = totiStudentii
+                    .GroupBy(s => new { s.FondBurseMeritRepartizatId, s.FondBurseMeritRepartizat.domeniu })
+                    .Select(group => new StudentScholarshipData
+                    {
+                        FondBurseId = group.Key.FondBurseMeritRepartizatId,
+                        Domeniu = group.Key.domeniu,
+                        BP1Count = group.Count(s => s.Bursa?.ToLower().Contains("bp1") ?? false),
+                        BP2Count = group.Count(s => s.Bursa?.ToLower().Contains("bp2") ?? false)
+                    }).ToList();
+
+                using var input = new FileStream(etapa0Path, FileMode.Open, FileAccess.Read);
+                using var outputStream = new MemoryStream();
+
+                var updatedStream = ExcelUpdater.UpdateScholarshipCounts(input, studentiClasificati0);
+                updatedStream.Position = 0;
+
+                await updatedStream.CopyToAsync(outputStream);
+
+                byte[] finalFileBytes = outputStream.ToArray();
+
+                return File(finalFileBytes,
+                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            "SituatieStudenti_modificati.xlsx");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"❌ Eroare la generarea fișierului: {ex.Message}");
+            }
+        }
+
 
 
     }

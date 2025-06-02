@@ -39,6 +39,7 @@ namespace Burse.Controllers
                     case "formatii": return "Formatii";
                     case "excel-import": return "Excel Import";
                     case "excel": return "Excel Import";
+                    case "modificare-bursa": return "Modificare Bursa";
                     // Important: "students-excels" aici trebuie să se potrivească EXACT cu ce extrage regex-ul
                     case "students-excels": return "Students Excels"; // Denumirea user-friendly pentru UI
                     default: return char.ToUpper(c[0]) + c.Substring(1);
@@ -73,6 +74,7 @@ namespace Burse.Controllers
                 case "excel import": filePrefix = "excel-import"; break;
                 case "students excels": filePrefix = "students-excels"; break;
                 case "excel": filePrefix = "excel"; break;
+                case "modificare bursa": filePrefix = "modificare-bursa"; break;
                 default:
                     return BadRequest($"Unknown log category: {logType}");
             }
@@ -126,6 +128,7 @@ namespace Burse.Controllers
                 case "excel import": filePrefix = "excel-import"; break;
                 case "students excels": filePrefix = "students-excels"; break;
                 case "excel": filePrefix = "excel"; break;
+                case "modificare bursa": filePrefix = "modificare-bursa"; break;
                 default:
                     return BadRequest($"Unknown log category: {logType}");
             } 
