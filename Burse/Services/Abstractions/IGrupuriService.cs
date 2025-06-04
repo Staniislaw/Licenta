@@ -26,4 +26,9 @@ public interface IGrupuriService
     Task<bool> AddValToPdfGroupAsync(GrupPdfEntry payload);
     Task RemoveValFromPdfGroupAsync(string grup, string valoare);
     Task<Dictionary<string, List<string>>> GetGrupuriPdfAsync();
+
+    // Grupuri Acronime
+    Task<bool> AddValToAcronimGroupAsync(GrupAcronimEntry payload);
+    Task RemoveValFromAcronimGroupAsync(string grup, string valoare);
+    Task<Dictionary<string, List<string>>> GetGrupuriAcronimeAsync();
 }

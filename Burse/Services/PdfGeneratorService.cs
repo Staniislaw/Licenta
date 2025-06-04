@@ -12,10 +12,11 @@ namespace Burse.Services
     public class PdfGeneratorService : IPdfGeneratorService
     {
         private readonly IFondBurseService _fondBurseService;
-
-        public PdfGeneratorService(IFondBurseService fondBurseService)
+        private readonly IGrupuriService _grupuriService;
+        public PdfGeneratorService(IFondBurseService fondBurseService, IGrupuriService grupuriService)
         {
             _fondBurseService = fondBurseService;
+            _grupuriService = grupuriService;
         }
 
         public async Task<MemoryStream> GeneratePdfAsync(PdfRequest request)
@@ -28,6 +29,7 @@ namespace Burse.Services
             QuestPDF.Settings.License = LicenseType.Community;
 
             var studentiCuBursa0 = await _fondBurseService.GetStudentsWithBursaFromDatabaseAsync();
+            var acronymMappings = await _grupuriService.GetGrupuriAcronimeAsync();
 
             var document = Document.Create(container =>
             {
@@ -90,11 +92,25 @@ namespace Burse.Services
                                     });
 
                                     int index = 1;
-                                    foreach (var s in filtrati)
+                                    var filtratiGrupati = filtrati
+                                        .OrderBy(s => s.An + 1)
+                                        .ThenBy(s => s.FondBurseMeritRepartizat.domeniu.Contains("DUAL") || s.FondBurseMeritRepartizat.domeniu.Contains("-DUAL") ? 1 : 0) 
+                                        .ToList();
+
+                                    foreach (var s in filtratiGrupati)
                                     {
                                         table.Cell().Element(CellStyle).Text(index++.ToString()).FontSize(9);
                                         table.Cell().Element(CellStyle).Text(s.Emplid).FontSize(9);
-                                        table.Cell().Element(CellStyle).Text((s.An + 1).ToString()).FontSize(9);
+                                        string anText;
+                                        if (s.FondBurseMeritRepartizat.domeniu.Contains("DUAL") || s.FondBurseMeritRepartizat.domeniu.Contains("-DUAL"))
+                                        {
+                                            anText = (s.An + 1).ToString() + "Dual";
+                                        }
+                                        else
+                                        {
+                                            anText = (s.An + 1).ToString();
+                                        }
+                                        table.Cell().Element(CellStyle).Text(anText).FontSize(9);
                                         table.Cell().Element(CellStyle).Text(s.Media.ToString("0.00")).FontSize(9);
                                         table.Cell().Element(CellStyle).Text(s.SursaFinantare).FontSize(9);
                                         table.Cell().Element(CellStyle).Text(s.Bursa).FontSize(9);
@@ -108,7 +124,7 @@ namespace Burse.Services
 
                             col.Item().Text(text =>
                             {
-                                string content = ReplaceDynamicFields(el.Content, request.DynamicFields);
+                                string content = ReplaceDynamicFields(el.Content, request.DynamicFields, acronymMappings);
 
                                 text.Span(content)
                                     .FontSize(style.FontSize)
@@ -144,17 +160,57 @@ namespace Burse.Services
         {
             return Regex.Replace(domeniu, @"\s*\(\d+\)|\-DUAL", "").Trim().ToLower();
         }
-        private string ReplaceDynamicFields(string content, Dictionary<string, string> dynamicFields)
+        private string ReplaceDynamicFields(string content, Dictionary<string, string> dynamicFields, Dictionary<string, List<string>> acronymMappings)
         {
             if (string.IsNullOrWhiteSpace(content) || dynamicFields == null)
                 return content;
 
             foreach (var field in dynamicFields)
             {
-                content = content.Replace(field.Key, field.Value);
+                if (field.Key == "ProgramStudiu.Dynamic")
+                {
+                    var acronimeSelectate = field.Value
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                        .ToList();
+
+                    var domeniiSelectate = new List<string>();
+
+                    foreach (var acronim in acronimeSelectate)
+                    {
+                        if (acronim.Contains("DUAL"))
+                        {
+                            // Pentru acronime cu DUAL, căutăm versiunea fără DUAL în dicționar
+                            string acronimFaraDual = acronim.Replace("-DUAL", "");
+                            var programeGasite = acronymMappings
+                                .Where(kvp => kvp.Value.Contains(acronimFaraDual))
+                                .Select(kvp => kvp.Key + "-DUAL") // Adăugăm -DUAL la cheia găsită
+                                .ToList();
+                            domeniiSelectate.AddRange(programeGasite);
+                        }
+                        else
+                        {
+                            // Pentru acronime normale, căutăm direct
+                            var programeGasite = acronymMappings
+                                .Where(kvp => kvp.Value.Contains(acronim))
+                                .Select(kvp => kvp.Key)
+                                .ToList();
+                            domeniiSelectate.AddRange(programeGasite);
+                        }
+                    }
+
+                    domeniiSelectate = domeniiSelectate.Distinct().ToList();
+                    string domeniiText = string.Join("/ ", domeniiSelectate);
+
+                    content = content.Replace(field.Key, domeniiText);
+                }
+                else
+                {
+                    content = content.Replace(field.Key, field.Value);
+                }
             }
 
             return content;
+
         }
     }
 

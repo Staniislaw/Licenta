@@ -216,6 +216,53 @@
   },
   {
     "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "GetGrupuriAcronime",
+    "RelativePath": "api/Settings/grupuri-acronime",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "AddValToAcronimGroup",
+    "RelativePath": "api/Settings/grupuri-acronime/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "payload",
+        "Type": "Burse.Models.GrupAcronimEntry",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "RemoveValFromAcronimGroup",
+    "RelativePath": "api/Settings/grupuri-acronime/remove",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "grup",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "valoare",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
     "Method": "GetGrupuriBurse",
     "RelativePath": "api/Settings/grupuri-burse",
     "HttpMethod": "GET",

@@ -10,6 +10,7 @@ using OfficeOpenXml;
 using System.Drawing;
 
 using System.Text.RegularExpressions;
+using Microsoft.Office.Interop.Excel;
 
 namespace Burse.Services
 {
@@ -18,12 +19,15 @@ namespace Burse.Services
         private readonly BurseDBContext _context;
         private readonly IFondBurseMeritRepartizatService _fondBurseMeritRepartizatService;
         private readonly GrupuriDomeniiHelper _grupuriHelper;
-
-        public FondBurseService(BurseDBContext context, IFondBurseMeritRepartizatService fondBurseMeritRepartizatService, GrupuriDomeniiHelper grupuriHelper)
+        private readonly IGrupuriService _grupuriService;
+        private readonly AppLogger _logger;
+        public FondBurseService(BurseDBContext context, IFondBurseMeritRepartizatService fondBurseMeritRepartizatService, GrupuriDomeniiHelper grupuriHelper, IGrupuriService grupuriService, AppLogger logger)
         {
             _context = context;
             _fondBurseMeritRepartizatService = fondBurseMeritRepartizatService;
             _grupuriHelper = grupuriHelper;
+            _grupuriService = grupuriService;
+            _logger = logger;
         }
 
         public async Task<List<FondBurse>> GetDateFromBursePerformanteAsync()
@@ -58,15 +62,54 @@ namespace Burse.Services
             var generator = new AcronymGenerator();
 
             var grouped = new Dictionary<string, List<FormatiiStudii>>();
+            var acronymMappings = await _grupuriService.GetGrupuriAcronimeAsync();
+            var programeFaraAcronime = new List<string>();
 
             foreach (var f in formatii)
             {
                 if (!int.TryParse(f.An, out int anValid) || anValid <= 0)
                     continue;
 
-                string acronim = generator.GenerateAcronym(f.ProgramDeStudiu, f.An.ToString());
+                //string acronim = generator.GenerateAcronym(f.ProgramDeStudiu, f.An.ToString());
 
-                if (f.ProgramDeStudiu.ToUpper().Contains("DUAL") && !acronim.EndsWith("-DUAL"))
+
+                string programNormalizat = AcronymGenerator.RemoveDiacritics(f.ProgramDeStudiu).ToUpper();
+
+                // Eliminam "DUAL" pentru căutarea în mappări
+                string programPentruCautare = programNormalizat.Replace("DUAL", "").Replace("INVATAMANT","").Trim();
+
+                string acronimBase = null;
+
+                string normalizedSearch = AcronymGenerator.RemoveDiacritics(programPentruCautare).ToUpper();
+
+                // 1. Potrivire exactă
+                foreach (var mapping in acronymMappings)
+                {
+                    string keyNormalizat = AcronymGenerator.RemoveDiacritics(mapping.Key).ToUpper();
+                    if (keyNormalizat == normalizedSearch)
+                    {
+                        acronimBase = mapping.Value[0];
+                        break;
+                    }
+                }
+
+
+
+
+                if (acronimBase == null)
+                {
+                    if (!programeFaraAcronime.Contains(f.ProgramDeStudiu))
+                    {
+                        programeFaraAcronime.Add(f.ProgramDeStudiu);
+                    }
+                    continue; 
+                }
+
+
+                // Construiește acronimul final
+                string acronim = $"{acronimBase} ({f.An})";
+
+                if (programNormalizat.Contains("DUAL") && !acronim.EndsWith("-DUAL"))
                 {
                     acronim += "-DUAL";
                 }
@@ -79,11 +122,20 @@ namespace Burse.Services
                 grouped[acronim].Add(f);
             }
 
+            if (programeFaraAcronime.Any())
+            {
+                string programeListate = string.Join(", ", programeFaraAcronime);
+                string errorMessage = $"Nu s-a găsit mapping pentru programele de studii: {programeListate}";
+                _logger.LogError(errorMessage);
+                throw new Exception(errorMessage);
+            }
+
             return grouped;
         }
 
         public async Task<byte[]> GenerateCustomLayout2(string filePath, List<FondBurse> fonduri, List<FormatiiStudii> formatiiStudii, decimal disponibilBM)
         {
+            var acronymMappings = await _grupuriService.GetGrupuriAcronimeAsync();
             // 1) Licență EPPlus
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var generator = new AcronymGenerator();
@@ -272,7 +324,7 @@ namespace Burse.Services
                 // Scriem grupul L
                 int groupLStartRow = currentRow;
 
-                var sortedGroupL = await SortGroupLAsync(groupL);
+                var sortedGroupL = await SortGroupLAsync(groupL, acronymMappings);
 
                 foreach (var (rec, domeniu, grupa) in sortedGroupL)
                 {
@@ -455,7 +507,7 @@ namespace Burse.Services
                 // Scriem grupul M
                 int groupMStartRow = currentRow;
 
-                var sortedGroupM = await SortGroupLAsync(groupM);
+                var sortedGroupM = await SortGroupLAsync(groupM, acronymMappings);
                 foreach (var (rec, domeniu, grupa) in sortedGroupM)
                 {
                     // ✅ Compute the sum for the scholarship fund
@@ -845,18 +897,63 @@ namespace Burse.Services
         }
 
             private async Task<List<(FormatiiStudii rec, string domeniu, string grupa)>> SortGroupLAsync(
-        List<FormatiiStudii> groupL)
+        List<FormatiiStudii> groupL, Dictionary<string, List<string>> acronymMappings)
             {
                 var generator = new AcronymGenerator();
-
                 var domeniiProcesate = new List<(FormatiiStudii rec, string domeniu, string grupa)>();
                 var ordineGrupe = new List<string>();
                 var grupaToDomenii = new Dictionary<string, List<string>>();
-
+                var normalizedAcronymMap = acronymMappings
+                    .ToDictionary(
+                        kvp => AcronymGenerator.RemoveDiacritics(kvp.Key).ToUpper(),
+                        kvp => kvp.Value[0] // doar primul acronim
+                    );
+                var programeFaraAcronime = new List<string>();
                 foreach (var rec in groupL)
                 {
-                    string domeniu = generator.GenerateAcronym(
-                        AcronymGenerator.RemoveDiacritics(rec.ProgramDeStudiu), rec.An);
+                //string domeniu = generator.GenerateAcronym(
+                //  AcronymGenerator.RemoveDiacritics(rec.ProgramDeStudiu), rec.An);
+
+                    string programNormalizat = AcronymGenerator.RemoveDiacritics(rec.ProgramDeStudiu).ToUpper();
+                    string programPentruCautare = programNormalizat.Replace("DUAL", "").Trim();
+
+                    string Normalize(string text) =>
+                            Regex.Replace(AcronymGenerator.RemoveDiacritics(text).ToUpper(), @"[^\w\s]", "").Trim();
+
+                    string normalizedSearch = Normalize(programPentruCautare);
+
+                    // 1. Căutare după egalitate exactă
+                    var acronimBase = normalizedAcronymMap
+                        .FirstOrDefault(kvp => Normalize(kvp.Key) == normalizedSearch).Value;
+
+                    // 2. Dacă nu găsește, caută cea mai lungă potrivire parțială
+                    if (acronimBase == null)
+                    {
+                        acronimBase = normalizedAcronymMap
+                            .Where(kvp => normalizedSearch.Contains(Normalize(kvp.Key)))
+                            .OrderByDescending(kvp => kvp.Key.Length)
+                            .Select(kvp => kvp.Value)
+                            .FirstOrDefault();
+                    }
+                    if (acronimBase == null)
+                    {
+                        if (!programeFaraAcronime.Contains(rec.ProgramDeStudiu))
+                        {
+                            programeFaraAcronime.Add(rec.ProgramDeStudiu);
+                        }
+                        continue; // Continuă cu următoarea înregistrare
+                    }
+
+
+
+                    // Construiesc acronimul final
+                    string domeniu = $"{acronimBase} ({rec.An})";
+
+                    // Verific dacă programul original conține DUAL
+                    if (programNormalizat.Contains("DUAL") && !domeniu.EndsWith("-DUAL"))
+                    {
+                        domeniu += "-DUAL";
+                    }
 
                     string grupa = await _grupuriHelper.GetGrupaAsync(domeniu);
 
@@ -870,6 +967,13 @@ namespace Burse.Services
 
                     if (!grupaToDomenii[grupa].Contains(domeniu))
                         grupaToDomenii[grupa].Add(domeniu);
+                }
+                if (programeFaraAcronime.Any())
+                {
+                    string programeListate = string.Join(", ", programeFaraAcronime);
+                    string errorMessage = $"Nu s-a găsit mapping pentru programele de studii: {programeListate}";
+                    _logger.LogError(errorMessage);
+                    throw new Exception(errorMessage);
                 }
 
                 var sorted = new List<(FormatiiStudii rec, string domeniu, string grupa)>();
@@ -894,6 +998,58 @@ namespace Burse.Services
 
                 return sorted;
             }
+
+        private async Task<List<(FormatiiStudii rec, string domeniu, string grupa)>> SortGroupLAsyncV2(
+        List<FormatiiStudii> groupL)
+        {
+            var generator = new AcronymGenerator();
+
+            var domeniiProcesate = new List<(FormatiiStudii rec, string domeniu, string grupa)>();
+            var ordineGrupe = new List<string>();
+            var grupaToDomenii = new Dictionary<string, List<string>>();
+
+            foreach (var rec in groupL)
+            {
+                string domeniu = generator.GenerateAcronym(
+                    AcronymGenerator.RemoveDiacritics(rec.ProgramDeStudiu), rec.An);
+
+                string grupa = await _grupuriHelper.GetGrupaAsync(domeniu);
+
+                domeniiProcesate.Add((rec, domeniu, grupa));
+
+                if (!ordineGrupe.Contains(grupa))
+                    ordineGrupe.Add(grupa);
+
+                if (!grupaToDomenii.ContainsKey(grupa))
+                    grupaToDomenii[grupa] = new List<string>();
+
+                if (!grupaToDomenii[grupa].Contains(domeniu))
+                    grupaToDomenii[grupa].Add(domeniu);
+            }
+
+            var sorted = new List<(FormatiiStudii rec, string domeniu, string grupa)>();
+            var alreadyAdded = new HashSet<(string domeniu, string grupa)>();
+
+            foreach (var grupa in ordineGrupe)
+            {
+                foreach (var domeniu in grupaToDomenii[grupa])
+                {
+                    var selectie = domeniiProcesate
+                        .Where(x => x.domeniu == domeniu && x.grupa == grupa && !alreadyAdded.Contains((domeniu, grupa)))
+                        .ToList();
+
+                    sorted.AddRange(selectie);
+                    foreach (var x in selectie)
+                        alreadyAdded.Add((x.domeniu, x.grupa));
+                }
+            }
+
+            sorted.AddRange(domeniiProcesate
+                .Where(x => !alreadyAdded.Contains((x.domeniu, x.grupa))));
+
+            return sorted;
+        }
+
 
     }
 }

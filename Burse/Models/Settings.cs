@@ -27,5 +27,13 @@
         public string Valoare { get; set; } = null!;
     }
 
+    public class GrupAcronimEntry
+    {
+        public int Id { get; set; }
+        public string Grup { get; set; } = string.Empty;
+        public string Valoare { get; set; } = string.Empty;
+
+    }
+
 
 }

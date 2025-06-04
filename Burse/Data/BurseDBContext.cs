@@ -21,5 +21,6 @@ namespace Burse.Data
         public DbSet<GrupPdfEntry> GrupPDF { get; set; }
         public DbSet<BursaIstoric> BursaIstoric { get; set; }
         public DbSet<TemplateEntity> TemplateEntity { get; set; }
+        public DbSet<GrupAcronimEntry> GrupAcronim { get; set; }
     }
 }

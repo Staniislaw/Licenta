@@ -113,5 +113,27 @@ namespace Burse.Controllers
             await _grupuriService.RemoveValFromPdfGroupAsync(grup, valoare);
             return Ok();
         }
+        [HttpGet("grupuri-acronime")]
+        public async Task<IActionResult> GetGrupuriAcronime()
+        {
+            var result = await _grupuriService.GetGrupuriAcronimeAsync();
+            return Ok(result);
+        }
+
+        [HttpPost("grupuri-acronime/add")]
+        public async Task<IActionResult> AddValToAcronimGroup([FromBody] GrupAcronimEntry payload)
+        {
+            var added = await _grupuriService.AddValToAcronimGroupAsync(payload);
+            if (added)
+                return Ok();
+            return BadRequest("Entry already exists");
+        }
+
+        [HttpDelete("grupuri-acronime/remove")]
+        public async Task<IActionResult> RemoveValFromAcronimGroup([FromQuery] string grup, [FromQuery] string valoare)
+        {
+            await _grupuriService.RemoveValFromAcronimGroupAsync(grup, valoare);
+            return Ok();
+        }
     }
 }

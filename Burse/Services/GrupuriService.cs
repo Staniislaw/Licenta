@@ -156,4 +156,36 @@ public class GrupuriService : IGrupuriService
             await _context.SaveChangesAsync();
         }
     }
+    // Grupuri Acronime
+    // Grupuri Acronime
+
+    public async Task<Dictionary<string, List<string>>> GetGrupuriAcronimeAsync()
+    {
+        var entries = await _context.GrupAcronim.ToListAsync();
+        return entries
+            .GroupBy(e => e.Grup)
+            .ToDictionary(g => g.Key, g => g.Select(x => x.Valoare).ToList());
+    }
+
+    public async Task<bool> AddValToAcronimGroupAsync(GrupAcronimEntry payload)
+    {
+        var exists = await _context.GrupAcronim.AnyAsync(e => e.Grup == payload.Grup && e.Valoare == payload.Valoare);
+        if (!exists)
+        {
+            _context.GrupAcronim.Add(payload);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        return false;
+    }
+
+    public async Task RemoveValFromAcronimGroupAsync(string grup, string valoare)
+    {
+        var entry = await _context.GrupAcronim.FirstOrDefaultAsync(e => e.Grup == grup && e.Valoare == valoare);
+        if (entry != null)
+        {
+            _context.GrupAcronim.Remove(entry);
+            await _context.SaveChangesAsync();
+        }
+    }
 }
