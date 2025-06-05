@@ -1,0 +1,3 @@
+2025-06-05 15:19:57.717 +03:00 [INF] Numărul studenților pentru Domeniul 'SIC (1)' în fișierul 'masterat_fara.xls' nu coincide. Procesați: 50, Preluați din fișierul FormatiiStudii: 49
+2025-06-05 15:19:57.756 +03:00 [INF] Numărul studenților pentru Domeniul 'TAMAE (2)' în fișierul 'SE.xls' nu coincide. Procesați: 23, Preluați din fișierul FormatiiStudii: 18
+2025-06-05 15:45:04.557 +03:00 [INF] Numărul studenților pentru Domeniul 'SMCPE (2)' în fișierul 'IEN.xls' nu coincide. Procesați: 23, Preluați din fișierul FormatiiStudii: 24

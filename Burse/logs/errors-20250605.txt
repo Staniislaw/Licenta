@@ -1,0 +1,6 @@
+2025-06-05 14:22:05.400 +03:00 [ERR] Nu s-a găsit mapping pentru programele de studii: Administratie public si drept, Stiinte politice, Psihologie, Sociologie, Sociologie invatamant dual, Jurnalism, Isotric pedagoie si stiinte ale comunc, Horticultuira si zootehnie, Horticultuira si zootehnie invatamnat dual, Optometroe, Psihologie clinica, Moda si teatrue, Kinetoterapie si motricitate speciala, CHIMIBE BIOLOGIE
+2025-06-05 15:07:58.995 +03:00 [ERR] A apărut o eroare. Consultați logurile din Students-Excels pentru detalii.
+2025-06-05 15:09:12.040 +03:00 [ERR] A apărut o eroare. Consultați logurile din Students-Excels pentru detalii.
+2025-06-05 15:09:37.049 +03:00 [ERR] A apărut o eroare. Consultați logurile din Students-Excels pentru detalii.
+2025-06-05 15:19:58.852 +03:00 [ERR] A apărut o eroare. Consultați logurile din Students-Excels pentru detalii.
+2025-06-05 15:45:04.583 +03:00 [ERR] A apărut o eroare. Consultați logurile din Students-Excels pentru detalii.

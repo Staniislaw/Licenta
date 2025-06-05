@@ -1,0 +1,27 @@
+2025-06-05 14:23:42.498 +03:00 [INF] Procesare date Studenti -> Domeniul 'IEN  (1) studentului' nu există în formatii studii.
+2025-06-05 14:23:42.502 +03:00 [INF] Procesare date Studenti -> Domeniul 'IEN  (2) studentului' nu există în formatii studii.
+2025-06-05 14:30:07.485 +03:00 [INF] Procesare date Studenti -> Domeniul 'IEN  (1) studentului' nu există în formatii studii.
+2025-06-05 15:07:58.981 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (1) studentului' nu există în formatii studii.
+2025-06-05 15:07:58.983 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (2) studentului' nu există în formatii studii.
+2025-06-05 15:09:07.222 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (1) studentului' nu există în formatii studii.
+2025-06-05 15:09:07.222 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (2) studentului' nu există în formatii studii.
+2025-06-05 15:09:20.586 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (1) studentului' nu există în formatii studii.
+2025-06-05 15:09:20.586 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (2) studentului' nu există în formatii studii.
+2025-06-05 15:19:57.745 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (1) studentului' nu există în formatii studii.
+2025-06-05 15:19:57.747 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (2) studentului' nu există în formatii studii.
+2025-06-05 15:20:58.100 +03:00 [INF] Nu au fost găsite toate domeniile de studii in listele cu studenti incarcate. Lipsesc: SMCPE.
+2025-06-05 15:21:03.317 +03:00 [INF] Nu au fost găsite toate domeniile de studii in listele cu studenti incarcate. Lipsesc: SMCPE.
+2025-06-05 15:21:10.487 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (1) studentului' nu există în formatii studii.
+2025-06-05 15:21:10.487 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (2) studentului' nu există în formatii studii.
+2025-06-05 15:25:27.570 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (1) studentului' nu există în formatii studii.
+2025-06-05 15:25:27.592 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (2) studentului' nu există în formatii studii.
+2025-06-05 15:26:29.502 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (1) studentului' nu există în formatii studii.
+2025-06-05 15:26:29.502 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (2) studentului' nu există în formatii studii.
+2025-06-05 15:33:25.625 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (1) studentului' nu există în formatii studii.
+2025-06-05 15:33:25.625 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (2) studentului' nu există în formatii studii.
+2025-06-05 15:37:18.307 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (1) studentului' nu există în formatii studii.
+2025-06-05 15:37:18.307 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (2) studentului' nu există în formatii studii.
+2025-06-05 15:37:42.298 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (1) studentului' nu există în formatii studii.
+2025-06-05 15:37:42.298 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (2) studentului' nu există în formatii studii.
+2025-06-05 15:39:14.306 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (1) studentului' nu există în formatii studii.
+2025-06-05 15:39:14.306 +03:00 [INF] Procesare date Studenti -> Domeniul 'SM (2) studentului' nu există în formatii studii.

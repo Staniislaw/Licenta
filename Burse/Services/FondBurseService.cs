@@ -125,7 +125,7 @@ namespace Burse.Services
             if (programeFaraAcronime.Any())
             {
                 string programeListate = string.Join(", ", programeFaraAcronime);
-                string errorMessage = $"Nu s-a găsit mapping pentru programele de studii: {programeListate}";
+                string errorMessage = $"Nu s-a găsit mapare acronyme pentru programele de studii: {programeListate}";
                 _logger.LogError(errorMessage);
                 throw new Exception(errorMessage);
             }
@@ -971,7 +971,7 @@ namespace Burse.Services
                 if (programeFaraAcronime.Any())
                 {
                     string programeListate = string.Join(", ", programeFaraAcronime);
-                    string errorMessage = $"Nu s-a găsit mapping pentru programele de studii: {programeListate}";
+                    string errorMessage = $"Nu s-a găsit mapare acronyme pentru programele de studii: {programeListate}";
                     _logger.LogError(errorMessage);
                     throw new Exception(errorMessage);
                 }

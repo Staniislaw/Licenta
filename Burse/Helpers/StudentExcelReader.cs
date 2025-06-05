@@ -57,7 +57,7 @@ namespace Burse.Helpers
                         if (!string.IsNullOrEmpty(domeniuPotrivit))
                         {
                             int index = domeniuPotrivit.IndexOf('(');
-                            string baza = (index > 0) ? domeniuPotrivit.Substring(0, index) : domeniuPotrivit;
+                            string baza = (index > 0) ? domeniuPotrivit.Substring(0, index).Trim() : domeniuPotrivit.Trim();
                             domeniu = $"{baza} ({formattedSheetName})";
                         }
                         else

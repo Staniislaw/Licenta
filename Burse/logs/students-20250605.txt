@@ -1,0 +1,405 @@
+2025-06-05 14:23:43.299 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 50000225, Nume: , Bursa: BP1, Program: SMCPE (1)
+Emplid: 50000226, Nume: , Bursa: NU, Program: SMCPE (1)
+2025-06-05 14:23:43.570 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 14:23:43.820 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 1000000, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 1000001, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 14:23:44.253 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 14:23:44.253 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 14:23:44.456 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 14:30:07.793 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 50000225, Nume: , Bursa: BP1, Program: SMCPE (1)
+Emplid: 50000226, Nume: , Bursa: NU, Program: SMCPE (1)
+2025-06-05 14:30:07.949 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 14:30:08.078 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 1000000, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 1000001, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 14:30:08.361 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 14:30:08.361 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 14:30:08.536 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.93 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 14:30:47.880 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 50000225, Nume: , Bursa: BP1, Program: SMCPE (1)
+Emplid: 50000226, Nume: , Bursa: NU, Program: SMCPE (1)
+2025-06-05 14:30:48.076 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 14:30:48.205 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 1000000, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 1000001, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 14:30:48.488 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 14:30:48.488 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 14:30:48.663 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.93 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 14:42:56.207 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 50000225, Nume: , Bursa: BP1, Program: SMCPE (1)
+Emplid: 50000226, Nume: , Bursa: NU, Program: SMCPE (1)
+2025-06-05 14:42:56.402 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 14:42:56.534 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 1000000, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 1000001, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 14:42:56.903 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 14:42:56.903 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 14:42:57.092 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.93 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 14:43:36.059 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 50000225, Nume: , Bursa: BP1, Program: SMCPE (1)
+Emplid: 50000226, Nume: , Bursa: NU, Program: SMCPE (1)
+2025-06-05 14:43:36.317 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 14:43:36.509 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 1000000, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 1000001, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 14:43:36.857 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 14:43:36.857 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 14:43:37.043 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 15:21:16.236 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 15:21:16.730 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: , Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: , Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 15:21:16.963 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.2 au situație mixtă la bursă (valori diferite):
+Emplid: 72099, Nume: , Bursa: BP2, Program: ME (3)
+Emplid: 50000072, Nume: , Bursa: NU, Program: ME (3)
+2025-06-05 15:21:17.161 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 15:21:17.161 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 15:21:17.407 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.93 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 15:21:17.600 +03:00 [INF] ⚠️ Atenție!etapa2: Studenți cu media 9.18 au situație mixtă la bursă (valori diferite):
+Emplid: 50000099, Nume: , Bursa: BP2, Program: ETI (4)
+Emplid: 452821, Nume: , Bursa: NU, Program: ETI (4)
+2025-06-05 15:25:31.360 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 15:25:31.623 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: , Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: , Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 15:25:31.847 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.20 au situație mixtă la bursă (valori diferite):
+Emplid: 72099, Nume: , Bursa: BP2, Program: ME (3)
+Emplid: 50000072, Nume: , Bursa: NU, Program: ME (3)
+2025-06-05 15:25:32.081 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 15:25:32.081 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 15:25:32.324 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.93 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 15:25:32.425 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 465412, Nume: , Bursa: NU, Program: RCC (1)
+Emplid: 465194, Nume: , Bursa: NU, Program: RCC (1)
+Emplid: 3037, Nume: , Bursa: BP2, Program: RCC (2)
+2025-06-05 15:25:32.517 +03:00 [INF] ⚠️ Atenție!etapa2: Studenți cu media 9.18 au situație mixtă la bursă (valori diferite):
+Emplid: 50000099, Nume: , Bursa: BP2, Program: ETI (4)
+Emplid: 452821, Nume: , Bursa: NU, Program: ETI (4)
+2025-06-05 15:26:31.590 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 15:26:31.942 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: , Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: , Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 15:26:32.120 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.2 au situație mixtă la bursă (valori diferite):
+Emplid: 72099, Nume: , Bursa: BP2, Program: ME (3)
+Emplid: 50000072, Nume: , Bursa: NU, Program: ME (3)
+2025-06-05 15:26:32.262 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 15:26:32.262 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 15:26:32.457 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 15:33:30.151 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 15:33:30.353 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: , Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: , Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 15:33:30.508 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.20 au situație mixtă la bursă (valori diferite):
+Emplid: 50000072, Nume: , Bursa: BP2, Program: ME (3)
+Emplid: 72099, Nume: , Bursa: NU, Program: ME (3)
+2025-06-05 15:33:30.665 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 15:33:30.665 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 15:33:30.844 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.93 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 15:37:21.936 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 15:37:22.152 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 15:37:22.484 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 15:37:22.484 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 15:37:22.674 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.93 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 15:37:43.140 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 15:37:43.508 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 15:37:43.870 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 15:37:43.870 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 15:37:44.071 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 15:39:14.716 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 15:39:14.856 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 15:39:15.118 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 15:39:15.118 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 15:39:15.293 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.93 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 15:46:07.457 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 15:46:07.580 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 15:46:07.852 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 15:46:07.852 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 15:46:08.035 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.93 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 15:56:19.526 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 15:56:19.637 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 15:57:07.797 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 15:57:07.797 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 15:57:07.961 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.93 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 15:58:24.918 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 15:58:25.040 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 15:58:27.147 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 15:58:27.147 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 15:58:27.321 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.93 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 15:59:18.207 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 15:59:18.327 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 15:59:18.602 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 15:59:18.603 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 15:59:18.780 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.93 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 16:01:57.804 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 16:01:58.037 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 16:03:24.628 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 16:03:24.628 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 16:03:24.836 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 16:04:44.250 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 16:04:44.378 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 16:04:50.541 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 16:04:50.541 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 16:04:50.750 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.93 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 16:11:18.358 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 16:11:18.479 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 16:11:18.737 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 16:11:18.737 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 16:11:18.908 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.93 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 16:11:43.437 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 16:11:43.623 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 16:11:43.966 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 16:11:43.966 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 16:11:44.161 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 16:12:35.353 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 16:12:35.533 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 16:12:35.866 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 16:12:35.866 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 16:12:36.057 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 16:16:30.894 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 16:16:31.123 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 16:16:31.498 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 16:16:31.498 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 16:16:31.697 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-05 16:18:23.480 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație mixtă la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-05 16:18:23.700 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație mixtă la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-05 16:18:24.074 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-05 16:18:24.074 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 8.62 au situație mixtă la bursă (valori diferite):
+Emplid: 225, Nume: , Bursa: NU, Program: C (2)
+Emplid: 226, Nume: , Bursa: NU, Program: C (2)
+Emplid: 560, Nume: , Bursa: BP2, Program: C (4)
+2025-06-05 16:18:24.272 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 653, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 654, Nume: , Bursa: NU, Program: SIC (1)
