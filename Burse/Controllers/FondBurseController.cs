@@ -2508,8 +2508,5 @@ await _context.SaveChangesAsync();
                 return BadRequest($"❌ Eroare la generarea fișierului: {ex.Message}");
             }
         }
-
-
-
     }
 }
