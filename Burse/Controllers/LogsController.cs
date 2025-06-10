@@ -35,7 +35,7 @@ namespace Burse.Controllers
                 switch (c.ToLowerInvariant())
                 {
                     case "errors": return "Errors";
-                    case "students": return "studenti aceeasi bursa";
+                    case "students": return "studenti";
                     case "formatii": return "Formatii";
                     case "excel-import": return "Excel Import";
                     case "excel": return "Excel Import";
@@ -69,7 +69,7 @@ namespace Burse.Controllers
             switch (filePrefix)
             {
                 case "errors": filePrefix = "errors"; break;
-                case "studenti aceeasi bursa": filePrefix = "students"; break;
+                case "studenti": filePrefix = "students"; break;
                 case "formatii": filePrefix = "formatii"; break;
                 case "excel import": filePrefix = "excel-import"; break;
                 case "students excels": filePrefix = "students-excels"; break;
@@ -122,7 +122,7 @@ namespace Burse.Controllers
             switch (filePrefix)
             {
                 case "errors": filePrefix = "errors"; break;
-                case "studenti aceeasi bursa": filePrefix = "students"; break;
+                case "studenti": filePrefix = "students"; break;
                 case "student": filePrefix = "students"; break; // pentru cazul in care AppLogger e singular
                 case "formatii": filePrefix = "formatii"; break;
                 case "excel import": filePrefix = "excel-import"; break;

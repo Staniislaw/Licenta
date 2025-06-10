@@ -61,7 +61,7 @@ namespace Burse.Migrations
 
                     b.HasIndex("StudentRecordId");
 
-                    b.ToTable("BursaIstoric");
+                    b.ToTable("BursaIstoric", (string)null);
                 });
 
             modelBuilder.Entity("Burse.Models.FondBurse", b =>
@@ -80,7 +80,7 @@ namespace Burse.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FondBurse");
+                    b.ToTable("FondBurse", (string)null);
                 });
 
             modelBuilder.Entity("Burse.Models.FondBurseMeritRepartizat", b =>
@@ -108,7 +108,7 @@ namespace Burse.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("FondBurseMeritRepartizat");
+                    b.ToTable("FondBurseMeritRepartizat", (string)null);
                 });
 
             modelBuilder.Entity("Burse.Models.FormatiiStudii", b =>
@@ -160,7 +160,7 @@ namespace Burse.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("FormatiiStudii");
+                    b.ToTable("FormatiiStudii", (string)null);
                 });
 
             modelBuilder.Entity("Burse.Models.GrupAcronimEntry", b =>
@@ -179,7 +179,7 @@ namespace Burse.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GrupAcronim");
+                    b.ToTable("GrupAcronim", (string)null);
                 });
 
             modelBuilder.Entity("Burse.Models.GrupBursaEntry", b =>
@@ -198,7 +198,7 @@ namespace Burse.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GrupBursa");
+                    b.ToTable("GrupBursa", (string)null);
                 });
 
             modelBuilder.Entity("Burse.Models.GrupDomeniuEntry", b =>
@@ -217,7 +217,7 @@ namespace Burse.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GrupDomeniu");
+                    b.ToTable("GrupDomeniu", (string)null);
                 });
 
             modelBuilder.Entity("Burse.Models.GrupPdfEntry", b =>
@@ -236,7 +236,7 @@ namespace Burse.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GrupPDF");
+                    b.ToTable("GrupPDF", (string)null);
                 });
 
             modelBuilder.Entity("Burse.Models.GrupProgramStudiiEntry", b =>
@@ -255,7 +255,7 @@ namespace Burse.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GrupProgramStudii");
+                    b.ToTable("GrupProgramStudii", (string)null);
                 });
 
             modelBuilder.Entity("Burse.Models.StudentRecord", b =>
@@ -330,7 +330,7 @@ namespace Burse.Migrations
 
                     b.HasIndex("FondBurseMeritRepartizatId");
 
-                    b.ToTable("StudentRecord");
+                    b.ToTable("StudentRecord", (string)null);
                 });
 
             modelBuilder.Entity("Burse.Models.TemplatePDF.TemplateEntity", b =>
@@ -352,7 +352,7 @@ namespace Burse.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TemplateEntity");
+                    b.ToTable("TemplateEntity", (string)null);
                 });
 
             modelBuilder.Entity("Burse.Models.BursaIstoric", b =>

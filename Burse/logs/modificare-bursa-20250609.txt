@@ -1,0 +1,2 @@
+2025-06-09 17:48:43.270 +03:00 [INF] Studentul cu emplid 1015 si numele  a fost modificat bursa din fără bursă în BP1
+2025-06-09 17:48:56.776 +03:00 [INF] Studentul cu emplid 1015 si numele  a fost modificat bursa din BP1 în fără bursă

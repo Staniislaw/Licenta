@@ -318,6 +318,13 @@ namespace Burse.Controllers
                     List<StudentRecord> students = ProcessStudents(entry.Value);
                     FondBurseMeritRepartizat? fondRepartizatByDomeniu = await _fondBurseMeritRepartizatService.GetByDomeniuAsync(domeniu);
 
+                    students
+                        .Where(s => s.Media == 0 || s.Media == null)
+                        .ToList()
+                        .ForEach(s => _logger.LogStudentInfo($"Studentul {s.Emplid} Program: {entry.Key} are media 0"));
+
+
+
                     if (fondRepartizatByDomeniu == null) continue;
 
                     (decimal valoareAnualBP1, decimal valoareAnualBP2) = CalculateScholarshipValues(domeniu, fonduri, fondRepartizatByDomeniu);
