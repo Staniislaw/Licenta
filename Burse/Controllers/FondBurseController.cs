@@ -247,13 +247,12 @@ namespace Burse.Controllers
 
             bool toateCoincid = true;
             var discrepante = new List<string>();
-            
+
             foreach (var pathStudenti in pathStudentiList)
             {
                 using var stream = pathStudenti.OpenReadStream();
-                var studentRecords =excelReader.ReadStudentRecordsFromExcel(stream, pathStudenti.FileName, domenii,excludereStudenti,_logger);
+                var (studentRecords, excluderiPeDomeniu) = excelReader.ReadStudentRecordsFromExcel(stream, pathStudenti.FileName, domenii, excludereStudenti, _logger);
 
-                // Procesăm fiecare listă de studenți înainte de a o adăuga
                 var processed = new Dictionary<string, List<StudentRecord>>();
                 foreach (var kvp in studentRecords)
                 {
@@ -269,6 +268,7 @@ namespace Burse.Controllers
                     }
 
                     int processedCount = kvp.Value.Count;
+                    int excludedCount = excluderiPeDomeniu.TryGetValue(kvp.Key, out int excl) ? excl : 0;
 
                     int groupedCount = groupedFormatii[matchedKey].Sum(f =>
                         ParseIntOrZero(f.FaraTaxaRomani) +
@@ -281,18 +281,15 @@ namespace Burse.Controllers
                         ParseIntOrZero(f.CPV)
                     );
 
-                    if (processedCount != groupedCount)
+                    if (processedCount + excludedCount != groupedCount)
                     {
-                        if (processedCount != groupedCount)
-                        {
-                            var msg = $"Numărul studenților pentru Domeniul '{kvp.Key}' în fișierul '{pathStudenti.FileName}' nu coincide. Procesați: {processedCount}, Preluați din fișierul FormatiiStudii: {groupedCount}";
-                            _logger.LogStudentsExcels(msg);
-                            discrepante.Add(msg); 
-                        }
+                        var msg = $"Numărul studenților pentru Domeniul '{kvp.Key}' în fișierul '{pathStudenti.FileName}' nu coincide. Procesați: {processedCount}, Excluși: {excludedCount}, Așteptați: {groupedCount}";
+                        _logger.LogStudentsExcels(msg);
+                        discrepante.Add(msg);
                     }
+
                     var processedStudents = ProcessStudents(kvp.Value);
                     processed[kvp.Key] = processedStudents;
-
                 }
 
                 allStudentRecordsList.Add(processed);

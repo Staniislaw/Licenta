@@ -12,14 +12,15 @@ namespace Burse.Helpers
 {
     public class StudentExcelReader
     {
-        public Dictionary<string, List<StudentRecord>> ReadStudentRecordsFromExcel(Stream stream, string fisier, Dictionary<string, List<string>> domenii, Dictionary<string, List<string>> excludereStudenti, AppLogger _logger)
+        public (Dictionary<string, List<StudentRecord>> studentRecordsByDomain, Dictionary<string, int> excluderiPeDomeniu) ReadStudentRecordsFromExcel(Stream stream, string fisier, Dictionary<string, List<string>> domenii, Dictionary<string, List<string>> excludereStudenti, AppLogger _logger)
         {
             var studentRecordsByDomain = new Dictionary<string, List<StudentRecord>>();
+            var excluderiPeDomeniu = new Dictionary<string, int>();
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
             string fileName = System.IO.Path.GetFileNameWithoutExtension(fisier);
-            var columnMappings = LoadColumnMappingsFromDatabase(); // Încărcăm mapping-ul
-            
+            var columnMappings = LoadColumnMappingsFromDatabase();
+
             using (var reader = ExcelReaderFactory.CreateReader(stream))
             {
                 do
@@ -27,7 +28,6 @@ namespace Burse.Helpers
                     string formattedSheetName = reader.Name;
                     string domeniu = $"{fileName.ToUpper()} ({formattedSheetName})";
 
-                    // Detectăm "Xcdual" și transformăm în "C (X)-DUAL"
                     var matchDual = System.Text.RegularExpressions.Regex.Match(formattedSheetName, @"^(\d+)\w*dual$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
                     if (matchDual.Success)
                     {
@@ -36,7 +36,6 @@ namespace Burse.Helpers
                     }
                     else
                     {
-                        // Detectăm orice format de tip "1scc", "2rcc", "2sc" și îl transformăm în "X (Y)", excluzând "dual"
                         var matchGeneric = System.Text.RegularExpressions.Regex.Match(formattedSheetName, @"^(\d+)([a-zA-Z]+)$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
                         if (matchGeneric.Success && !matchGeneric.Groups[2].Value.ToLower().Contains("dual"))
                         {
@@ -45,14 +44,11 @@ namespace Burse.Helpers
                         }
                     }
 
-
                     string fileNameUpper = fileName.ToUpper();
 
                     var keyFound = domenii.Keys.FirstOrDefault(k => k.Contains(fileNameUpper));
-
                     if (keyFound != null && domenii.TryGetValue(keyFound, out List<string>? listaDomenii))
                     {
-                        // gasim domeniul potrivit din lista domenii pentru cheia respectiva
                         string? domeniuPotrivit = listaDomenii.FirstOrDefault(d => d.Contains($"({formattedSheetName})"));
                         if (!string.IsNullOrEmpty(domeniuPotrivit))
                         {
@@ -62,86 +58,16 @@ namespace Burse.Helpers
                         }
                         else
                         {
-                            if (fileNameUpper == "IETTI")
-                            {
-                                if (formattedSheetName == "1") domeniu = "IETTI (1)";
-                                else if (formattedSheetName == "2") domeniu = "IETTI (2)";
-                                else if (formattedSheetName == "3") domeniu = "RST (3)";
-                                else if (formattedSheetName == "4") domeniu = "RST (4)";
-                            }
-                            else if (fileNameUpper == "IEN")
-                            {
-                                if (formattedSheetName == "1") domeniu = "IEN (1)";
-                                else if (formattedSheetName == "2") domeniu = "IEN (2)";
-                                else if (formattedSheetName == "3") domeniu = "ME (3)";
-                                else if (formattedSheetName == "4") domeniu = "ETI (4)";
-                            }
+                            domeniu = HandleFallback(fileNameUpper, formattedSheetName, domeniu);
                         }
                     }
                     else
                     {
-                        if (fileNameUpper == "IETTI")
-                        {
-                            if (formattedSheetName == "1") domeniu = "IETTI (1)";
-                            else if (formattedSheetName == "2") domeniu = "IETTI (2)";
-                            else if (formattedSheetName == "3") domeniu = "RST (3)";
-                            else if (formattedSheetName == "4") domeniu = "RST (4)";
-                        }
-                        else if (fileNameUpper == "IEN")
-                        {
-                            if (formattedSheetName == "1") domeniu = "IEN (1)";
-                            else if (formattedSheetName == "2") domeniu = "IEN (2)";
-                            else if (formattedSheetName == "3") domeniu = "ME (3)";
-                            else if (formattedSheetName == "4") domeniu = "ETI (4)";
-                        }
+                        domeniu = HandleFallback(fileNameUpper, formattedSheetName, domeniu);
                     }
-
-
-
-                    /*if (fileName.ToUpper() == "IETTI")
-                    {
-                        if (formattedSheetName == "1")
-                        {
-                            domeniu = "IETTI (1)";
-                        }
-                        else if (formattedSheetName == "2")
-                        {
-                            domeniu = "IETTI (2)";
-                        }
-                        else if (formattedSheetName == "3")
-                        {
-                            domeniu = "RST (3)";
-                        }
-                        else if (formattedSheetName == "4")
-                        {
-                            domeniu = "RST (4)";
-                        }
-                    }
-                    
-                    if(fileName.ToUpper() =="IEN")
-                    {
-                        if (formattedSheetName == "1")
-                        {
-                            domeniu = "IEN (1)";
-                        }
-                        else if (formattedSheetName == "2")
-                        {
-                            domeniu = "IEN (2)";
-                        }
-                        else if (formattedSheetName == "3")
-                        {
-                            domeniu = "ME (3)";
-                        }
-                        else if (formattedSheetName == "4")
-                        {
-                            domeniu = "ETI (4)";
-                        }
-                    }*/
 
                     bool isTableStarted = false;
                     Dictionary<string, int> columnMapping = new Dictionary<string, int>();
-
-                    Console.WriteLine($"📄 Citim foaia: {reader.Name}");
 
                     while (reader.Read())
                     {
@@ -159,7 +85,6 @@ namespace Burse.Helpers
                                     columnMapping[colName] = i;
                                 }
                             }
-                            Console.WriteLine($"📌 Antet tabel detectat, mapăm coloanele...");
                             continue;
                         }
 
@@ -168,6 +93,11 @@ namespace Burse.Helpers
                         if (!studentRecordsByDomain.ContainsKey(domeniu))
                         {
                             studentRecordsByDomain[domeniu] = new List<StudentRecord>();
+                        }
+
+                        if (!excluderiPeDomeniu.ContainsKey(domeniu))
+                        {
+                            excluderiPeDomeniu[domeniu] = 0;
                         }
 
                         if (int.TryParse(firstCellValue, out int nrCrt))
@@ -192,10 +122,7 @@ namespace Burse.Helpers
                                 TR = GetColumnValueAsInt(reader, columnMapping, columnMappings["TR"]),
                                 SursaFinantare = GetColumnValue(reader, columnMapping, columnMappings["SursaFinantare"])
                             };
-                            //Stare înmatriculare
-                            //Forma de finanțare
-                            //Sursa de    finanțare
-                            Console.WriteLine($"👨‍🎓 Student detectat: {student.NumeStudent} - Media: {student.Media}");
+
                             bool excludeStudent = false;
                             var normalizedColumnMapping = columnMapping.ToDictionary(
                                 kvp => NormalizeKey(kvp.Key),
@@ -222,13 +149,37 @@ namespace Burse.Helpers
                             {
                                 studentRecordsByDomain[domeniu].Add(student);
                             }
+                            else
+                            {
+                                excluderiPeDomeniu[domeniu]++;
+                            }
                         }
                     }
                 } while (reader.NextResult());
             }
 
-            return studentRecordsByDomain;
+            return (studentRecordsByDomain, excluderiPeDomeniu);
         }
+
+        private string HandleFallback(string fileNameUpper, string formattedSheetName, string domeniu)
+        {
+            if (fileNameUpper == "IETTI")
+            {
+                if (formattedSheetName == "1") return "IETTI (1)";
+                else if (formattedSheetName == "2") return "IETTI (2)";
+                else if (formattedSheetName == "3") return "RST (3)";
+                else if (formattedSheetName == "4") return "RST (4)";
+            }
+            else if (fileNameUpper == "IEN")
+            {
+                if (formattedSheetName == "1") return "IEN (1)";
+                else if (formattedSheetName == "2") return "IEN (2)";
+                else if (formattedSheetName == "3") return "ME (3)";
+                else if (formattedSheetName == "4") return "ETI (4)";
+            }
+            return domeniu;
+        }
+
 
         private static string GetColumnValue(IDataReader reader, Dictionary<string, int> columnMapping, List<string> keys)
         {
