@@ -1,4 +1,5 @@
-﻿using Burse.Models;
+﻿using Burse.Data;
+using Burse.Models;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Spreadsheet;
 
@@ -11,8 +12,7 @@ namespace Burse.Helpers
 {
     public class StudentExcelReader
     {
-
-        public Dictionary<string, List<StudentRecord>> ReadStudentRecordsFromExcel(Stream stream, string fisier, Dictionary<string, List<string>> domenii)
+        public Dictionary<string, List<StudentRecord>> ReadStudentRecordsFromExcel(Stream stream, string fisier, Dictionary<string, List<string>> domenii, Dictionary<string, List<string>> excludereStudenti, AppLogger _logger)
         {
             var studentRecordsByDomain = new Dictionary<string, List<StudentRecord>>();
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
@@ -195,10 +195,33 @@ namespace Burse.Helpers
                             //Stare înmatriculare
                             //Forma de finanțare
                             //Sursa de    finanțare
-
-
                             Console.WriteLine($"👨‍🎓 Student detectat: {student.NumeStudent} - Media: {student.Media}");
-                            studentRecordsByDomain[domeniu].Add(student);
+                            bool excludeStudent = false;
+                            var normalizedColumnMapping = columnMapping.ToDictionary(
+                                kvp => NormalizeKey(kvp.Key),
+                                kvp => kvp.Value);
+
+                            foreach (var excludereKey in excludereStudenti.Keys)
+                            {
+                                string normalizedKey = NormalizeKey(excludereKey);
+
+                                if (normalizedColumnMapping.TryGetValue(normalizedKey, out int colIndex))
+                                {
+                                    var cellValue = reader.GetValue(colIndex)?.ToString()?.Trim() ?? "";
+
+                                    if (excludereStudenti[excludereKey].Any(val => !string.IsNullOrEmpty(val) && cellValue.Contains(val, StringComparison.OrdinalIgnoreCase)))
+                                    {
+                                        excludeStudent = true;
+                                        _logger.LogStudentInfo($"⛔ Student {student.NumeStudent} exclus pe baza criteriului: {excludereKey} conține valoarea '{cellValue}'");
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (!excludeStudent)
+                            {
+                                studentRecordsByDomain[domeniu].Add(student);
+                            }
                         }
                     }
                 } while (reader.NextResult());

@@ -31,4 +31,12 @@ public interface IGrupuriService
     Task<bool> AddValToAcronimGroupAsync(GrupAcronimEntry payload);
     Task RemoveValFromAcronimGroupAsync(string grup, string valoare);
     Task<Dictionary<string, List<string>>> GetGrupuriAcronimeAsync();
+
+    // Excluderi Studenti
+    Task<Dictionary<string, List<string>>> GetExcluderiStudentAsync();
+    Task<bool> AddValToExcludereStudentAsync(ExcludereStudentEntry payload);
+    Task RemoveValFromExcludereStudentAsync(string campExcludere, string valoare);
+    Task RemoveAllFromExcludereStudentCampAsync(string campExcludere);
+    Task<List<string>> GetValoriPentruCampExcludereAsync(string campExcludere);
+
 }

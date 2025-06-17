@@ -1,0 +1,1 @@
+2025-06-14 21:45:25.255 +03:00 [ERR] A apărut o eroare. Consultați logurile din Students-Excels pentru detalii.

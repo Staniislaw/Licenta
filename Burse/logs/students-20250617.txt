@@ -1,0 +1,310 @@
+2025-06-17 20:51:23.740 +03:00 [INF] Studentul 205 Program: C (1) are media 0
+2025-06-17 20:51:23.799 +03:00 [INF] Studentul 448555 Program: C (4) are media 0
+2025-06-17 20:51:23.799 +03:00 [INF] Studentul 66641 Program: C (4) are media 0
+2025-06-17 20:51:24.143 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație aceeasi la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-17 20:51:24.287 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație aceeasi la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-17 20:51:24.682 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-17 20:51:24.879 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 654, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 655, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-17 20:52:31.764 +03:00 [INF] Studentul 205 Program: C (1) are media 0
+2025-06-17 20:52:31.802 +03:00 [INF] Studentul 448555 Program: C (4) are media 0
+2025-06-17 20:52:31.802 +03:00 [INF] Studentul 66641 Program: C (4) are media 0
+2025-06-17 20:52:32.146 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație aceeasi la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-17 20:52:32.269 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație aceeasi la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-17 20:52:32.552 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-17 20:52:32.738 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 654, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 655, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-17 21:00:36.504 +03:00 [INF] Studentul 205 Program: C (1) are media 0
+2025-06-17 21:00:36.726 +03:00 [INF] Studentul 448555 Program: C (4) are media 0
+2025-06-17 21:00:36.726 +03:00 [INF] Studentul 66641 Program: C (4) are media 0
+2025-06-17 21:00:37.439 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație aceeasi la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-17 21:00:37.695 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație aceeasi la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-17 21:00:38.140 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-17 21:00:38.340 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 654, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 655, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-17 21:01:34.334 +03:00 [INF] Studentul 205 Program: C (1) are media 0
+2025-06-17 21:01:34.371 +03:00 [INF] Studentul 448555 Program: C (4) are media 0
+2025-06-17 21:01:34.371 +03:00 [INF] Studentul 66641 Program: C (4) are media 0
+2025-06-17 21:01:34.771 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație aceeasi la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-17 21:01:34.907 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație aceeasi la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-17 21:01:35.207 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-17 21:01:35.375 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 654, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 655, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-17 21:44:26.661 +03:00 [INF] Studentul 205 Program: C (1) are media 0
+2025-06-17 21:44:26.877 +03:00 [INF] Studentul 448555 Program: C (4) are media 0
+2025-06-17 21:44:26.877 +03:00 [INF] Studentul 66641 Program: C (4) are media 0
+2025-06-17 21:44:27.567 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație aceeasi la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-17 21:44:27.826 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație aceeasi la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-17 21:44:28.354 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-17 21:44:28.581 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 654, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 655, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-17 22:16:28.119 +03:00 [INF] Studentul 205 Program: C (1) are media 0
+2025-06-17 22:16:28.345 +03:00 [INF] Studentul 448555 Program: C (4) are media 0
+2025-06-17 22:16:28.345 +03:00 [INF] Studentul 66641 Program: C (4) are media 0
+2025-06-17 22:16:29.020 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație aceeasi la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-17 22:16:29.266 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație aceeasi la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-17 22:16:29.735 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-17 22:16:29.930 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 654, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 655, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-17 22:28:50.914 +03:00 [INF] Studentul 205 Program: C (1) are media 0
+2025-06-17 22:28:50.973 +03:00 [INF] Studentul 448555 Program: C (4) are media 0
+2025-06-17 22:28:50.973 +03:00 [INF] Studentul 66641 Program: C (4) are media 0
+2025-06-17 22:28:51.344 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație aceeasi la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-17 22:28:51.491 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație aceeasi la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-17 22:28:51.912 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-17 22:28:52.128 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 654, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 655, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-17 22:32:24.428 +03:00 [INF] Studentul 205 Program: C (1) are media 0
+2025-06-17 22:32:24.456 +03:00 [INF] Studentul 448555 Program: C (4) are media 0
+2025-06-17 22:32:24.456 +03:00 [INF] Studentul 66641 Program: C (4) are media 0
+2025-06-17 22:32:24.750 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 9.58 au situație aceeasi la bursă (valori diferite):
+Emplid: 3036, Nume: , Bursa: BP2, Program: RCC (2)
+Emplid: 3037, Nume: , Bursa: NU, Program: RCC (2)
+2025-06-17 22:32:24.863 +03:00 [INF] ⚠️ Atenție! etapa 0: Studenți cu media 10 au situație aceeasi la bursă (valori diferite):
+Emplid: 10000015, Nume: , Bursa: BP1, Program: TAMAE (1)
+Emplid: 10000016, Nume: , Bursa: NU, Program: TAMAE (1)
+2025-06-17 22:32:25.127 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.68 au situație mixtă la bursă (valori diferite):
+Emplid: 98, Nume: , Bursa: BP2, Program: C (1)
+Emplid: 99, Nume: , Bursa: NU, Program: C (1)
+2025-06-17 22:32:25.289 +03:00 [INF] ⚠️ Atenție! etapa1: Studenți cu media 9.925 au situație mixtă la bursă (valori diferite):
+Emplid: 654, Nume: , Bursa: BP2, Program: SIC (1)
+Emplid: 655, Nume: , Bursa: NU, Program: SIC (1)
+2025-06-17 22:34:06.240 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.240 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.240 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.241 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.241 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.241 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.241 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.242 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.242 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.242 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.242 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.242 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.242 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.263 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.264 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.264 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.264 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.264 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.264 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.264 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.264 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.264 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.264 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.264 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.267 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.267 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.267 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.267 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.267 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.267 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.267 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.267 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.267 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.275 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.275 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.275 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.275 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:06.275 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:19.994 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:34.479 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:36.869 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:37.243 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:37.446 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:42.125 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:42.126 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:42.127 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:42.129 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:42.129 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:42.130 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:42.130 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:42.131 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.761 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.761 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.761 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.761 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.761 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.762 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.762 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.762 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.762 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.762 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.762 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.764 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.764 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.764 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.765 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.765 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.765 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.765 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.765 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.765 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.773 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.773 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.773 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.773 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:34:54.773 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.890 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.890 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.890 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.891 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.891 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.891 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.891 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.892 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.892 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.892 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.892 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.892 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.892 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.911 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.911 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.911 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.911 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.911 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.911 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.911 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.911 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.911 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.911 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.911 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.914 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.914 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.914 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.915 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.915 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.915 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.915 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.915 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.915 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.923 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.924 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.924 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.924 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:01.924 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.731 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.731 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.731 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.732 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.732 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.732 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.733 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.733 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.733 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.733 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.733 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.733 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.733 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.751 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.751 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.751 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.751 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.751 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.751 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.752 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.752 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.752 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.752 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.752 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.755 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.755 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.755 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.755 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.755 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.755 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.755 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.755 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.755 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.764 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.764 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.764 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.764 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:35:47.764 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:28.692 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:28.694 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:28.695 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:28.695 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:28.695 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:28.696 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:28.696 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:28.696 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:28.696 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:28.696 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:28.697 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:28.697 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:28.697 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.537 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.537 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.537 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.538 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.538 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.538 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.538 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.538 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.538 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.538 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.538 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.541 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.541 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.541 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.541 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.541 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.541 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.541 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.541 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:43:59.541 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:44:02.941 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:44:02.941 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:44:02.941 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:44:02.941 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'
+2025-06-17 22:44:02.941 +03:00 [INF] ⛔ Student  exclus pe baza criteriului: Observatii conține valoarea 'RP, RM, DD'

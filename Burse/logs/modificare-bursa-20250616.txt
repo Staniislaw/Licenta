@@ -1,0 +1,6 @@
+2025-06-16 14:32:40.700 +03:00 [INF] Studentul cu emplid 72099 si numele  a fost modificat bursa din BP2 în fără bursă
+2025-06-16 14:32:56.962 +03:00 [INF] Studentul cu emplid 72099 si numele  a fost modificat bursa din fără bursă în BP1
+2025-06-16 14:33:29.130 +03:00 [INF] Studentul cu emplid 72099 si numele  a fost modificat bursa din BP1 în fără bursă
+2025-06-16 14:33:31.421 +03:00 [INF] Studentul cu emplid 72099 si numele  a fost modificat bursa din fără bursă în BP2
+2025-06-16 14:39:51.138 +03:00 [INF] Studentul cu emplid 72099 si numele  a fost modificat bursa din BP2 în fără bursă
+2025-06-16 14:40:19.625 +03:00 [INF] Studentul cu emplid 72099 si numele  a fost modificat bursa din fără bursă în BP2

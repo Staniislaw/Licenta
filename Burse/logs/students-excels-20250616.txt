@@ -1,0 +1,13 @@
+2025-06-16 21:12:42.012 +03:00 [INF] Numărul studenților pentru Domeniul 'C (1)' în fișierul 'C.xls' nu coincide. Procesați: 120, Preluați din fișierul FormatiiStudii: 119
+2025-06-16 21:12:42.015 +03:00 [INF] Numărul studenților pentru Domeniul 'C (2)' în fișierul 'C.xls' nu coincide. Procesați: 149, Preluați din fișierul FormatiiStudii: 127
+2025-06-16 21:12:42.016 +03:00 [INF] Numărul studenților pentru Domeniul 'C (3)' în fișierul 'C.xls' nu coincide. Procesați: 99, Preluați din fișierul FormatiiStudii: 93
+2025-06-16 21:12:42.016 +03:00 [INF] Numărul studenților pentru Domeniul 'C (4)' în fișierul 'C.xls' nu coincide. Procesați: 100, Preluați din fișierul FormatiiStudii: 91
+2025-06-16 21:18:35.753 +03:00 [INF] Numărul studenților pentru Domeniul 'C (1)' în fișierul 'C.xls' nu coincide. Procesați: 120, Preluați din fișierul FormatiiStudii: 119
+2025-06-16 21:18:35.753 +03:00 [INF] Numărul studenților pentru Domeniul 'C (2)' în fișierul 'C.xls' nu coincide. Procesați: 149, Preluați din fișierul FormatiiStudii: 127
+2025-06-16 21:18:35.753 +03:00 [INF] Numărul studenților pentru Domeniul 'C (3)' în fișierul 'C.xls' nu coincide. Procesați: 99, Preluați din fișierul FormatiiStudii: 93
+2025-06-16 21:18:35.753 +03:00 [INF] Numărul studenților pentru Domeniul 'C (4)' în fișierul 'C.xls' nu coincide. Procesați: 100, Preluați din fișierul FormatiiStudii: 91
+2025-06-16 21:19:05.835 +03:00 [INF] Numărul studenților pentru Domeniul 'C (1)' în fișierul 'C.xls' nu coincide. Procesați: 120, Preluați din fișierul FormatiiStudii: 119
+2025-06-16 21:19:05.835 +03:00 [INF] Numărul studenților pentru Domeniul 'C (2)' în fișierul 'C.xls' nu coincide. Procesați: 149, Preluați din fișierul FormatiiStudii: 127
+2025-06-16 21:19:05.835 +03:00 [INF] Numărul studenților pentru Domeniul 'C (3)' în fișierul 'C.xls' nu coincide. Procesați: 99, Preluați din fișierul FormatiiStudii: 93
+2025-06-16 21:19:05.835 +03:00 [INF] Numărul studenților pentru Domeniul 'C (4)' în fișierul 'C.xls' nu coincide. Procesați: 100, Preluați din fișierul FormatiiStudii: 91
+2025-06-16 21:20:18.351 +03:00 [INF] Numărul studenților pentru Domeniul 'C (2)' în fișierul 'C.xls' nu coincide. Procesați: 128, Preluați din fișierul FormatiiStudii: 127

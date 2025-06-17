@@ -1,5 +1,8 @@
 ﻿using Burse.Models;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
+
+using System.Drawing;
 
 
 public class ExcelUpdater
@@ -65,6 +68,32 @@ public class ExcelUpdater
                 {
                     worksheet.Cells[row, bp1Col].Value = entry.BP1Count;
                     worksheet.Cells[row, bp2Col].Value = entry.BP2Count;
+
+                    // 👉 Adăugăm BP1RP și BP2RP în coloanele imediat următoare
+                    if (entry.BP1CountRP > 0)
+                        worksheet.Cells[row, bp1Col + 1].Value = entry.BP1CountRP;
+
+                    if (entry.BP2CountRP > 0)
+                        worksheet.Cells[row, bp2Col + 1].Value = entry.BP2CountRP;
+
+                    if (!string.IsNullOrWhiteSpace(entry.TipInconsistenta))
+                    {
+                        var inconsistencyCell = worksheet.Cells[row, 12];
+                        inconsistencyCell.Value = entry.TipInconsistenta;
+                        inconsistencyCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        inconsistencyCell.Style.Fill.BackgroundColor.SetColor(Color.Red);
+                        inconsistencyCell.Style.Font.Color.SetColor(Color.White);
+                        inconsistencyCell.Style.WrapText = false;
+                        worksheet.Column(12).Width = 15;
+
+                        for (int col = 1; col < 11; col++)
+                        {
+                            var cell = worksheet.Cells[row, col];
+                            cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                            cell.Style.Font.Color.SetColor(Color.White);
+                            cell.Style.Fill.BackgroundColor.SetColor(Color.LightCoral);
+                        }
+                    }
                 }
             }
 

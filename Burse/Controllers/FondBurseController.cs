@@ -113,7 +113,7 @@ namespace Burse.Controllers
             return Ok(fondBurse);
         }
         [HttpGet("generate")]
-        public async Task<IActionResult> GenerateExcel(decimal disponibilBM = 1671770.95m)
+        public async Task<IActionResult> GenerateExcel(decimal disponibilBM = 1671770.95m, double? valoareRomaniDePretutindeni = null)
         {
             try
             {
@@ -123,7 +123,7 @@ namespace Burse.Controllers
                 string filePath = Path.Combine(Path.GetTempPath(), "Burse_Studenți.xlsx");
 
                 // Generăm fișierul Excel
-                byte[] fileBytes= await _fondBurseService.GenerateCustomLayout2(filePath, fonduri, formatiiStudii, disponibilBM);
+                byte[] fileBytes= await _fondBurseService.GenerateCustomLayout2(filePath, fonduri, formatiiStudii, disponibilBM, valoareRomaniDePretutindeni);
 
                 // Citim fișierul și îl returnăm ca răspuns HTTP
                 //byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
@@ -140,7 +140,7 @@ namespace Burse.Controllers
         }
 
         [HttpPost("process")]
-        public async Task<IActionResult> ProcessExcelFiles([FromForm] List<IFormFile> pathStudentiList,IFormFile burseFile, [FromQuery]decimal? epsilonValue = 0.05M)
+        public async Task<IActionResult> ProcessExcelFiles([FromForm] List<IFormFile> pathStudentiList, [FromForm] IFormFile burseFile, [FromQuery] decimal? epsilonValue = 0.05M, [FromQuery] double? valoareRomaniDePretutindeni = null)
         {
             //await _fondBurseService.ResetSumaRamasaAsync();
             //await _fondBurseService.ResetStudentiAsync();
@@ -160,6 +160,8 @@ namespace Burse.Controllers
             var programeDeStudii = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             Dictionary<string, List<string>> domenii = await _grupuriService.GetGrupuriAsync();
+            Dictionary<string, List<string>> excludereStudenti = await _grupuriService.GetExcluderiStudentAsync();
+
             foreach (var file in pathStudentiList)
             {
                 string programPrincipal = Path.GetFileNameWithoutExtension(file.FileName).ToUpper();
@@ -249,13 +251,12 @@ namespace Burse.Controllers
             foreach (var pathStudenti in pathStudentiList)
             {
                 using var stream = pathStudenti.OpenReadStream();
-                var studentRecords =excelReader.ReadStudentRecordsFromExcel(stream, pathStudenti.FileName, domenii);
+                var studentRecords =excelReader.ReadStudentRecordsFromExcel(stream, pathStudenti.FileName, domenii,excludereStudenti,_logger);
 
                 // Procesăm fiecare listă de studenți înainte de a o adăuga
                 var processed = new Dictionary<string, List<StudentRecord>>();
                 foreach (var kvp in studentRecords)
                 {
-                   
                     string processedKeyNormalized = AcronymGenerator.RemoveDiacritics(kvp.Key).ToUpperInvariant();
 
                     var matchedKey = groupedFormatii.Keys
@@ -327,20 +328,44 @@ namespace Burse.Controllers
 
                     if (fondRepartizatByDomeniu == null) continue;
 
-                    (decimal valoareAnualBP1, decimal valoareAnualBP2) = CalculateScholarshipValues(domeniu, fonduri, fondRepartizatByDomeniu);
+                    (decimal valoareAnualBP1, decimal valoareAnualBP2, decimal valoareAnualBP1RP,decimal valoareAnualBP2RP) = CalculateScholarshipValues(domeniu, fonduri, fondRepartizatByDomeniu, valoareRomaniDePretutindeni);
 
                     decimal sumaDisponibila = fondRepartizatByDomeniu.bursaAlocatata;
                     if (sumaDisponibila < 0)
                         continue;
-                    (var sumaRamasa, var istoricePerDomeniu) = AssignScholarshipsOptimezedWithCriteriaMediilorAceleasi(
-                        students,
-                        sumaDisponibila,
-                        valoareAnualBP1,
-                        valoareAnualBP2,
-                        epsilon,
-                        fondRepartizatByDomeniu,
-                        "0"
-                    );
+                    decimal sumaRamasa;
+                    var istoricePerDomeniu = new List<(string Emplid, BursaIstoric Istoric)>();
+
+                    if (sumaDisponibila <= 31500)
+                    {
+                        (sumaRamasa, istoricePerDomeniu) = AssignScholarshipsOptimizedV2(
+                            students,
+                            sumaDisponibila,
+                            valoareAnualBP1,
+                            valoareAnualBP2,
+                            valoareAnualBP1RP,
+                            valoareAnualBP2RP,
+                            epsilon,
+                            fondRepartizatByDomeniu,
+                            "0",
+                            valoareRomaniDePretutindeni
+                        );
+                    }
+                    else
+                    {
+                        (sumaRamasa, istoricePerDomeniu) = AssignScholarshipsOptimezedWithCriteriaMediilorAceleasi(
+                            students,
+                            sumaDisponibila,
+                            valoareAnualBP1,
+                            valoareAnualBP2,
+                            valoareAnualBP1RP,
+                            valoareAnualBP2RP,
+                            epsilon,
+                            fondRepartizatByDomeniu,
+                            "0",
+                            valoareRomaniDePretutindeni
+                        );
+                    }
                     sumaDisponibila = sumaRamasa;
 
                     istoricList.AddRange(istoricePerDomeniu);
@@ -361,11 +386,26 @@ namespace Burse.Controllers
                         // Dacă sunt 2 sau mai multe valori distincte, înseamnă inconsistență
                         if (valoriDistincteBursa.Count > 1)
                         {
+                            foreach (var student in group)
+                            {
+                                if (!string.IsNullOrWhiteSpace(student.Bursa))
+                                {
+                                    var altStudent = group.FirstOrDefault(s => s.Emplid != student.Emplid);
+
+                                    if (altStudent != null)
+                                    {
+                                        student.TipInconsistenta = $"Etapa :0 ,Studentul Emplid: {student.Emplid} Nume: {student.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(student.Bursa) ? "NU" : student.Bursa)}, Program: {fondRepartizatByDomeniu.domeniu}, cu media {group.Key} are aceeași medie ca studentul Emplid: {altStudent.Emplid}, Nume: {altStudent.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(altStudent.Bursa) ? "NU" : altStudent.Bursa)}, Program: {fondRepartizatByDomeniu.domeniu}, dar nu a primit bursă.";
+                                        //student.TipInconsistenta = $"Media {group.Key} - Alt student: Emplid: {altStudent.Emplid}, Nume: {altStudent.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(altStudent.Bursa) ? "NU" : altStudent.Bursa)}, Program: {fondRepartizatByDomeniu.domeniu}";
+                                    }
+                                }
+                            }
+
+
                             var studentiCuAceeasiMedia = group.Select(s =>
                                 $"Emplid: {s.Emplid}, Nume: {s.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(s.Bursa) ? "NU" : s.Bursa)}, Program: {fondRepartizatByDomeniu.domeniu}"
                             );
 
-                            var mesaj = $"⚠️ Atenție! etapa 0: Studenți cu media {group.Key} au situație mixtă la bursă (valori diferite):\n" +
+                            var mesaj = $"⚠️ Atenție! etapa 0: Studenți cu media {group.Key} au situație aceeasi la bursă (valori diferite):\n" +
                                         string.Join("\n", studentiCuAceeasiMedia);
 
                             _logger.LogStudentInfo(mesaj);
@@ -487,7 +527,7 @@ namespace Burse.Controllers
                  // ✅ Atribuim DOAR BP2 pe această grupă
                  //AssignOnlyBP2   (students, ref sumaDisponibila, fonduri, sumaRamasaPeFond);
 
-                 (decimal sumaNoua, var istoricBP2) = AssignOnlyBP2(students, sumaDisponibila, fonduri, sumaRamasaPeFond,"1");
+                 (decimal sumaNoua, var istoricBP2) = AssignOnlyBP2(students, sumaDisponibila, fonduri, sumaRamasaPeFond,"1", valoareRomaniDePretutindeni);
                  sumaDisponibila = sumaNoua;
 
                 var groupedByMedia = students.GroupBy(s => s.Media);
@@ -504,6 +544,19 @@ namespace Burse.Controllers
                     // Dacă sunt 2 sau mai multe valori distincte, înseamnă inconsistență
                     if (valoriDistincteBursa.Count > 1)
                     {
+                        foreach (var student in group)
+                        {
+                            if (!string.IsNullOrWhiteSpace(student.Bursa))
+                            {
+                                var altStudent = group.FirstOrDefault(s => s.Emplid != student.Emplid);
+
+                                if (altStudent != null)
+                                {
+                                    student.TipInconsistenta = $"Etapa :1 ,Studentul Emplid: {student.Emplid} Nume: {student.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(student.Bursa) ? "NU" : student.Bursa)}, Program: {student.FondBurseMeritRepartizat.domeniu}, cu media {group.Key} are aceeași medie ca studentul Emplid: {altStudent.Emplid}, Nume: {altStudent.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(altStudent.Bursa) ? "NU" : altStudent.Bursa)}, Program: {altStudent.FondBurseMeritRepartizat.domeniu}, dar nu a primit bursă.";
+                                    //student.TipInconsistenta = $"Media {group.Key} - Alt student: Emplid: {altStudent.Emplid}, Nume: {altStudent.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(altStudent.Bursa) ? "NU" : altStudent.Bursa)}, Program: {fondRepartizatByDomeniu.domeniu}";
+                                }
+                            }
+                        }
                         var studentiCuAceeasiMedia = group.Select(s =>
                             $"Emplid: {s.Emplid}, Nume: {s.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(s.Bursa) ? "NU" : s.Bursa)}, Program: {s.FondBurseMeritRepartizat.domeniu}"
                         );
@@ -674,7 +727,7 @@ namespace Burse.Controllers
                 if (sumaDisponibila <= 0) continue;
 
                 //AssignOnlyBP2(students, ref sumaDisponibila, fonduri, sumaRamasaPeFond);
-                (decimal sumaNoua, var istoricBP2) = AssignOnlyBP2(students, sumaDisponibila, fonduri, sumaRamasaPeFond, "2");
+                (decimal sumaNoua, var istoricBP2) = AssignOnlyBP2(students, sumaDisponibila, fonduri, sumaRamasaPeFond, "2", valoareRomaniDePretutindeni);
                 sumaDisponibila = sumaNoua;
 
 
@@ -692,6 +745,19 @@ namespace Burse.Controllers
                     // Dacă sunt 2 sau mai multe valori distincte, înseamnă inconsistență
                     if (valoriDistincteBursa.Count > 1)
                     {
+                        foreach (var student in group)
+                        {
+                            if (!string.IsNullOrWhiteSpace(student.Bursa))
+                            {
+                                var altStudent = group.FirstOrDefault(s => s.Emplid != student.Emplid);
+
+                                if (altStudent != null)
+                                {
+                                    student.TipInconsistenta = $"Etapa :2 ,Studentul Emplid: {student.Emplid} Nume: {student.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(student.Bursa) ? "NU" : student.Bursa)}, Program: {student.FondBurseMeritRepartizat.domeniu}, cu media {group.Key} are aceeași medie ca studentul Emplid: {altStudent.Emplid}, Nume: {altStudent.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(altStudent.Bursa) ? "NU" : altStudent.Bursa)}, Program: {altStudent.FondBurseMeritRepartizat.domeniu}, dar nu a primit bursă.";
+                                    //student.TipInconsistenta = $"Media {group.Key} - Alt student: Emplid: {altStudent.Emplid}, Nume: {altStudent.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(altStudent.Bursa) ? "NU" : altStudent.Bursa)}, Program: {fondRepartizatByDomeniu.domeniu}";
+                                }
+                            }
+                        }
                         var studentiCuAceeasiMedia = group.Select(s =>
                             $"Emplid: {s.Emplid}, Nume: {s.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(s.Bursa) ? "NU" : s.Bursa)}, Program: {s.FondBurseMeritRepartizat.domeniu}"
                         );
@@ -773,24 +839,25 @@ namespace Burse.Controllers
 
                 // Grupare pe program de studiu (sau domeniu), și determinare fracțiune
                 var fonduriPeProgram = fonduriInGrup
-                    .Where(f => f.programStudiu?.ToLower() == "licenta")
-                    .GroupBy(f => f.domeniu)
-                    .Select(grupProgram => new
-                    {
-                        ProgramStudiu = grupProgram.Key,
-                        SumaRamasa = grupProgram.Sum(f => f.SumaRamasa),
-                        SumaInitiala = grupProgram.Sum(f => f.bursaAlocatata),
-                        Fonduri = grupProgram.ToList()
-                    })
-                    .Where(g => g.SumaInitiala > 0)
-                    .Select(g => new
-                    {
-                        g.ProgramStudiu,
-                        g.Fonduri,
-                        Fractiune = g.SumaRamasa 
-                    })
-                    .OrderByDescending(g => g.Fractiune)
-                    .FirstOrDefault();
+                        .Where(f => f.programStudiu?.ToLower() == "licenta")
+                        .GroupBy(f => f.Grupa) // Grupez după Grupa (AIA(1), AIA(2), C(1), etc.)
+                        .Select(grupProgram => new
+                        {
+                            ProgramStudiu = grupProgram.Key, // AIA(1), AIA(2), C(1), etc.
+                            SumaRamasa = grupProgram.Sum(f => f.SumaRamasa),
+                            SumaInitiala = grupProgram.Sum(f => f.bursaAlocatata),
+                            Fonduri = grupProgram.ToList()
+                        })
+                        .Where(g => g.SumaInitiala > 0)
+                        .Select(g => new
+                        {
+                            g.ProgramStudiu,
+                            g.Fonduri,
+                            Fractiune = g.SumaRamasa
+                        })
+                        .OrderByDescending(g => g.Fractiune) // Cea cu fracțiunea cea mai mare
+                        .FirstOrDefault();
+
 
 
                 if (fonduriPeProgram == null || fonduriPeProgram.Fonduri.Sum(f => f.SumaRamasa) <= 0)
@@ -816,7 +883,7 @@ namespace Burse.Controllers
                     sumaDisponibila,
                     fonduri,
                     sumaRamasaPeFond,
-                    "3"
+                    "3", valoareRomaniDePretutindeni
                 );
 
 
@@ -834,6 +901,19 @@ namespace Burse.Controllers
                     // Dacă sunt 2 sau mai multe valori distincte, înseamnă inconsistență
                     if (valoriDistincteBursa.Count > 1)
                     {
+                        foreach (var student in group)
+                        {
+                            if (!string.IsNullOrWhiteSpace(student.Bursa))
+                            {
+                                var altStudent = group.FirstOrDefault(s => s.Emplid != student.Emplid);
+
+                                if (altStudent != null)
+                                {
+                                    student.TipInconsistenta = $"Etapa :3 ,Studentul Emplid: {student.Emplid} Nume: {student.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(student.Bursa) ? "NU" : student.Bursa)}, Program: {student.FondBurseMeritRepartizat.domeniu}, cu media {group.Key} are aceeași medie ca studentul Emplid: {altStudent.Emplid}, Nume: {altStudent.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(altStudent.Bursa) ? "NU" : altStudent.Bursa)}, Program: {altStudent.FondBurseMeritRepartizat.domeniu}, dar nu a primit bursă.";
+                                    //student.TipInconsistenta = $"Media {group.Key} - Alt student: Emplid: {altStudent.Emplid}, Nume: {altStudent.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(altStudent.Bursa) ? "NU" : altStudent.Bursa)}, Program: {fondRepartizatByDomeniu.domeniu}";
+                                }
+                            }
+                        }
                         var studentiCuAceeasiMedia = group.Select(s =>
                             $"Emplid: {s.Emplid}, Nume: {s.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(s.Bursa) ? "NU" : s.Bursa)}, Program: {s.FondBurseMeritRepartizat.domeniu}"
                         );
@@ -1118,7 +1198,7 @@ await _context.SaveChangesAsync();
                         .ToList();
 
                     //AssignOnlyBP2(studentiGrup, ref sumaDisponibila, fonduri, sumaRamasaPeFond);
-                    (decimal sumaNoua, var istoricBP2) = AssignOnlyBP2(studentiGrup, sumaDisponibila, fonduri, sumaRamasaPeFond, "4");
+                    (decimal sumaNoua, var istoricBP2) = AssignOnlyBP2(studentiGrup, sumaDisponibila, fonduri, sumaRamasaPeFond, "4", valoareRomaniDePretutindeni);
                     sumaDisponibila = sumaNoua;
 
                     var groupedByMedia = studentiGrup.GroupBy(s => s.Media);
@@ -1135,6 +1215,19 @@ await _context.SaveChangesAsync();
                         // Dacă sunt 2 sau mai multe valori distincte, înseamnă inconsistență
                         if (valoriDistincteBursa.Count > 1)
                         {
+                            foreach (var student in group)
+                            {
+                                if (!string.IsNullOrWhiteSpace(student.Bursa))
+                                {
+                                    var altStudent = group.FirstOrDefault(s => s.Emplid != student.Emplid);
+
+                                    if (altStudent != null)
+                                    {
+                                        student.TipInconsistenta = $" Etapa :4 :Studentul Emplid: {student.Emplid} Nume: {student.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(student.Bursa) ? "NU" : student.Bursa)}, Program: {student.FondBurseMeritRepartizat.domeniu}, cu media {group.Key} are aceeași medie ca studentul Emplid: {altStudent.Emplid}, Nume: {altStudent.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(altStudent.Bursa) ? "NU" : altStudent.Bursa)}, Program: {altStudent.FondBurseMeritRepartizat.domeniu}, dar nu a primit bursă.";
+                                        //student.TipInconsistenta = $"Media {group.Key} - Alt student: Emplid: {altStudent.Emplid}, Nume: {altStudent.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(altStudent.Bursa) ? "NU" : altStudent.Bursa)}, Program: {fondRepartizatByDomeniu.domeniu}";
+                                    }
+                                }
+                            }
                             var studentiCuAceeasiMedia = group.Select(s =>
                                 $"Emplid: {s.Emplid}, Nume: {s.NumeStudent}, Bursa: {(string.IsNullOrWhiteSpace(s.Bursa) ? "NU" : s.Bursa)}, Program: {s.FondBurseMeritRepartizat.domeniu}"
                             );
@@ -1188,15 +1281,43 @@ await _context.SaveChangesAsync();
 
 
             List<StudentRecord> studentiCuBursa4 = await _fondBurseService.GetStudentsWithBursaFromDatabaseAsync();
-            List<StudentScholarshipData> studentiClasificati4 = studentiCuBursa4
+            bool EsteRP(StudentRecord s) => !string.IsNullOrWhiteSpace(s.TaraCetatenie) && !string.Equals(s.TaraCetatenie, "ROU", StringComparison.OrdinalIgnoreCase);
+            var studentiClasificati4 = studentiCuBursa4
                 .GroupBy(s => new { s.FondBurseMeritRepartizatId, s.FondBurseMeritRepartizat.domeniu })
-                .Select(group => new StudentScholarshipData
+                .Select(group =>
                 {
-                    FondBurseId = group.Key.FondBurseMeritRepartizatId,
-                    Domeniu = group.Key.domeniu,
-                    BP1Count = group.Count(s => s.Bursa.ToLower().Contains("bp1")),
-                    BP2Count = group.Count(s => s.Bursa.ToLower().Contains("bp2"))
-                }).ToList();
+                    int bp1Count, bp1CountRP, bp2Count, bp2CountRP;
+
+                    if (valoareRomaniDePretutindeni.HasValue)
+                    {
+                        bp1Count = group.Count(s => s.Bursa.ToLower().Contains("bp1") && !EsteRP(s));
+                        bp1CountRP = group.Count(s => s.Bursa.ToLower().Contains("bp1") && EsteRP(s));
+                        bp2Count = group.Count(s => s.Bursa.ToLower().Contains("bp2") && !EsteRP(s));
+                        bp2CountRP = group.Count(s => s.Bursa.ToLower().Contains("bp2") && EsteRP(s));
+                    }
+                    else
+                    {
+                        bp1Count = group.Count(s => s.Bursa.ToLower().Contains("bp1"));
+                        bp1CountRP = 0;
+                        bp2Count = group.Count(s => s.Bursa.ToLower().Contains("bp2"));
+                        bp2CountRP = 0;
+                    }
+
+                    return new StudentScholarshipData
+                    {
+                        FondBurseId = group.Key.FondBurseMeritRepartizatId,
+                        Domeniu = group.Key.domeniu,
+                        BP1Count = bp1Count,
+                        BP1CountRP = bp1CountRP,
+                        BP2Count = bp2Count,
+                        BP2CountRP = bp2CountRP,
+                        TipInconsistenta = string.Join(", ", group
+                            .Select(s => s.TipInconsistenta)
+                            .Where(t => !string.IsNullOrWhiteSpace(t))
+                            .Distinct())
+                    };
+                })
+                .ToList();
 
 
             string etapa0Path = $"C:\\Licenta\\Etapa_0.xlsx";
@@ -1272,23 +1393,52 @@ await _context.SaveChangesAsync();
         /// <summary>
         /// Calculează valoarea anuală a burselor BP1 și BP2 în funcție de domeniu.
         /// </summary>
-        private (decimal, decimal) CalculateScholarshipValues(string domeniu, List<FondBurse> fonduri, FondBurseMeritRepartizat fondRepartizat)
+        private (decimal, decimal, decimal, decimal) CalculateScholarshipValues(
+    string domeniu,
+    List<FondBurse> fonduri,
+    FondBurseMeritRepartizat fondRepartizat,
+    double? valoareRomaniDePretutindeni = null)
         {
-            decimal valoareBP1, valoareBP2;
+            decimal valoareBP1, valoareBP2, valoareBP1RP, valoareBP2RP;
 
             if (domeniu.Contains("4") || (fondRepartizat.programStudiu == "master" && domeniu.Contains("2")))
             {
                 valoareBP1 = fonduri[0].ValoreaLunara * 9.35M;
                 valoareBP2 = fonduri[1].ValoreaLunara * 9.35M;
+
+                if (valoareRomaniDePretutindeni != null)
+                {
+                    decimal valoareRP = (decimal)valoareRomaniDePretutindeni;
+                    valoareBP1RP = valoareBP1 - (valoareRP * 9.35M);
+                    valoareBP2RP = valoareBP2 - (valoareRP * 9.35M);
+                }
+                else
+                {
+                    valoareBP1RP = valoareBP1;
+                    valoareBP2RP = valoareBP2;
+                }
             }
             else
             {
                 valoareBP1 = fonduri[0].ValoreaLunara * 12;
                 valoareBP2 = fonduri[1].ValoreaLunara * 12;
+
+                if (valoareRomaniDePretutindeni != null)
+                {
+                    decimal valoareRP = (decimal)valoareRomaniDePretutindeni;
+                    valoareBP1RP = valoareBP1 - (valoareRP * 12);
+                    valoareBP2RP = valoareBP2 - (valoareRP * 12);
+                }
+                else
+                {
+                    valoareBP1RP = valoareBP1;
+                    valoareBP2RP = valoareBP2;
+                }
             }
 
-            return (valoareBP1, valoareBP2);
+            return (valoareBP1, valoareBP2, valoareBP1RP, valoareBP2RP);
         }
+
 
         /// <summary>
         /// Alocă bursele studenților, respectând regulile de diferență între medii.
@@ -1452,9 +1602,12 @@ await _context.SaveChangesAsync();
     decimal sumaDisponibila,
     decimal valoareAnualBP1,
     decimal valoareAnualBP2,
+    decimal valoareAnualBP1RP,
+    decimal valoareAnualBP2RP,
     decimal epsilon,
     FondBurseMeritRepartizat fondBurseMeritRepartizat,
-    string etapa)
+    string etapa,
+    double? valoareRomaniDePretutindeni = null)
         {
             var istoricList = new List<(string Emplid, BursaIstoric Istoric)>();
 
@@ -1470,11 +1623,13 @@ await _context.SaveChangesAsync();
 
             foreach (var student in students)
             {
-                decimal diferenta = studentAnterior != null ? Math.Abs(studentAnterior.Media - student.Media) : 0;
+                //decimal diferenta = studentAnterior != null ? Math.Abs(studentAnterior.Media - student.Media) : 0;
+
+                decimal diferenta = primaMedie.HasValue ? Math.Abs(primaMedie.Value - student.Media) : 0;
                 // The 'diferenta' calculation will now reflect the media of the previously processed student
                 // in the *sorted* list. If two students had the same primary Media and were ordered by tie-breakers,
                 // their 'diferenta' will be 0, correctly triggering the logic for close averages.
-
+                bool esteRP = !string.Equals(student.TaraCetatenie, "ROU", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(student.TaraCetatenie);
                 string bursaAtribuita = null;
                 decimal suma = 0;
                 string motiv = "";
@@ -1491,21 +1646,22 @@ await _context.SaveChangesAsync();
 
                 bool eligibilPentruBP1 = ("licenta".Equals(fondBurseMeritRepartizat.programStudiu) && student.Media >= 9.00M)
                                        || ("master".Equals(fondBurseMeritRepartizat.programStudiu) && student.Media >= 9.5M);
-
+                decimal valoareBP1Actuala = esteRP ? valoareAnualBP1RP : valoareAnualBP1;
+                decimal valoareBP2Actuala = esteRP ? valoareAnualBP2RP : valoareAnualBP2;
                 if (eligibilPentruBP1)
                 {
                     if (!aFostAcordatBP2 && diferenta <= epsilon)
                     {
-                        if (sumaDisponibila >= valoareAnualBP1)
+                        if (sumaDisponibila >= valoareBP1Actuala)
                         {
                             bursaAtribuita = "BP1";
-                            suma = valoareAnualBP1;
+                            suma = valoareBP1Actuala;
                             motiv = "Media ≥ 9.00 și Δ ≤ ε – BP1 acordat";
                         }
-                        else if (sumaDisponibila >= valoareAnualBP2)
+                        else if (sumaDisponibila >= valoareBP2Actuala)
                         {
                             bursaAtribuita = "BP2";
-                            suma = valoareAnualBP2;
+                            suma = valoareBP2Actuala;
                             motiv = "Fond insuficient pentru BP1 – fallback la BP2";
                             fallback = $"(necesar BP1: {valoareAnualBP1:F2} lei, dar disponibil doar: {sumaDisponibila:F2} lei)";
                             aFostAcordatBP2 = true;
@@ -1514,7 +1670,7 @@ await _context.SaveChangesAsync();
                     else if (sumaDisponibila >= valoareAnualBP2)
                     {
                         bursaAtribuita = "BP2";
-                        suma = valoareAnualBP2;
+                        suma = valoareBP2Actuala;
                         motiv = "Δ > ε – fallback la BP2";
                         fallback = $"(Δ = {diferenta:F2} > ε = {epsilon:F2})";
                         aFostAcordatBP2 = true;
@@ -1523,7 +1679,7 @@ await _context.SaveChangesAsync();
                 else if (sumaDisponibila >= valoareAnualBP2 && student.Media >= 8.00M)
                 {
                     bursaAtribuita = "BP2";
-                    suma = valoareAnualBP2;
+                    suma = valoareBP2Actuala;
                     motiv = "Media < 9.00 – BP2 acordat";
                     fallback = "(criteriu media)";
                     aFostAcordatBP2 = true;
@@ -1553,7 +1709,7 @@ await _context.SaveChangesAsync();
                     var urmatorii = students
                         .Where(s => s.Bursa == null && s != student) // Ensure 's != student' is used for the current iteration
                         .Take(5)
-                        .Select(s => $"(Emplid: {s.Emplid}, Media: {s.Media:F2}, An: {s.An}, Bursa: {s.Bursa ?? "—"})")
+                        .Select(s => $"(Emplid: {s.Emplid}, Media: {s.Media:F2}, An: {s.An+1}, Bursa: {s.Bursa ?? "—"})")
                         .ToList();
 
                     string urmatoriiText = urmatorii.Count > 0
@@ -1576,7 +1732,8 @@ await _context.SaveChangesAsync();
                         Motiv = motiv,
                         Comentarii = comentariu,
                         ComentariiAI = comentariuAI,
-                        DataModificare = DateTime.Now
+                        DataModificare = DateTime.Now,
+                        Etapa = etapa
                     }));
 
                     studentAnterior = student;
@@ -1796,6 +1953,190 @@ await _context.SaveChangesAsync();
 
             return (sumaDisponibila, istoricList);
         }
+        private (decimal, List<(string Emplid, BursaIstoric Istoric)>) AssignScholarshipsOptimizedV2(
+    List<StudentRecord> students,
+    decimal sumaDisponibila,
+    decimal valoareAnualBP1,
+    decimal valoareAnualBP2,
+    decimal valoareAnualBP1RP,
+    decimal valoareAnualBP2RP,
+    decimal epsilon,
+    FondBurseMeritRepartizat fondBurseMeritRepartizat,
+    string etapa,
+    double? valoareRomaniDePretutindeni = null)
+        {
+            var istoricList = new List<(string Emplid, BursaIstoric Istoric)>();
+            decimal sumaDisponibilaInitiala = sumaDisponibila;
+
+            // 1. Pre-procesarea și categorizarea studenților
+            var sortedStudents = students.OrderByDescending(s => s.Media).ToList();
+
+            var eligibleBP1 = new List<StudentRecord>(); // Studenți eligibili pentru BP1
+            var eligibleOnlyBP2 = new List<StudentRecord>(); // Studenți eligibili doar pentru BP2
+
+            foreach (var student in sortedStudents)
+            {
+                // Regula de eligibilitate BP1 - FĂRĂ verificarea diferenței epsilon
+                bool isEligibleForBP1Criterion = ("licenta".Equals(fondBurseMeritRepartizat.programStudiu) && student.Media >= 9.00M) ||
+                                                 ("master".Equals(fondBurseMeritRepartizat.programStudiu) && student.Media >= 9.5M);
+                
+                // Regula de eligibilitate BP2
+                bool isEligibleForBP2Criterion = student.Media >= 8.00M;
+
+                if (isEligibleForBP1Criterion)
+                {
+                    eligibleBP1.Add(student);
+                }
+                else if (isEligibleForBP2Criterion)
+                {
+                    eligibleOnlyBP2.Add(student);
+                }
+                // Studenții sub 8.00 nu sunt incluși în nicio listă de eligibilitate merit
+            }
+
+            int maxBP1Possible = eligibleBP1.Count;
+            int maxBP2Possible = eligibleOnlyBP2.Count;
+
+            int bestNumBP1 = 0;
+            int bestNumBP2 = 0;
+            int maxTotalScholarships = -1;
+
+            // 2. Simularea tuturor combinațiilor posibile
+            for (int numBP1 = maxBP1Possible; numBP1 >= 0; numBP1--)
+            {
+                if (numBP1 > eligibleBP1.Count) continue;
+
+                decimal costBP1 = numBP1 * valoareAnualBP1;
+                decimal remainingFundsAfterBP1 = sumaDisponibila - costBP1;
+
+                if (remainingFundsAfterBP1 < 0) continue;
+
+                // Calculăm câte BP2 putem acorda
+                int numBP2 = 0;
+                decimal tempRemaining = remainingFundsAfterBP1;
+
+                // Studenții care nu au primit BP1 și cei eligibili doar pentru BP2
+                var studentsForBP2 = eligibleBP1.Skip(numBP1).Concat(eligibleOnlyBP2)
+                                               .OrderByDescending(s => s.Media);
+
+                foreach (var student in studentsForBP2)
+                {
+                    if (tempRemaining >= valoareAnualBP2)
+                    {
+                        numBP2++;
+                        tempRemaining -= valoareAnualBP2;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                int currentTotalScholarships = numBP1 + numBP2;
+
+                // 3. Alegerea celei mai bune combinații
+                if (currentTotalScholarships > maxTotalScholarships)
+                {
+                    maxTotalScholarships = currentTotalScholarships;
+                    bestNumBP1 = numBP1;
+                    bestNumBP2 = numBP2;
+                }
+                else if (currentTotalScholarships == maxTotalScholarships)
+                {
+                    // Preferăm mai multe BP1 dacă numărul total e același
+                    if (numBP1 > bestNumBP1)
+                    {
+                        bestNumBP1 = numBP1;
+                        bestNumBP2 = numBP2;
+                    }
+                }
+            }
+
+            // 4. Alocarea efectivă a burselor
+            sumaDisponibila = sumaDisponibilaInitiala;
+
+            // Alocăm BP1
+            int bp1AllocatedCount = 0;
+
+            foreach (var student in eligibleBP1.OrderByDescending(s => s.Media))
+            {
+                bool esteRP = !string.Equals(student.TaraCetatenie, "ROU", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(student.TaraCetatenie);
+
+                decimal valoareBP1Actuala = esteRP ? valoareAnualBP1RP : valoareAnualBP1;
+
+                if (bp1AllocatedCount < bestNumBP1 && sumaDisponibila >= valoareAnualBP1)
+                {
+                    student.Bursa = "BP1";
+                    student.SumaBursa = valoareBP1Actuala;
+                    sumaDisponibila -= valoareBP1Actuala;
+                    bp1AllocatedCount++;
+
+                    string motiv = "Media eligibilă pentru BP1.";
+                    string explicatie = $"Media: {student.Media:F2}";
+                    string comentariu = $"Etapa: {etapa} | Media: {student.Media:F2} | {motiv} | {explicatie} | Suma acordată: {valoareAnualBP1:F2} lei | Rămas fond: {sumaDisponibila:F2} lei";
+                    string comentariuAI = GenerateAIComment(student, null, sumaDisponibila, "BP1", motiv, "", etapa, sortedStudents);
+
+                    istoricList.Add((student.Emplid, new BursaIstoric
+                    {
+                        StudentRecordId = student.Id,
+                        TipBursa = "BP1",
+                        Actiune = "Acordare",
+                        Suma = valoareBP1Actuala,
+                        Motiv = motiv,
+                        Comentarii = comentariu,
+                        ComentariiAI = comentariuAI,
+                        DataModificare = DateTime.Now,
+                        Etapa = etapa
+                    }));
+                }
+                else
+                {
+                    student.Bursa = null;
+                    student.SumaBursa = 0;
+                }
+            }
+
+            // Alocăm BP2 pentru studenții rămași eligibili
+            int bp2AllocatedCount = 0;
+            foreach (var student in sortedStudents.Where(s => s.Bursa == null).OrderByDescending(s => s.Media))
+            {
+                bool esteRP = !string.Equals(student.TaraCetatenie, "ROU", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(student.TaraCetatenie);
+                decimal valoareBP2Actuala = esteRP ? valoareAnualBP2RP : valoareAnualBP2;
+                bool isEligibleForBP2Criterion = student.Media >= 8.00M;
+
+                if (isEligibleForBP2Criterion && bp2AllocatedCount < bestNumBP2 && sumaDisponibila >= valoareAnualBP2)
+                {
+                    student.Bursa = "BP2";
+                    student.SumaBursa = valoareBP2Actuala;
+                    sumaDisponibila -= valoareBP2Actuala;
+                    bp2AllocatedCount++;
+
+                    string motiv = "Media eligibilă pentru BP2.";
+                    string explicatie = $"Media: {student.Media:F2}";
+                    string comentariu = $"Etapa: {etapa} | Media: {student.Media:F2} | {motiv} | {explicatie} | Suma acordată: {valoareAnualBP2:F2} lei | Rămas fond: {sumaDisponibila:F2} lei";
+                    string comentariuAI = GenerateAIComment(student, null, sumaDisponibila, "BP2", motiv, "", etapa, sortedStudents);
+
+                    istoricList.Add((student.Emplid, new BursaIstoric
+                    {
+                        StudentRecordId = student.Id,
+                        TipBursa = "BP2",
+                        Actiune = "Acordare",
+                        Suma = valoareBP2Actuala,
+                        Motiv = motiv,
+                        Comentarii = comentariu,
+                        ComentariiAI = comentariuAI,
+                        DataModificare = DateTime.Now
+                    }));
+                }
+                else
+                {
+                    student.Bursa = null;
+                    student.SumaBursa = 0;
+                }
+            }
+
+            return (sumaDisponibila, istoricList);
+        }
 
         // Această metodă este un placeholder. Va trebui să adaptezi logica reală de generare a comentariului AI
         // în funcție de contextul alocării specifice și de studenții anteriori/următori.
@@ -1829,25 +2170,30 @@ await _context.SaveChangesAsync();
     decimal sumaDisponibila,
     List<FondBurse> fonduri,
     Dictionary<int, decimal> sumaRamasaPeFond,
-    string etapa)
+    string etapa,
+    double? valoareRomaniDePretutindeni = null)
         {
             var istoricList = new List<(string Emplid, BursaIstoric Istoric)>();
             StudentRecord studentAnterior = null;
 
             foreach (var student in students)
             {
+                bool esteRP = !string.Equals(student.TaraCetatenie, "ROU", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(student.TaraCetatenie);
+
                 string domeniu = student.FondBurseMeritRepartizat?.domeniu;
                 if (string.IsNullOrEmpty(domeniu))
                 {
                     student.Bursa = null;
-                    continue;
+                    // OPRIRE: Dacă studentul nu are domeniu valid, oprește algoritmul
+                    break;
                 }
 
                 Match match = Regex.Match(domeniu, @"\((\d+)\)");
                 if (!match.Success)
                 {
                     student.Bursa = null;
-                    continue;
+                    // OPRIRE: Dacă nu se poate extrage anul din domeniu, oprește algoritmul
+                    break;
                 }
 
                 int an = int.Parse(match.Groups[1].Value);
@@ -1859,31 +2205,52 @@ await _context.SaveChangesAsync();
                     ? fonduri[1].ValoreaLunara * 9.35M
                     : fonduri[1].ValoreaLunara * 12;
 
+                decimal valoareAnualBP2RP = 0;
+                if (valoareRomaniDePretutindeni != null)
+                {
+                    decimal valoareRP = (decimal)valoareRomaniDePretutindeni;
+                    if (an == 4 || (program == "master" && an == 2))
+                    {
+                        valoareAnualBP2RP = valoareBP2 - (valoareRP * 9.35M);
+                    }
+                    else
+                    {
+                        valoareAnualBP2RP = valoareBP2 - (valoareRP * 12);
+                    }
+                }
+                else
+                {
+                    valoareAnualBP2RP = valoareBP2; 
+                }
 
-                if (sumaDisponibila >= valoareBP2 && student.Media >= 8.00M)
+                decimal valoareBP2Actuala = esteRP ? valoareAnualBP2RP : valoareBP2;
+
+                // Verifică dacă studentul poate primi bursa
+                if (sumaDisponibila >= valoareBP2Actuala && student.Media >= 8.00M)
                 {
                     student.Bursa = "BP2";
-                    student.SumaBursa = valoareBP2;
-                    sumaDisponibila -= valoareBP2;
+                    student.SumaBursa = valoareBP2Actuala;
+                    sumaDisponibila -= valoareBP2Actuala;
+
                     if (fondId.HasValue)
-                        sumaRamasaPeFond[fondId.Value] -= valoareBP2;
+                        sumaRamasaPeFond[fondId.Value] -= valoareBP2Actuala;
 
                     string infoDurata = (an == 4 || (program == "master" && an == 2)) ? "9.35 luni" : "12 luni";
-
                     string comentariu = $"Etapa: {etapa} | Media: {student.Media:F2} | " +
-                        $"Acordare BP2 ({valoareBP2:F2} lei) – fond ID {fondId?.ToString() ?? "—"} | " +
-                        $"Necesari: {valoareBP2:F2} lei | " +
+                        $"Acordare BP2 ({valoareBP2Actuala:F2} lei) – fond ID {fondId?.ToString() ?? "—"} | " +
+                        $"Necesari: {valoareBP2Actuala:F2} lei | " +
                         $"Program: {program}, An: {an}, Durată: {infoDurata}";
 
                     var urmatorii = students
                         .Where(s => s.Bursa == null && s.Id != student.Id)
                         .Take(5)
-                        .Select(s => $"{s.Emplid} (Media: {s.Media:F2}, An: {an}, Domeniu: {s.FondBurseMeritRepartizat?.domeniu ?? "—"})")
+                        .Select(s => $"{s.Emplid} (Media: {s.Media:F2}, An: {s.An+1}, Domeniu: {s.FondBurseMeritRepartizat?.domeniu ?? "—"})")
                         .ToList();
 
                     string urmatoriiText = urmatorii.Count > 0
                         ? $"Următorii studenți eligibili: {string.Join(", ", urmatorii)}"
                         : "Nu mai sunt studenți eligibili în acest moment.";
+
                     string anterior = studentAnterior != null
                         ? $"Studentul anterior: {studentAnterior.NumeStudent} (media {studentAnterior.Media:F2}, bursă {studentAnterior.Bursa}, Domeniu: {studentAnterior.FondBurseMeritRepartizat?.domeniu ?? "—"})"
                         : "Acesta este primul student care primește bursă.";
@@ -1893,29 +2260,32 @@ await _context.SaveChangesAsync();
                         $"Fondurile disponibile au permis acordarea integrală a bursei din fondul #{fondId?.ToString() ?? "—"}. " +
                         $"{anterior}. {urmatoriiText}. Fonduri rămase: {sumaDisponibila:F2} lei.";
 
-
-
                     istoricList.Add((student.Emplid, new BursaIstoric
                     {
                         StudentRecordId = student.Id,
                         TipBursa = "BP2",
                         Actiune = "Acordare",
-                        Suma = valoareBP2,
+                        Suma = valoareBP2Actuala,
                         Motiv = "Acordare BP2 – fonduri suficiente",
                         Comentarii = comentariu,
-                        ComentariiAI = comentariuAI, 
-                        DataModificare = DateTime.Now
+                        ComentariiAI = comentariuAI,
+                        DataModificare = DateTime.Now,
+                        Etapa = etapa
                     }));
+
                     studentAnterior = student;
                 }
                 else
                 {
                     student.Bursa = null;
+                    // OPRIRE: Dacă studentul nu poate primi bursa (fonduri insuficiente sau media prea mică), oprește algoritmul
+                    break;
                 }
             }
 
             return (sumaDisponibila, istoricList);
         }
+
 
 
 
@@ -2487,7 +2857,7 @@ await _context.SaveChangesAsync();
                 List<StudentRecord> totiStudentii = await _fondBurseService.GetStudentsWithBursaFromDatabaseAsync();
 
                 List<StudentScholarshipData> studentiClasificati0 = totiStudentii
-                    .GroupBy(s => new { s.FondBurseMeritRepartizatId, s.FondBurseMeritRepartizat.domeniu })
+                    .GroupBy(s => new { s.FondBurseMeritRepartizatId, s.FondBurseMeritRepartizat?.domeniu })
                     .Select(group => new StudentScholarshipData
                     {
                         FondBurseId = group.Key.FondBurseMeritRepartizatId,
@@ -2497,22 +2867,170 @@ await _context.SaveChangesAsync();
                     }).ToList();
 
                 using var input = new FileStream(etapa0Path, FileMode.Open, FileAccess.Read);
-                using var outputStream = new MemoryStream();
 
                 var updatedStream = ExcelUpdater.UpdateScholarshipCounts(input, studentiClasificati0);
                 updatedStream.Position = 0;
 
-                await updatedStream.CopyToAsync(outputStream);
+                using var workbook = new ClosedXML.Excel.XLWorkbook(updatedStream);
 
-                byte[] finalFileBytes = outputStream.ToArray();
+                var worksheet = workbook.Worksheets.Add("Toți studenții");
 
-                return File(finalFileBytes,
+                var headers = new[]
+                {
+                    "Nr. crt.", "Emplid", "CNP", "Nume Student", "Țară Cetățenie",
+                    "An", "Media", "Punctaj An", "CO", "RO", "TC", "TR",
+                    "Sursa de finanțare", "Domeniu", "Bursa", "Suma Bursă"
+                };
+
+                for (int i = 0; i < headers.Length; i++)
+                {
+                    var cell = worksheet.Cell(1, i + 1);
+                    cell.Value = headers[i];
+                    cell.Style.Font.Bold = true;
+                    cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    cell.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    cell.Style.Fill.BackgroundColor = XLColor.LightGray;
+                }
+
+                int row = 2;
+                int nrCrt = 1;
+
+                var studentiSortati = totiStudentii
+                    .Where(s => !string.IsNullOrEmpty(s.Bursa) && s.Bursa != "NU")
+                    .OrderBy(s => s.FondBurseMeritRepartizat?.domeniu)
+                    .ThenBy(s => s.Media)
+                    .ToList();
+
+                string domeniuCurent = null;
+
+                foreach (var s in studentiSortati)
+                {
+                    if (domeniuCurent != s.FondBurseMeritRepartizat?.domeniu)
+                    {
+                        if (row > 2)
+                            row++;
+
+                        domeniuCurent = s.FondBurseMeritRepartizat?.domeniu;
+                        worksheet.Cell(row, 1).Value = domeniuCurent;
+                        worksheet.Range(row, 1, row, headers.Length).Merge();
+                        var domeniuCell = worksheet.Cell(row, 1);
+                        domeniuCell.Style.Font.Bold = true;
+                        domeniuCell.Style.Fill.BackgroundColor = XLColor.LightBlue;
+                        domeniuCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+
+                        row++;
+                    }
+                    worksheet.Cell(row, 1).Value = nrCrt++;
+                    worksheet.Cell(row, 2).Value = s.Emplid;
+                    worksheet.Cell(row, 3).Value = s.CNP;
+                    worksheet.Cell(row, 4).Value = s.NumeStudent;
+                    worksheet.Cell(row, 5).Value = s.TaraCetatenie; 
+                    worksheet.Cell(row, 6).Value = s.An + 1;
+                    worksheet.Cell(row, 7).Value = s.Media;
+                    worksheet.Cell(row, 8).Value = s.PunctajAn;
+                    worksheet.Cell(row, 9).Value = s.CO;
+                    worksheet.Cell(row, 10).Value = s.RO;
+                    worksheet.Cell(row, 11).Value = s.TC;
+                    worksheet.Cell(row, 12).Value = s.TR;
+                    worksheet.Cell(row, 13).Value = s.SursaFinantare;
+                    worksheet.Cell(row, 14).Value = domeniuCurent;
+                    worksheet.Cell(row, 15).Value = s.Bursa ?? "";
+                    worksheet.Cell(row, 16).Value = s.SumaBursa.ToString("0.00");
+
+                    var range = worksheet.Range(row, 1, row, headers.Length);
+                    range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    range.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                    row++;
+                }
+
+                worksheet.Columns().AdjustToContents();
+
+                string ExtractGrup(string domeniu)
+                {
+                    if (string.IsNullOrEmpty(domeniu))
+                        return "Fără grup";
+
+                    var match = System.Text.RegularExpressions.Regex.Match(domeniu.Trim(), @"^[A-Za-z]+");
+                    return match.Success ? match.Value.ToUpper() : domeniu.ToUpper();
+                }
+
+                var grupuri = studentiSortati
+                    .GroupBy(s => ExtractGrup(s.FondBurseMeritRepartizat?.domeniu))
+                    .OrderBy(g => g.Key);
+
+                foreach (var grup in grupuri)
+                {
+                    string denumireFoaie = grup.Key.Length > 31 ? grup.Key.Substring(0, 31) : grup.Key;
+                    worksheet = workbook.Worksheets.Add(denumireFoaie);
+
+                    for (int i = 0; i < headers.Length; i++)
+                    {
+                        var cell = worksheet.Cell(1, i + 1);
+                        cell.Value = headers[i];
+                        cell.Style.Font.Bold = true;
+                        cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        cell.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        cell.Style.Fill.BackgroundColor = XLColor.LightGray;
+                    }
+
+                     row = 2;
+                     nrCrt = 1;
+
+                    foreach (var s in grup)
+                    {
+                        worksheet.Cell(row, 1).Value = nrCrt++;
+                        worksheet.Cell(row, 2).Value = s.Emplid;
+                        worksheet.Cell(row, 3).Value = s.CNP;
+                        worksheet.Cell(row, 4).Value = s.NumeStudent;
+                        worksheet.Cell(row, 5).Value = s.TaraCetatenie;
+                        worksheet.Cell(row, 6).Value = s.An + 1;
+                        worksheet.Cell(row, 7).Value = s.Media;
+                        worksheet.Cell(row, 8).Value = s.PunctajAn;
+                        worksheet.Cell(row, 9).Value = s.CO;
+                        worksheet.Cell(row, 10).Value = s.RO;
+                        worksheet.Cell(row, 11).Value = s.TC;
+                        worksheet.Cell(row, 12).Value = s.TR;
+                        worksheet.Cell(row, 13).Value = s.SursaFinantare;
+                        worksheet.Cell(row, 14).Value = s.FondBurseMeritRepartizat?.domeniu ?? "";
+                        worksheet.Cell(row, 15).Value = s.Bursa ?? "";
+                        worksheet.Cell(row, 16).Value = s.SumaBursa.ToString("0.00");
+
+                        var range = worksheet.Range(row, 1, row, headers.Length);
+                        range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                        range.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                        row++;
+                    }
+
+                    worksheet.Columns().AdjustToContents();
+                }
+                using var finalStream = new MemoryStream();
+                workbook.SaveAs(finalStream);
+                finalStream.Position = 0;
+
+                return File(finalStream.ToArray(),
                             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                             "SituatieStudenti_modificati.xlsx");
             }
             catch (Exception ex)
             {
                 return BadRequest($"❌ Eroare la generarea fișierului: {ex.Message}");
+            }
+        }
+        [HttpPost("reset-burse")]
+        public async Task<IActionResult> ResetBurseAsync()
+        {
+            try
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM [FondBurseMeritRepartizat]");
+                return Ok(new { message = "înregistrările au fost resetate." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"❌ Eroare la resetarea burselor: {ex.Message}");
             }
         }
     }

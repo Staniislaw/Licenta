@@ -135,5 +135,54 @@ namespace Burse.Controllers
             await _grupuriService.RemoveValFromAcronimGroupAsync(grup, valoare);
             return Ok();
         }
+
+        //Exlucdere STUDENTI
+
+        [HttpGet("excluderi-student")]
+        public async Task<IActionResult> GetExcluderiStudent()
+        {
+            var result = await _grupuriService.GetExcluderiStudentAsync();
+            return Ok(result);
+        }
+
+        [HttpPost("excluderi-student/add")]
+        public async Task<IActionResult> AddValToExcludereStudent([FromBody] ExcludereStudentEntry payload)
+        {
+            if (string.IsNullOrEmpty(payload.CampExcludere) || string.IsNullOrEmpty(payload.Valoare))
+            {
+                return BadRequest("CampExcludere și Valoare sunt obligatorii");
+            }
+
+            var added = await _grupuriService.AddValToExcludereStudentAsync(payload);
+            if (added)
+                return Ok();
+            return BadRequest("Entry already exists");
+        }
+
+        [HttpDelete("excluderi-student/remove")]
+        public async Task<IActionResult> RemoveValFromExcludereStudent([FromQuery] string campExcludere, [FromQuery] string valoare)
+        {
+            if (string.IsNullOrEmpty(campExcludere) || string.IsNullOrEmpty(valoare))
+            {
+                return BadRequest("CampExcludere și Valoare sunt obligatorii");
+            }
+
+            await _grupuriService.RemoveValFromExcludereStudentAsync(campExcludere, valoare);
+            return Ok();
+        }
+
+        [HttpGet("excluderi-student/{campExcludere}")]
+        public async Task<IActionResult> GetValoriPentruCampExcludere(string campExcludere)
+        {
+            var result = await _grupuriService.GetValoriPentruCampExcludereAsync(campExcludere);
+            return Ok(result);
+        }
+
+        [HttpDelete("excluderi-student/camp/{campExcludere}")]
+        public async Task<IActionResult> RemoveAllFromExcludereStudentCamp(string campExcludere)
+        {
+            await _grupuriService.RemoveAllFromExcludereStudentCampAsync(campExcludere);
+            return Ok();
+        }
     }
 }

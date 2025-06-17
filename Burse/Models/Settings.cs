@@ -34,6 +34,13 @@
         public string Valoare { get; set; } = string.Empty;
 
     }
+    public class ExcludereStudentEntry
+    {
+        public int Id { get; set; }
+        public string CampExcludere { get; set; } = string.Empty;
+        public string Valoare { get; set; } = string.Empty;
+    }
+
 
 
 }

@@ -1,0 +1,42 @@
+2025-06-17 22:34:06.245 +03:00 [INF] Numărul studenților pentru Domeniul 'SIC (1)' în fișierul 'C.xls' nu coincide. Procesați: 36, Preluați din fișierul FormatiiStudii: 49
+2025-06-17 22:34:06.273 +03:00 [INF] Numărul studenților pentru Domeniul 'RCC (1)' în fișierul 'IETTI.xls' nu coincide. Procesați: 23, Preluați din fișierul FormatiiStudii: 34
+2025-06-17 22:34:06.273 +03:00 [INF] Numărul studenților pentru Domeniul 'SC (1)' în fișierul 'IETTI.xls' nu coincide. Procesați: 30, Preluați din fișierul FormatiiStudii: 39
+2025-06-17 22:34:06.281 +03:00 [INF] Numărul studenților pentru Domeniul 'TAMAE (1)' în fișierul 'SE.xls' nu coincide. Procesați: 16, Preluați din fișierul FormatiiStudii: 21
+2025-06-17 22:34:51.743 +03:00 [INF] Numărul studenților pentru Domeniul 'SIC (1)' în fișierul 'C.xls' nu coincide. Procesați: 36, Preluați din fișierul FormatiiStudii: 49
+2025-06-17 22:34:54.770 +03:00 [INF] Numărul studenților pentru Domeniul 'RCC (1)' în fișierul 'IETTI.xls' nu coincide. Procesați: 23, Preluați din fișierul FormatiiStudii: 34
+2025-06-17 22:34:54.770 +03:00 [INF] Numărul studenților pentru Domeniul 'SC (1)' în fișierul 'IETTI.xls' nu coincide. Procesați: 30, Preluați din fișierul FormatiiStudii: 39
+2025-06-17 22:34:54.779 +03:00 [INF] Numărul studenților pentru Domeniul 'TAMAE (1)' în fișierul 'SE.xls' nu coincide. Procesați: 16, Preluați din fișierul FormatiiStudii: 21
+2025-06-17 22:35:01.894 +03:00 [INF] Numărul studenților pentru Domeniul 'SIC (1)' în fișierul 'C.xls' nu coincide. Procesați: 36, Preluați din fișierul FormatiiStudii: 49
+2025-06-17 22:35:01.921 +03:00 [INF] Numărul studenților pentru Domeniul 'RCC (1)' în fișierul 'IETTI.xls' nu coincide. Procesați: 23, Preluați din fișierul FormatiiStudii: 34
+2025-06-17 22:35:01.921 +03:00 [INF] Numărul studenților pentru Domeniul 'SC (1)' în fișierul 'IETTI.xls' nu coincide. Procesați: 30, Preluați din fișierul FormatiiStudii: 39
+2025-06-17 22:35:01.931 +03:00 [INF] Numărul studenților pentru Domeniul 'TAMAE (1)' în fișierul 'SE.xls' nu coincide. Procesați: 16, Preluați din fișierul FormatiiStudii: 21
+2025-06-17 22:35:47.735 +03:00 [INF] Numărul studenților pentru Domeniul 'SIC (1)' în fișierul 'C.xls' nu coincide. Procesați: 36, Preluați din fișierul FormatiiStudii: 49
+2025-06-17 22:35:47.762 +03:00 [INF] Numărul studenților pentru Domeniul 'RCC (1)' în fișierul 'IETTI.xls' nu coincide. Procesați: 23, Preluați din fișierul FormatiiStudii: 34
+2025-06-17 22:35:47.762 +03:00 [INF] Numărul studenților pentru Domeniul 'SC (1)' în fișierul 'IETTI.xls' nu coincide. Procesați: 30, Preluați din fișierul FormatiiStudii: 39
+2025-06-17 22:35:47.770 +03:00 [INF] Numărul studenților pentru Domeniul 'TAMAE (1)' în fișierul 'SE.xls' nu coincide. Procesați: 16, Preluați din fișierul FormatiiStudii: 21
+2025-06-17 22:43:28.642 +03:00 [INF] ⚠️ Domeniul 'AIA (2)': 15 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 33, Procesați 18 + Excluși 15
+2025-06-17 22:43:28.662 +03:00 [INF] ⚠️ Domeniul 'AIA (3)': 11 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 27, Procesați 16 + Excluși 11
+2025-06-17 22:43:28.662 +03:00 [INF] ⚠️ Domeniul 'AIA (4)': 3 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 20, Procesați 17 + Excluși 3
+2025-06-17 22:43:28.699 +03:00 [INF] ⚠️ Domeniul 'C (2)': 22 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 127, Procesați 105 + Excluși 22
+2025-06-17 22:43:28.700 +03:00 [INF] ⚠️ Domeniul 'C (3)': 32 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 93, Procesați 61 + Excluși 32
+2025-06-17 22:43:28.700 +03:00 [INF] ⚠️ Domeniul 'C (4)': 22 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 91, Procesați 69 + Excluși 22
+2025-06-17 22:43:59.475 +03:00 [INF] ❗ Numărul studenților pentru Domeniul 'SIC (1)' în fișierul 'C.xls' nu coincide. Procesați: 36, Așteptați: 49
+2025-06-17 22:43:59.476 +03:00 [INF] ⚠️ Domeniul 'SIC (2)': 14 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 43, Procesați 29 + Excluși 14
+2025-06-17 22:43:59.497 +03:00 [INF] ⚠️ Domeniul 'ESCCA (2)': 1 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 11, Procesați 10 + Excluși 1
+2025-06-17 22:43:59.497 +03:00 [INF] ⚠️ Domeniul 'ESCCA (3)': 3 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 14, Procesați 11 + Excluși 3
+2025-06-17 22:43:59.497 +03:00 [INF] ⚠️ Domeniul 'ESCCA (4)': 3 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 13, Procesați 10 + Excluși 3
+2025-06-17 22:43:59.525 +03:00 [INF] ⚠️ Domeniul 'ESM (2)': 6 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 18, Procesați 12 + Excluși 6
+2025-06-17 22:43:59.525 +03:00 [INF] ⚠️ Domeniul 'ESM (4)': 1 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 10, Procesați 9 + Excluși 1
+2025-06-17 22:43:59.535 +03:00 [INF] ⚠️ Domeniul 'SMCPE (2)': 2 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 24, Procesați 22 + Excluși 2
+2025-06-17 22:43:59.535 +03:00 [INF] ⚠️ Domeniul 'IEN (2)': 8 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 15, Procesați 7 + Excluși 8
+2025-06-17 22:44:00.192 +03:00 [INF] ❗ Numărul studenților pentru Domeniul 'RCC (1)' în fișierul 'IETTI.xls' nu coincide. Procesați: 23, Așteptați: 34
+2025-06-17 22:44:00.192 +03:00 [INF] ⚠️ Domeniul 'RCC (2)': 1 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 29, Procesați 28 + Excluși 1
+2025-06-17 22:44:02.938 +03:00 [INF] ❗ Numărul studenților pentru Domeniul 'SC (1)' în fișierul 'IETTI.xls' nu coincide. Procesați: 30, Așteptați: 39
+2025-06-17 22:44:02.939 +03:00 [INF] ⚠️ Domeniul 'SC (2)': 1 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 19, Procesați 18 + Excluși 1
+2025-06-17 22:44:02.939 +03:00 [INF] ⚠️ Domeniul 'IETTI (2)': 9 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 21, Procesați 12 + Excluși 9
+2025-06-17 22:44:02.939 +03:00 [INF] ⚠️ Domeniul 'RST (3)': 6 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 24, Procesați 18 + Excluși 6
+2025-06-17 22:44:02.939 +03:00 [INF] ⚠️ Domeniul 'RST (4)': 5 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 14, Procesați 9 + Excluși 5
+2025-06-17 22:44:02.950 +03:00 [INF] ❗ Numărul studenților pentru Domeniul 'TAMAE (1)' în fișierul 'SE.xls' nu coincide. Procesați: 16, Așteptați: 21
+2025-06-17 22:44:02.950 +03:00 [INF] ⚠️ Domeniul 'TAMAE (2)': 5 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 18, Procesați 13 + Excluși 5
+2025-06-17 22:44:02.950 +03:00 [INF] ⚠️ Domeniul 'SE (2)': 3 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 24, Procesați 21 + Excluși 3
+2025-06-17 22:44:02.950 +03:00 [INF] ⚠️ Domeniul 'SE (3)': 4 studenți excluși conform criteriilor. Totalul corespunde: Așteptați 13, Procesați 9 + Excluși 4

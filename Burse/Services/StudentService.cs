@@ -69,15 +69,14 @@ namespace Burse.Services
 
         public async Task<byte[]> ExportStudentiExcelAsync()
         {
-            var studenti = await GetAllAsync(); // sau repository/metoda ta
+            var studenti = await GetAllAsync(); 
             var studentiCuBursa = studenti
-                .Where(s => !string.IsNullOrEmpty(s.Bursa) && s.Bursa != "NU") // adaptează dacă ai alte valori
+                .Where(s => !string.IsNullOrEmpty(s.Bursa) && s.Bursa != "NU")
                 .ToList();
 
             using var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add("Studenți");
 
-            // Antet
             var headers = new[]
                 {
                     "Nr. crt.", "Emplid", "CNP", "Nume Student", "Țară Cetățenie",
@@ -92,7 +91,6 @@ namespace Burse.Services
                 worksheet.Cell(1, i + 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
             }
 
-            // Conținut
             int row = 2;
             int nrCrt = 1;
 
@@ -102,7 +100,7 @@ namespace Burse.Services
                 worksheet.Cell(row, 2).Value = s.Emplid;
                 worksheet.Cell(row, 3).Value = s.CNP;
                 worksheet.Cell(row, 4).Value = s.NumeStudent;
-                worksheet.Cell(row, 5).Value = "RO"; // sau s.Tara, dacă ai câmpul
+                worksheet.Cell(row, 5).Value = s.TaraCetatenie; // sau s.Tara, dacă ai câmpul
                 worksheet.Cell(row, 6).Value = s.An + 1;
                 worksheet.Cell(row, 7).Value = s.Media;
                 worksheet.Cell(row, 8).Value = s.PunctajAn;
@@ -110,13 +108,12 @@ namespace Burse.Services
                 worksheet.Cell(row, 10).Value = s.RO;
                 worksheet.Cell(row, 11).Value = s.TC;
                 worksheet.Cell(row, 12).Value = s.TR;
-                worksheet.Cell(row, 13).Value = s.SursaFinantare; // sau logica ta: s.Bursa == "DA" ? "BUGET" : "TAXĂ"
-                worksheet.Cell(row, 14).Value = s.FondBurseMeritRepartizat?.domeniu ?? ""; // nou
-                worksheet.Cell(row, 15).Value = s.Bursa ?? ""; // nou
-                worksheet.Cell(row, 16).Value = s.SumaBursa.ToString("0.00") ?? ""; // nou
+                worksheet.Cell(row, 13).Value = s.SursaFinantare;
+                worksheet.Cell(row, 14).Value = s.FondBurseMeritRepartizat?.domeniu ?? ""; 
+                worksheet.Cell(row, 15).Value = s.Bursa ?? ""; 
+                worksheet.Cell(row, 16).Value = s.SumaBursa.ToString("0.00") ?? ""; 
 
 
-                // Stilizare: Bordură pt fiecare celulă din rând
                 for (int col = 1; col <= headers.Length; col++)
                 {
                     var cell = worksheet.Cell(row, col);

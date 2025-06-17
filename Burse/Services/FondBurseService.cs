@@ -133,7 +133,7 @@ namespace Burse.Services
             return grouped;
         }
 
-        public async Task<byte[]> GenerateCustomLayout2(string filePath, List<FondBurse> fonduri, List<FormatiiStudii> formatiiStudii, decimal disponibilBM)
+        public async Task<byte[]> GenerateCustomLayout2(string filePath, List<FondBurse> fonduri, List<FormatiiStudii> formatiiStudii, decimal disponibilBM, double? valoareRomaniDePretutindeni = null)
         {
             var acronymMappings = await _grupuriService.GetGrupuriAcronimeAsync();
             // 1) Licență EPPlus
@@ -225,14 +225,34 @@ namespace Burse.Services
                 // ---------------------------------------------------------
                 // G) 15600 pe D18, 12155 pe D19
                 // ---------------------------------------------------------
+                decimal valoareRP = (decimal)(valoareRomaniDePretutindeni ?? 0);
                 sheet.Cells["D18"].Value = fonduri[0].ValoreaLunara * 12;
                 sheet.Cells["D19"].Value = fonduri[0].ValoreaLunara * 9.35m;
 
-                // ---------------------------------------------------------
-                // H) 14400 pe F18, 11200 pe F19
-                // ---------------------------------------------------------
+                if (valoareRomaniDePretutindeni != null)
+                {
+                    sheet.Cells["E18"].Value = fonduri[0].ValoreaLunara * 12 - (valoareRP * 12);
+                    sheet.Cells["E19"].Value = fonduri[0].ValoreaLunara * 9.35m - (valoareRP * 9.35m);
+                }
+                else
+                {
+                    sheet.Cells["E18"].Value = null;
+                    sheet.Cells["E19"].Value = null;
+                }
+
                 sheet.Cells["F18"].Value = fonduri[1].ValoreaLunara * 12;
                 sheet.Cells["F19"].Value = fonduri[1].ValoreaLunara * 9.35m;
+
+                if (valoareRomaniDePretutindeni != null)
+                {
+                    sheet.Cells["G18"].Value = fonduri[1].ValoreaLunara * 12 - (valoareRP * 12);
+                    sheet.Cells["G19"].Value = fonduri[1].ValoreaLunara * 9.35m - (valoareRP * 9.35m);
+                }
+                else
+                {
+                    sheet.Cells["G18"].Value = null; 
+                    sheet.Cells["G19"].Value = null;
+                }
 
                 // ---------------------------------------------------------
                 // I) Cheltuit bursa de merit (H17:H19)
@@ -787,10 +807,29 @@ namespace Burse.Services
                 }
                 else
                 {
+                    existingStudent.Emplid = student.Emplid;
+                    existingStudent.CNP = student.CNP;
+                    existingStudent.NumeStudent = student.NumeStudent;
+                    existingStudent.TaraCetatenie = student.TaraCetatenie;
+                    existingStudent.An = student.An;
+                    existingStudent.Media = student.Media;
+                    existingStudent.MediaBac = student.MediaBac;
+                    existingStudent.MediaBacMat = student.MediaBacMat;
+                    existingStudent.MediaInterviu = student.MediaInterviu;
+                    existingStudent.MediaDL = student.MediaDL;
+                    existingStudent.MEDG_ASL = student.MEDG_ASL;
+                    existingStudent.PunctajAn = student.PunctajAn;
+                    existingStudent.CO = student.CO;
+                    existingStudent.RO = student.RO;
+                    existingStudent.TC = student.TC;
+                    existingStudent.TR = student.TR;
+                    existingStudent.SursaFinantare = student.SursaFinantare;
                     existingStudent.Bursa = student.Bursa;
-                    existingStudent.FondBurseMeritRepartizatId = student.FondBurseMeritRepartizatId;
-                    allProcessed.Add(existingStudent); // EXISTENT, cu Id deja complet
+                    existingStudent.SumaBursa = student.SumaBursa;
+                    existingStudent.TipInconsistenta = student.TipInconsistenta;
+                    allProcessed.Add(existingStudent);
                 }
+
             }
 
             if (studentsToAdd.Any())

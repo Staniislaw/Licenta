@@ -14,7 +14,6 @@
           "EPPlus": "7.6.0",
           "ExcelDataReader": "3.7.0",
           "ExcelDataReader.DataSet": "3.7.0",
-          "Microsoft.EntityFrameworkCore": "6.0.6",
           "Microsoft.EntityFrameworkCore.SqlServer": "6.0.6",
           "Microsoft.EntityFrameworkCore.Tools": "6.0.6",
           "Microsoft.ML.OnnxRuntime": "1.21.0",

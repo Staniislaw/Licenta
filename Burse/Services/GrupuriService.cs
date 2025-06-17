@@ -188,4 +188,49 @@ public class GrupuriService : IGrupuriService
             await _context.SaveChangesAsync();
         }
     }
+
+    //Exlcudere studenti
+    public async Task<Dictionary<string, List<string>>> GetExcluderiStudentAsync()
+    {
+        var entries = await _context.ExcludereStudent.ToListAsync();
+        return entries
+            .GroupBy(e => e.CampExcludere)
+            .ToDictionary(g => g.Key, g => g.Select(x => x.Valoare).ToList());
+    }
+    public async Task<bool> AddValToExcludereStudentAsync(ExcludereStudentEntry payload)
+    {
+        var exists = await _context.ExcludereStudent.AnyAsync(e => e.CampExcludere == payload.CampExcludere && e.Valoare == payload.Valoare);
+        if (!exists)
+        {
+            _context.ExcludereStudent.Add(payload);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        return false;
+    }
+    public async Task RemoveValFromExcludereStudentAsync(string campExcludere, string valoare)
+    {
+        var entry = await _context.ExcludereStudent.FirstOrDefaultAsync(e => e.CampExcludere == campExcludere && e.Valoare == valoare);
+        if (entry != null)
+        {
+            _context.ExcludereStudent.Remove(entry);
+            await _context.SaveChangesAsync();
+        }
+    }
+    public async Task RemoveAllFromExcludereStudentCampAsync(string campExcludere)
+    {
+        var entries = await _context.ExcludereStudent.Where(e => e.CampExcludere == campExcludere).ToListAsync();
+        if (entries.Any())
+        {
+            _context.ExcludereStudent.RemoveRange(entries);
+            await _context.SaveChangesAsync();
+        }
+    }
+    public async Task<List<string>> GetValoriPentruCampExcludereAsync(string campExcludere)
+    {
+        return await _context.ExcludereStudent
+            .Where(e => e.CampExcludere == campExcludere)
+            .Select(e => e.Valoare)
+            .ToListAsync();
+    }
 }

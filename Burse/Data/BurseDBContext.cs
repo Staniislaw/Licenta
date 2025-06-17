@@ -22,5 +22,6 @@ namespace Burse.Data
         public DbSet<BursaIstoric> BursaIstoric { get; set; }
         public DbSet<TemplateEntity> TemplateEntity { get; set; }
         public DbSet<GrupAcronimEntry> GrupAcronim { get; set; }
+        public DbSet<ExcludereStudentEntry> ExcludereStudent { get; set; }
     }
 }

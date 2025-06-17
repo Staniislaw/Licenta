@@ -21,6 +21,7 @@
         public string ProgramStudiu { get; set; }
         public string Grupa { get; set; }
         public decimal? SumaRamasa { get; set; }
+        public string TaraCetatenie { get; set; }
         public List<BursaIstoricDto> IstoricBursa { get; set; } = new();
     }
     public class BursaIstoricDto

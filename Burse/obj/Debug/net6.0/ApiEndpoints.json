@@ -75,6 +75,11 @@
         "Name": "disponibilBM",
         "Type": "System.Decimal",
         "IsRequired": false
+      },
+      {
+        "Name": "valoareRomaniDePretutindeni",
+        "Type": "System.Nullable\u00601[[System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -93,16 +98,56 @@
         "IsRequired": false
       },
       {
-        "Name": "burseFile",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "Name": "ContentType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContentDisposition",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Headers",
+        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
+        "IsRequired": false
+      },
+      {
+        "Name": "Length",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileName",
+        "Type": "System.String",
         "IsRequired": false
       },
       {
         "Name": "epsilonValue",
         "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
+      },
+      {
+        "Name": "valoareRomaniDePretutindeni",
+        "Type": "System.Nullable\u00601[[System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.FondBurseController",
+    "Method": "ResetBurseAsync",
+    "RelativePath": "api/FondBurse/reset-burse",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -200,6 +245,85 @@
         "Name": "request",
         "Type": "Burse.Models.TemplatePDF.PdfRequest",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "GetExcluderiStudent",
+    "RelativePath": "api/Settings/excluderi-student",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "GetValoriPentruCampExcludere",
+    "RelativePath": "api/Settings/excluderi-student/{campExcludere}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "campExcludere",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "AddValToExcludereStudent",
+    "RelativePath": "api/Settings/excluderi-student/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "payload",
+        "Type": "Burse.Models.ExcludereStudentEntry",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "RemoveAllFromExcludereStudentCamp",
+    "RelativePath": "api/Settings/excluderi-student/camp/{campExcludere}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "campExcludere",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Burse.Controllers.SettingsController",
+    "Method": "RemoveValFromExcludereStudent",
+    "RelativePath": "api/Settings/excluderi-student/remove",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "campExcludere",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "valoare",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

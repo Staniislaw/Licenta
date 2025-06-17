@@ -1,0 +1,5 @@
+2025-06-16 21:12:42.053 +03:00 [ERR] A apărut o eroare. Consultați logurile din Students-Excels pentru detalii.
+2025-06-16 21:18:35.795 +03:00 [ERR] A apărut o eroare. Consultați logurile din Students-Excels pentru detalii.
+2025-06-16 21:19:05.871 +03:00 [ERR] A apărut o eroare. Consultați logurile din Students-Excels pentru detalii.
+2025-06-16 21:20:18.388 +03:00 [ERR] A apărut o eroare. Consultați logurile din Students-Excels pentru detalii.
+2025-06-16 21:34:28.368 +03:00 [ERR] Eroare la salvarea în BursaIstoric An error occurred while saving the entity changes. See the inner exception for details.

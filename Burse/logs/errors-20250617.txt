@@ -1,0 +1,5 @@
+2025-06-17 22:34:06.282 +03:00 [ERR] A apărut o eroare. Consultați logurile din Students-Excels pentru detalii.
+2025-06-17 22:34:54.779 +03:00 [ERR] A apărut o eroare. Consultați logurile din Students-Excels pentru detalii.
+2025-06-17 22:35:01.931 +03:00 [ERR] A apărut o eroare. Consultați logurile din Students-Excels pentru detalii.
+2025-06-17 22:36:40.493 +03:00 [ERR] A apărut o eroare. Consultați logurile din Students-Excels pentru detalii.
+2025-06-17 22:44:04.307 +03:00 [ERR] A apărut o eroare. Consultați logurile din Students-Excels pentru detalii.

@@ -27,10 +27,9 @@ namespace Burse.Models
 
         [ForeignKey("FondBurseMeritRepartizat")]
         public int FondBurseMeritRepartizatId { get; set; }
-
         public FondBurseMeritRepartizat FondBurseMeritRepartizat { get; set; }
         public virtual ICollection<BursaIstoric> IstoricBursa { get; set; }
-
-
+        public string TipInconsistenta { get; set; }
+        public string Observatii { get; set; }
     }
 }

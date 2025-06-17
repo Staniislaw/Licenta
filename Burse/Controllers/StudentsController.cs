@@ -53,6 +53,7 @@ namespace Burse.Controllers
                 Bursa = student.Bursa,
                 Domeniu = Regex.Replace(student.FondBurseMeritRepartizat.domeniu, @"\s*\(\d+\)", ""),
                 ProgramStudiu = student.FondBurseMeritRepartizat.programStudiu,
+                TaraCetatenie = student.TaraCetatenie,
                 Grupa = student.FondBurseMeritRepartizat.Grupa,
 
                 IstoricBursa = student.IstoricBursa.Select(h => new BursaIstoricDto

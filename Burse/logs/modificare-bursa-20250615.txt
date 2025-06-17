@@ -1,0 +1,3 @@
+2025-06-15 12:32:28.666 +03:00 [INF] Studentul cu emplid 1011 si numele  a fost modificat bursa din BP2 în BP1
+2025-06-15 12:32:35.587 +03:00 [INF] Studentul cu emplid 1095 si numele  a fost modificat bursa din BP2 în BP1
+2025-06-15 12:38:09.550 +03:00 [INF] Studentul cu emplid 1012 si numele  a fost modificat bursa din BP2 în BP1
