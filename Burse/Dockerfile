@@ -18,4 +18,4 @@ COPY --from=build /app/Burse/out ./
 ENV ASPNETCORE_URLS=http://+:$PORT
 EXPOSE 10000
 
-ENTRYPOINT ["dotnet", "NumeleProiectului.dll"]
+ENTRYPOINT ["dotnet", "Burse.dll"]
