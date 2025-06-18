@@ -14,7 +14,12 @@ builder.Services.AddScoped<IFondBurseMeritRepartizatService, FondBurseMeritRepar
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<BurseDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("BurseConnectionStrings")));
+builder.Services.AddDbContext<BurseDBContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("BurseConnectionStrings"),
+        new MySqlServerVersion(new Version(8, 0, 33)) 
+    )
+);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>

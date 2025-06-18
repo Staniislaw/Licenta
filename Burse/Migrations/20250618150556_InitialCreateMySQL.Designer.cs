@@ -3,7 +3,6 @@ using System;
 using Burse.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -12,17 +11,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Burse.Migrations
 {
     [DbContext(typeof(BurseDBContext))]
-    [Migration("20250424180310_sumabursaforstudent")]
-    partial class sumabursaforstudent
+    [Migration("20250618150556_InitialCreateMySQL")]
+    partial class InitialCreateMySQL
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.6")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Burse.Models.BursaIstoric", b =>
                 {
@@ -30,31 +27,32 @@ namespace Burse.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<string>("Actiune")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Comentarii")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ComentariiAI")
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("DataModificare")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Etapa")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Motiv")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("StudentRecordId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Suma")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(65,30)");
 
-                    b.Property<string>("Bursa")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("TipBursa")
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -63,19 +61,34 @@ namespace Burse.Migrations
                     b.ToTable("BursaIstoric");
                 });
 
+            modelBuilder.Entity("Burse.Models.ExcludereStudentEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CampExcludere")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Valoare")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExcludereStudent");
+                });
+
             modelBuilder.Entity("Burse.Models.FondBurse", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<string>("CategorieBurse")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<decimal>("ValoreaLunara")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
 
@@ -88,22 +101,20 @@ namespace Burse.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
                     b.Property<string>("Grupa")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<decimal>("SumaRamasa")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<decimal>("bursaAlocatata")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("domeniu")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("programStudiu")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("ID");
 
@@ -116,50 +127,65 @@ namespace Burse.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
                     b.Property<string>("An")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("BursieriAIStatuluiRoman")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("CPV")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("CuTaxaRM")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("CuTaxaRomani")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("CuTaxaUECEE")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ElibiliB")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Facultatea")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("FaraTaxaRomani")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("FaraTaxaRp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("FaraTaxaUECEE")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ProgramDeStudiu")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("RMEligibil")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("id");
 
                     b.ToTable("FormatiiStudii");
+                });
+
+            modelBuilder.Entity("Burse.Models.GrupAcronimEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Grup")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Valoare")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GrupAcronim");
                 });
 
             modelBuilder.Entity("Burse.Models.GrupBursaEntry", b =>
@@ -168,13 +194,11 @@ namespace Burse.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<string>("Domeniu")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("GrupBursa")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -187,17 +211,32 @@ namespace Burse.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<string>("Domeniu")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Grup")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.ToTable("GrupDomeniu");
+                });
+
+            modelBuilder.Entity("Burse.Models.GrupPdfEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Grup")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Valoare")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GrupPDF");
                 });
 
             modelBuilder.Entity("Burse.Models.GrupProgramStudiiEntry", b =>
@@ -206,13 +245,11 @@ namespace Burse.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<string>("Domeniu")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Grup")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -225,31 +262,47 @@ namespace Burse.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<int>("An")
                         .HasColumnType("int");
 
                     b.Property<string>("Bursa")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("CNP")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("CO")
                         .HasColumnType("int");
 
                     b.Property<string>("Emplid")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("FondBurseMeritRepartizatId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("MEDG_ASL")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<decimal>("Media")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("MediaBac")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("MediaBacMat")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("MediaDL")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("MediaInterviu")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("NumeStudent")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Observatii")
+                        .HasColumnType("longtext");
 
                     b.Property<int>("PunctajAn")
                         .HasColumnType("int");
@@ -258,10 +311,10 @@ namespace Burse.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("SumaBursa")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("SursaFinantare")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("TC")
                         .HasColumnType("int");
@@ -270,13 +323,36 @@ namespace Burse.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TaraCetatenie")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TipInconsistenta")
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FondBurseMeritRepartizatId");
 
                     b.ToTable("StudentRecord");
+                });
+
+            modelBuilder.Entity("Burse.Models.TemplatePDF.TemplateEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ElementsJson")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TemplateEntity");
                 });
 
             modelBuilder.Entity("Burse.Models.BursaIstoric", b =>
