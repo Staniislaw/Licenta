@@ -1,23 +1,21 @@
-# Etapa 1: Build
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
-# Copiaza fi?ierul .csproj ?i restore dependen?ele
-COPY *.csproj ./
+# Copiaza doar fi?ierul .csproj din folderul Burse
+COPY Burse/*.csproj ./Burse/
+WORKDIR /app/Burse
 RUN dotnet restore
 
 # Copiaza restul codului
-COPY . ./
+COPY . .
+
 RUN dotnet publish -c Release -o out
 
-# Etapa 2: Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
-COPY --from=build /app/out ./
+COPY --from=build /app/Burse/out ./
 
-# Asculta pe portul pe care îl ofera Render
 ENV ASPNETCORE_URLS=http://+:$PORT
 EXPOSE 10000
 
-# Înlocuie?te cu numele real al fi?ierului tau .dll
-ENTRYPOINT ["dotnet", "MyApi.dll"]
+ENTRYPOINT ["dotnet", "NumeleProiectului.dll"]
