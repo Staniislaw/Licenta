@@ -3022,7 +3022,7 @@ await _context.SaveChangesAsync();
         {
             try
             {
-                await _context.Database.ExecuteSqlRawAsync("DELETE FROM [FondBurseMeritRepartizat]");
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM FondBurseMeritRepartizat");
                 return Ok(new { message = "înregistrările au fost resetate." });
             }
             catch (Exception ex)

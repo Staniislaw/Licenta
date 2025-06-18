@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Burse.Models
 {
@@ -6,9 +7,11 @@ namespace Burse.Models
     {
         public int ID { get; set; } 
         public string domeniu { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal bursaAlocatata { get;set; }
         public string programStudiu { get; set; }
         public string Grupa { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal SumaRamasa { get; set; }
         [JsonIgnore]
         public List<StudentRecord> Studenti { get; set; } = new List<StudentRecord>();
