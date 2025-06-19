@@ -22,8 +22,8 @@ builder.Services.AddDbContext<BurseDBContext>(options =>
 );
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", builder =>
-        builder.AllowAnyOrigin()
+    options.AddPolicy("AllowFrontend", builder =>
+        builder.WithOrigins("http://apollo.eed.usv.ro:4200")
                .AllowAnyMethod()
                .AllowAnyHeader());
 });
@@ -43,6 +43,9 @@ builder.Services.AddSingleton<AppLogger>();
 
 QuestPDF.Settings.License = LicenseType.Community;
 
+
+builder.WebHost.UseUrls("https://apollo.eed.usv.ro:7109");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -51,7 +54,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseDefaultFiles();       // Servește index.html
+app.UseStaticFiles();        // Servește fișiere din wwwroot/
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapFallbackToFile("index.html");
+});
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
