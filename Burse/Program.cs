@@ -5,6 +5,9 @@ using Burse.Services;
 using Microsoft.EntityFrameworkCore;
 using Burse.Helpers;
 using QuestPDF.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -27,12 +30,29 @@ builder.Services.AddCors(options =>
                .AllowAnyMethod()
                .AllowAnyHeader());
 });
-
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = null; // sau nu seta deloc această opțiune
 
 });
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]);
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
 
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IBurseIstoricService, BurseIstoricService>();
@@ -44,9 +64,6 @@ builder.Services.AddSingleton<AppLogger>();
 
 QuestPDF.Settings.License = LicenseType.Community;
 
-
-builder.WebHost.UseUrls("https://apollo.eed.usv.ro:7109");
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -55,14 +72,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseDefaultFiles();       // Servește index.html
-app.UseStaticFiles();        // Servește fișiere din wwwroot/
-app.UseRouting();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-    endpoints.MapFallbackToFile("index.html");
-});
+
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");

@@ -14,6 +14,7 @@ namespace Burse.Controllers
         [HttpGet("GetLogCategories")] // Changed from "GetLogCategories" for consistency with Angular
         public IActionResult GetLogCategories()
         {
+            Console.WriteLine(_logsFolder);
             if (!Directory.Exists(_logsFolder))
             {
                 return Ok(new List<string>());

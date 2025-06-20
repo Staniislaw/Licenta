@@ -10,11 +10,17 @@ namespace Burse.Models
         public string NumeStudent { get; set; } = string.Empty;  // Nume student
         public string TaraCetatenie { get; set; } = string.Empty;  // Țară Cetățenie
         public int An { get; set; }  // Anul de studiu
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal Media { get; set; }  // Media generală
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal MediaBac { get; set; } //Media BAC pentru anii 1
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal MediaBacMat { get; set; }//media BAC matematica
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal MediaInterviu { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal MediaDL { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal MEDG_ASL { get; set; }
         public int PunctajAn { get; set; }  // Punctajul anual
         public int CO { get; set; }  // Coloana CO CO – credite obţinute in anul curent
@@ -23,6 +29,7 @@ namespace Burse.Models
         public int TR { get; set; }  // TR – restanţele anii precedenti + restante anul curent
         public string SursaFinantare { get; set; } = string.Empty;  // Sursa de finanțare
         public string Bursa { get; set; } = string.Empty;
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal SumaBursa { get; set; }
 
         [ForeignKey("FondBurseMeritRepartizat")]

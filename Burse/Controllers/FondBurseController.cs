@@ -856,8 +856,8 @@ namespace Burse.Controllers
                 // Studenții eligibili doar din programul respectiv și doar licență
 
                 var studentiEligibili = fonduriPeProgram.Fonduri
-                    .SelectMany(f => f.Studenti) 
-                    .Where(s => s.Bursa == null || s.Bursa.Trim().ToLower() == "nicio bursă")
+                    .SelectMany(f => f.Studenti)
+                    .Where(s => string.IsNullOrWhiteSpace(s.Bursa) || s.Bursa.Trim().ToLower() == "nicio bursă")
                     .OrderByDescending(s => s.Media)
                     .ToList();
 
@@ -1695,7 +1695,7 @@ await _context.SaveChangesAsync();
 
                     // Filter for students who haven't received a scholarship yet, after the current one
                     var urmatorii = students
-                        .Where(s => s.Bursa == null && s != student) // Ensure 's != student' is used for the current iteration
+                        .Where(s => string.IsNullOrWhiteSpace(s.Bursa) && s != student) // Ensure 's != student' is used for the current iteration
                         .Take(5)
                         .Select(s => $"(Emplid: {s.Emplid}, Media: {s.Media:F2}, An: {s.An+1}, Bursa: {s.Bursa ?? "—"})")
                         .ToList();
@@ -2086,7 +2086,7 @@ await _context.SaveChangesAsync();
 
             // Alocăm BP2 pentru studenții rămași eligibili
             int bp2AllocatedCount = 0;
-            foreach (var student in sortedStudents.Where(s => s.Bursa == null).OrderByDescending(s => s.Media))
+            foreach (var student in sortedStudents.Where(s => String.IsNullOrEmpty(s.Bursa)).OrderByDescending(s => s.Media))
             {
                 bool esteRP = !string.Equals(student.TaraCetatenie, "ROU", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(student.TaraCetatenie);
                 decimal valoareBP2Actuala = esteRP ? valoareAnualBP2RP : valoareAnualBP2;
@@ -2135,7 +2135,7 @@ await _context.SaveChangesAsync();
                 : "Acesta este primul student care primește bursă sau primul din categoria sa.";
 
             var nextEligibleStudents = allStudents
-                .Where(s => s.Bursa == null && s.Media >= 8.00M && s != currentStudent) // Considerăm toți studenții eligibili pentru o bursă merit
+                .Where(s => string.IsNullOrWhiteSpace(s.Bursa) && s.Media >= 8.00M && s != currentStudent) // Considerăm toți studenții eligibili pentru o bursă merit
                 .OrderByDescending(s => s.Media)
                 .Take(3) // Afișăm următorii 3 studenți relevanți
                 .Select(s => $"(Emplid: {s.Emplid}, Media: {s.Media:F2})")
@@ -2230,7 +2230,7 @@ await _context.SaveChangesAsync();
                         $"Program: {program}, An: {an}, Durată: {infoDurata}";
 
                     var urmatorii = students
-                        .Where(s => s.Bursa == null && s.Id != student.Id)
+                        .Where(s => string.IsNullOrWhiteSpace(s.Bursa) && s.Id != student.Id)
                         .Take(5)
                         .Select(s => $"{s.Emplid} (Media: {s.Media:F2}, An: {s.An+1}, Domeniu: {s.FondBurseMeritRepartizat?.domeniu ?? "—"})")
                         .ToList();

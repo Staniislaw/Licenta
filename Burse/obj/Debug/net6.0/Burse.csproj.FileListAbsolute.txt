@@ -412,3 +412,12 @@ C:\Licenta\Licenta\Burse\bin\Debug\net6.0\publish\appsettings.json
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\publish\Burse.deps.json
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\publish\Burse.runtimeconfig.json
 C:\Licenta\Licenta\Burse\bin\Debug\net6.0\publish\Burse.staticwebassets.endpoints.json
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\BCrypt.Net-Next.dll
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll

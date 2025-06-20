@@ -23,5 +23,6 @@ namespace Burse.Data
         public DbSet<TemplateEntity> TemplateEntity { get; set; }
         public DbSet<GrupAcronimEntry> GrupAcronim { get; set; }
         public DbSet<ExcludereStudentEntry> ExcludereStudent { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }
