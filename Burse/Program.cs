@@ -22,11 +22,12 @@ builder.Services.AddDbContext<BurseDBContext>(options =>
 );
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", builder =>
-        builder.WithOrigins("http://apollo.eed.usv.ro:4200")
+    options.AddPolicy("AllowAll", builder =>
+        builder.AllowAnyOrigin()
                .AllowAnyMethod()
                .AllowAnyHeader());
 });
+
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = null; // sau nu seta deloc această opțiune

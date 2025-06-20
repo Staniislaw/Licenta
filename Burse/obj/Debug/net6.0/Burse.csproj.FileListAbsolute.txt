@@ -406,3 +406,9 @@ C:\Licenta\Burse\Burse\bin\Debug\net6.0\runtimes\win-x86\native\libgcc_s_dw2-1.d
 C:\Licenta\Burse\Burse\bin\Debug\net6.0\runtimes\win-x86\native\libstdc++-6.dll
 C:\Licenta\Burse\Burse\bin\Debug\net6.0\runtimes\win-x86\native\libwinpthread-1.dll
 C:\Licenta\Burse\Burse\bin\Debug\net6.0\runtimes\win-x86\native\qpdf.dll
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\publish\web.config
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\publish\appsettings.Development.json
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\publish\appsettings.json
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\publish\Burse.deps.json
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\publish\Burse.runtimeconfig.json
+C:\Licenta\Licenta\Burse\bin\Debug\net6.0\publish\Burse.staticwebassets.endpoints.json

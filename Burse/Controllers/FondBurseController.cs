@@ -449,11 +449,6 @@ namespace Burse.Controllers
                 {
                     _logger.LogError( "Eroare la salvarea în BursaIstoric "+ex.Message);
 
-                    foreach (var i in istoricList)
-                    {
-                        Console.WriteLine($"Emplid: {i.Emplid}, StudentRecordId: {i.Istoric.StudentRecordId}, Bursa: {i.Istoric.TipBursa}, Suma: {i.Istoric.Suma}");
-                    }
-
                     // Opțional: aruncă mai departe excepția dacă vrei să o tratezi mai sus
                     // throw;
                 }
@@ -473,11 +468,6 @@ namespace Burse.Controllers
                     BP1Count = group.Count(s => s.Bursa.ToLower().Contains("bp1")),
                     BP2Count = group.Count(s => s.Bursa.ToLower().Contains("bp2"))
                 }).ToList();
-
-            foreach (var item in studentiClasificati0)
-            {
-                Console.WriteLine($"Domeniu: {item.Domeniu}, BP1: {item.BP1Count}, BP2: {item.BP2Count}");
-            }
 
             /*using var inputStream = burseFile.OpenReadStream();
             var updatedStream = ExcelUpdater.UpdateScholarshipCounts(inputStream, studentiClasificati1);
@@ -809,10 +799,7 @@ namespace Burse.Controllers
                     BP2Count = group.Count(s => s.Bursa.ToLower().Contains("bp2"))
                 }).ToList();
 
-            foreach (var item in studentiClasificati2)
-            {
-                Console.WriteLine($"Domeniu: {item.Domeniu}, BP1: {item.BP1Count}, BP2: {item.BP2Count}");
-            }
+            
 
             //ExcelUpdater.UpdateScholarshipCounts("D:\\Licenta\\Burse_Studenți (3).xlsx", studentiClasificati2);
 
@@ -1316,10 +1303,14 @@ await _context.SaveChangesAsync();
                 })
                 .ToList();
 
-
-            string etapa0Path = $"C:\\Licenta\\Etapa_0.xlsx";
-            using (var fileStream = new FileStream(etapa0Path, FileMode.Create, FileAccess.Write))
-           {
+            string licentaFolder = Path.Combine(Environment.CurrentDirectory, "Licenta");
+            if (!Directory.Exists(licentaFolder))
+            {
+                Directory.CreateDirectory(licentaFolder);
+            }
+            string etapa0Path = Path.Combine(licentaFolder, $"Etapa_0.xlsx");
+        using (var fileStream = new FileStream(etapa0Path, FileMode.Create, FileAccess.Write))
+            {
                 using var initialStream = burseFile.OpenReadStream();
                 await initialStream.CopyToAsync(fileStream);
             }
@@ -1339,7 +1330,7 @@ await _context.SaveChangesAsync();
             for (int i = 0; i < toateEtapele.Count; i++)
             {
                 string etapaInputPath = previousPath;
-                string etapaOutputPath = $"C:\\Licenta\\Etapa_{i + 1}.xlsx";
+                string etapaOutputPath = Path.Combine(licentaFolder, $"Etapa_{i + 1}.xlsx");
 
                 using var input = new FileStream(etapaInputPath, FileMode.Open, FileAccess.Read);
                 using var output = new FileStream(etapaOutputPath, FileMode.Create, FileAccess.Write);

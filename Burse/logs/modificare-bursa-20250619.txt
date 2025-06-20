@@ -1,0 +1,9 @@
+2025-06-19 20:45:09.495 +03:00 [INF] Studentul cu emplid 1010 si numele  a fost modificat bursa din BP1 în fără bursă
+2025-06-19 20:45:20.499 +03:00 [INF] Studentul cu emplid 1015 si numele  a fost modificat bursa din fără bursă în BP1
+2025-06-19 20:45:29.939 +03:00 [INF] Studentul cu emplid 1015 si numele  a fost modificat bursa din BP1 în BP2
+2025-06-19 20:45:40.095 +03:00 [INF] Studentul cu emplid 1015 si numele  a fost modificat bursa din BP2 în fără bursă
+2025-06-19 20:45:41.815 +03:00 [INF] Studentul cu emplid 1010 si numele  a fost modificat bursa din fără bursă în BP1
+2025-06-19 20:55:47.736 +03:00 [INF] Studentul cu emplid 1010 si numele  a fost modificat bursa din BP1 în fără bursă
+2025-06-19 20:55:51.513 +03:00 [INF] Studentul cu emplid 1015 si numele  a fost modificat bursa din fără bursă în BP1
+2025-06-19 20:55:56.137 +03:00 [INF] Studentul cu emplid 1015 si numele  a fost modificat bursa din BP1 în fără bursă
+2025-06-19 20:55:59.337 +03:00 [INF] Studentul cu emplid 1010 si numele  a fost modificat bursa din fără bursă în BP1
