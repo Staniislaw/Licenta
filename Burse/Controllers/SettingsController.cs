@@ -4,9 +4,11 @@ using System.Text.Json;
 using System;
 using Burse.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Burse.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class SettingsController : ControllerBase

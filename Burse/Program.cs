@@ -32,8 +32,7 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.ReferenceHandler = null; // sau nu seta deloc această opțiune
-
+    options.JsonSerializerOptions.ReferenceHandler = null;
 });
 builder.Services.AddAuthentication(options =>
 {
@@ -77,6 +76,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

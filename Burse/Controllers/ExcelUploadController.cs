@@ -1,4 +1,6 @@
 ﻿using ClosedXML.Excel;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Burse.Controllers
@@ -7,6 +9,7 @@ namespace Burse.Controllers
     [ApiController]
     public class ExcelUploadController : ControllerBase
     {
+        [Authorize]
         [HttpPost("upload")]
         public async Task<IActionResult> UploadExcel(List<IFormFile> files)
         {
