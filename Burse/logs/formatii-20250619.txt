@@ -1,0 +1,2 @@
+2025-06-19 20:44:28.061 +03:00 [INF] Nu au fost găsite toate domeniile de studii in listele cu studenti incarcate. Lipsesc: SC, IETTI, RCC, RST, SMCPE, IEN, ME, ETI, SE, TAMAE, SE-DUAL, ESM, SIC, C, C-DUAL, ESCCA.
+2025-06-19 20:53:26.686 +03:00 [INF] Nu au fost găsite toate domeniile de studii in listele cu studenti incarcate. Lipsesc: SC, IETTI, RCC, RST, SMCPE, IEN, ME, ETI, SE, TAMAE, SE-DUAL, ESM, ESCCA.

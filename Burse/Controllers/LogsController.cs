@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 using System.Text.RegularExpressions;
 
@@ -11,9 +12,11 @@ namespace Burse.Controllers
         private readonly string _logsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
 
         // Modified route for clarity
+        [Authorize]
         [HttpGet("GetLogCategories")] // Changed from "GetLogCategories" for consistency with Angular
         public IActionResult GetLogCategories()
         {
+            Console.WriteLine(_logsFolder);
             if (!Directory.Exists(_logsFolder))
             {
                 return Ok(new List<string>());
@@ -51,6 +54,7 @@ namespace Burse.Controllers
 
         // Endpoint 2: Obținerea datelor disponibile pentru o categorie de log specifică
         // GET /api/Logs/availabledates?category=Errors
+        [Authorize]
         [HttpGet("availabledates")]
         public IActionResult GetAvailableLogDates([FromQuery] string logType) // Numele parametrului schimbat AICI
         {
@@ -109,6 +113,7 @@ namespace Burse.Controllers
 
         // Endpoint 3: Obținerea conținutului unui log specific (Tip + Dată)
         // GET /api/Logs/content?category=Errors&date=2025-05-28
+        [Authorize]
         [HttpGet("content")]
         public async Task<IActionResult> GetLogContent([FromQuery] string logType, [FromQuery] string date)
         {

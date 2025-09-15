@@ -10,9 +10,11 @@ using Microsoft.ML.OnnxRuntime.Tensors;
 using static QuestPDF.Helpers.Colors;
 using System.Drawing;
 using System.Drawing.Imaging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Burse.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/template")]
     public class TemplateController : ControllerBase

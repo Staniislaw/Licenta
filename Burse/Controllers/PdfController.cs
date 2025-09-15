@@ -11,6 +11,7 @@ using System;
 using Burse.Data;
 using Microsoft.EntityFrameworkCore;
 using Burse.Services;
+using Microsoft.AspNetCore.Authorization;
 namespace Burse.Controllers
 {
     [ApiController]
@@ -33,7 +34,7 @@ namespace Burse.Controllers
         }
 
 
-
+        [Authorize]
         [HttpPost("generate")]
         public async Task<IActionResult> GeneratePdf([FromBody] PdfRequest request)
         {
@@ -47,7 +48,7 @@ namespace Burse.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [Authorize]
         [HttpPost("generate-all-pdfs")]
         public async Task<IActionResult> GenerateAllPdfs([FromBody] PdfRequest request)
         {
@@ -93,7 +94,7 @@ namespace Burse.Controllers
 
             return File(zipStream, "application/zip", "all-pdfs.zip");
         }
-
+        [Authorize]
         [HttpGet("export-excel-studenti")]
         public async Task<IActionResult> ExportExcelStudenti()
         {

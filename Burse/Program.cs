@@ -5,6 +5,9 @@ using Burse.Services;
 using Microsoft.EntityFrameworkCore;
 using Burse.Helpers;
 using QuestPDF.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -14,7 +17,12 @@ builder.Services.AddScoped<IFondBurseMeritRepartizatService, FondBurseMeritRepar
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<BurseDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("BurseConnectionStrings")));
+builder.Services.AddDbContext<BurseDBContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("BurseConnectionStrings"),
+        new MySqlServerVersion(new Version(8, 0, 33)) 
+    )
+);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
@@ -24,9 +32,26 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.ReferenceHandler = null; // sau nu seta deloc această opțiune
-
+    options.JsonSerializerOptions.ReferenceHandler = null;
 });
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]);
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
 
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IBurseIstoricService, BurseIstoricService>();
@@ -51,6 +76,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -855,8 +855,8 @@ namespace Burse.Services
             var studenti = await _context.StudentRecord
                 .Include(s => s.FondBurseMeritRepartizat)
                 .Where(s => s.FondBurseMeritRepartizat != null)
-                .Where(s => s.Bursa == null || s.Bursa == "nicio bursă")
-                .ToListAsync();
+                .Where(s => string.IsNullOrWhiteSpace(s.Bursa) || s.Bursa == "nicio bursă")
+                .ToListAsync(); 
 
             return studenti
                 .GroupBy(s => s.FondBurseMeritRepartizat.Grupa)
@@ -870,7 +870,7 @@ namespace Burse.Services
             var studenti = await _context.StudentRecord
                 .Include(s => s.FondBurseMeritRepartizat)
                 .Where(s => s.FondBurseMeritRepartizat != null)
-                .Where(s => s.Bursa == null || s.Bursa == "nicio bursă")
+                .Where(s => string.IsNullOrWhiteSpace(s.Bursa) || s.Bursa == "nicio bursă")
                 .ToListAsync();
 
             return studenti
@@ -886,7 +886,7 @@ namespace Burse.Services
             var studenti = await _context.StudentRecord
                 .Include(s => s.FondBurseMeritRepartizat)
                 .Where(s => s.FondBurseMeritRepartizat != null)
-                .Where(s => s.Bursa == null || s.Bursa == "nicio bursă")
+                .Where(s => string.IsNullOrWhiteSpace(s.Bursa) || s.Bursa == "nicio bursă")
                 .ToListAsync();
 
             var entries = await _context.GrupProgramStudii.ToListAsync();
@@ -916,12 +916,13 @@ namespace Burse.Services
         public async Task<List<StudentRecord>> GetStudentiEligibiliPeDomeniiAsync(List<string> domenii)
         {
             return await _context.StudentRecord
-                .Include(s => s.FondBurseMeritRepartizat)
-                .Where(s => s.FondBurseMeritRepartizat != null)
-                .Where(s => domenii.Contains(s.FondBurseMeritRepartizat.Grupa))
-                .Where(s => s.FondBurseMeritRepartizat.programStudiu == "licenta")
-                .Where(s => s.Bursa == null || s.Bursa == "nicio bursă")
-                .ToListAsync();
+            .Include(s => s.FondBurseMeritRepartizat)
+            .Where(s => s.FondBurseMeritRepartizat != null
+                && domenii.Contains(s.FondBurseMeritRepartizat.Grupa)
+                && s.FondBurseMeritRepartizat.programStudiu == "licenta"
+                && (string.IsNullOrWhiteSpace(s.Bursa) || s.Bursa.ToLower() == "nicio bursă"))
+            .ToListAsync();
+
         }
 
 

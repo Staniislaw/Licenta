@@ -54,6 +54,10 @@
               "target": "Package",
               "version": "[4.1.0, )"
             },
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
             "ClosedXML": {
               "target": "Package",
               "version": "[0.104.2, )"
@@ -74,9 +78,9 @@
               "target": "Package",
               "version": "[3.7.0, )"
             },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
-              "version": "[6.0.6, )"
+              "version": "[6.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -100,6 +104,10 @@
               "target": "Package",
               "version": "[13.0.3, )"
             },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
             "QuestPDF": {
               "target": "Package",
               "version": "[2025.4.0, )"
@@ -115,6 +123,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.5.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[7.7.1, )"
             }
           },
           "imports": [
